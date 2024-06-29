@@ -22,11 +22,19 @@ const folderId = process.env.FOLDER_ID;
 
 const SCOPE = [process.env.SCOPE];
 // A Function that can provide access to google drive api
+
+const credentials = {
+
+  private_key: process.env.PRIVATE_KEY.split(String.raw`\n`).join('\n'),
+  
+};
+
+
 async function authorize(){
     const jwtClient = new google.auth.JWT(
       process.env.CLIENT_EMAIL,
         null,
-        process.env.PRIVATE_KEY,
+        credentials.private_key,
         SCOPE
     );
     await jwtClient.authorize();
