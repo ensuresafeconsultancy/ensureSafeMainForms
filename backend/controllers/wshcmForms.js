@@ -24,9 +24,9 @@ const SCOPE = [process.env.SCOPE];
 // A Function that can provide access to google drive api
 async function authorize(){
     const jwtClient = new google.auth.JWT(
-      process.env.client_email,
+      process.env.CLIENT_EMAIL,
         null,
-        process.env.private_key,
+        process.env.PRIVATE_KEY,
         SCOPE
     );
     await jwtClient.authorize();

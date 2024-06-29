@@ -87,7 +87,7 @@ function WshcmForm(){
       } finally {
         setIsLoading(false);
       }
-    }, 200); // Delay for 2 seconds
+    }, 0); // Delay for 2 seconds
   
     // Cleanup function to clear the timeout when the component unmounts
     return () => clearTimeout(timeoutId);
