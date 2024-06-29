@@ -1,0 +1,66 @@
+.wshcmFormContainer{
+    height: 75vh;
+   overflow: auto;
+}
+.cursor_pointer{
+    cursor: pointer;
+}
+.fileName:hover{
+    color: red;
+}
+.downloadIcon{
+    height: 25px;
+    width: 25px;
+}
+.downloadIcon:hover{
+    background: rgb(135, 255, 135);
+}
+
+
+.actionIcon{
+    height: 35px;
+    width: 35px;
+}
+.actionIcon:hover{
+    background-color: rgb(214, 214, 214);
+}
+.deleteIcon{
+    color: red;
+}
+.deleteIcon:hover{
+    background-color: rgb(255, 184, 184);
+}
+
+.exportPdf:hover{
+    background-color: rgb(175, 255, 175);
+}
+
+.loadingImg{
+    height: 20px;
+}
+.wshcmFormTable{
+    height: 500px;
+    overflow-y: scroll;
+    /* overflow-x: scroll; */
+}
+
+
+
+/* ---------------------------------------- */
+
+.modal-body {
+    padding: 20px;
+  }
+  
+  .data-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .data-list li {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  

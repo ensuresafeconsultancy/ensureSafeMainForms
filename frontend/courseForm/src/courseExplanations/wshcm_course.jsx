@@ -1,5 +1,6 @@
 // import React from 'react'
 import Wshcm_form from '../courseForms/wshcmForm'
+// import CheckForm from '../courseForms/wshcmForm/checkForm'
 const Wshcm_course = () => {
   return (
     <section className=" mb-5 ">
@@ -59,6 +60,8 @@ const Wshcm_course = () => {
 
 
         <Wshcm_form />
+
+        {/* <CheckForm /> */}
 
         </div>
 

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>WSCHM Individual Form Data</title>
+    <!-- <link rel="stylesheet" href="styles.css"> -->
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .content {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .data-section {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 5px;
+      }
+
+      .data-section-title {
+        font-weight: bold;
+        margin-bottom: 5px;
+      }
+
+      .data-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+      }
+
+      .data-label {
+        width: 150px;
+        font-weight: 700;
+      }
+      .participant-photo {
+        height: 250px;
+      }
+     
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>WSCHM Individual Form Data</h1>
+    </header>
+
+    <main class="content">
+      <section class="data-section">
+        <h2 class="data-section-title">Personal Details</h2>
+
+      
+            <div class="data-row">
+              <span class="data-label">Class Type:</span>
+              <span class="data-value"><%= data.class_type %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Participant Name:</span>
+              <span class="data-value"><%= data.participantName %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Qualifications:</span>
+              <span class="data-value"><%= data.qualifications %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Experience:</span>
+              <span class="data-value"><%= data.experience %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Salary:</span>
+              <span class="data-value"><%= data.salary %></span>
+            </div>
+         
+            <div class="data-row">
+              <span class="data-label">Date of Birth:</span>
+              <span class="data-value"><%= data.date_of_birth %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Nationality:</span>
+              <span class="data-value"><%= data.nationality %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Gender:</span>
+              <span class="data-value"><%= data.gender %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Race:</span>
+              <span class="data-value"><%= data.race %></span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Type Of Registration:</span>
+              <span class="data-value"><%= data.organization %></span>
+            </div>
+         
+      </section>
+
+      <section class="data-section">
+        <h2 class="data-section-title">Contact Information</h2>
+        <div class="data-row">
+          <span class="data-label">Contact No:</span>
+          <span class="data-value"><%= data.contact_no %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Email ID:</span>
+          <span class="data-value"><%= data.email_id %></span>
+        </div>
+      </section>
+      <% if (data.organization == "Company") { %>
+      <section class="data-section">
+        <h2 class="data-section-title">Company Information</h2>
+        <div class="data-row">
+          <span class="data-label">Company Name:</span>
+          <span class="data-value"><%= data.companyName %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Company UEN/Reg No:</span>
+          <span class="data-value"><%= data.companyUEN %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Contact Person Name:</span>
+          <span class="data-value"><%= data.companyPersonName %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Contact Person Email:</span>
+          <span class="data-value"><%= data.companyPersonEmail %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Contact Person Contact No:</span>
+          <span class="data-value"><%= data.companyPersonContactNo %></span>
+        </div>
+      </section>
+      <% } %>
+
+      <section class="data-section">
+        <h2 class="data-section-title">Type of identification</h2>
+        <% if (data.identification == "NRIC") { %>
+        <div class="data-row">
+          <span class="data-label">NRIC No:</span>
+          <span class="data-value"><%= data.NRIC_No %></span>
+        </div>
+        <% } else { %>
+        <div class="data-row">
+          <span class="data-label">Work Permit or S pass FIN No:</span>
+          <span class="data-value"><%= data.work_permit %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Work permit or S Pass Expiry date:</span>
+          <span class="data-value"><%= data.work_permit_expiry %></span>
+        </div>
+        <% } %>
+
+        <div class="data-row">
+          <span class="data-label">Company UEN/Reg No:</span>
+          <span class="data-value"><%= data.companyUEN %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Contact Person Name:</span>
+          <span class="data-value"><%= data.companyPersonName %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Contact Person Email:</span>
+          <span class="data-value"><%= data.companyPersonEmail %></span>
+        </div>
+        <div class="data-row">
+          <span class="data-label">Contact Person Contact No:</span>
+          <span class="data-value"><%= data.companyPersonContactNo %></span>
+        </div>
+      </section>
+
+      <section class="data-section">
+        <h2 class="data-section-title">Photo</h2>
+        <% if (data.photo) { %>
+        <img
+          src="http://localhost:3000/<%= data.photo %>"
+          alt="Participant Photo"
+          class="participant-photo"
+        />
+        <% } else { %>
+        <p>No photo uploaded.</p>
+        <% } %>
+      </section>
+    </main>
+  </body>
+</html>

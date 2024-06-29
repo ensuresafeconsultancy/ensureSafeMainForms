@@ -1,0 +1,18 @@
+ <section class="data-section">
+    <h2 class="data-section-title">Certificates</h2>
+    <% if (data.certificateFiles && data.certificateFiles.length > 0) { %>
+    <ul class="certificate-list">
+        <% data.certificateFiles.forEach((certificateFile) => { %>
+        <li class="certificate-item">
+        <a href="<%= certificateFile %>"
+            >Download Certificate: <%= certificateFile %></a
+        >
+        </li>
+        <% }); %>
+    </ul>
+    <% } else { %>
+    <p>No certificates uploaded.</p>
+    <% } %>
+    </section>
+
+      

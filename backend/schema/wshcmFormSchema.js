@@ -24,6 +24,10 @@ const wshcmForm = new mongoose.Schema({
     gender : String,
     nationality : String,
     race : String,
+    certificateFilesId : [String],
+    certificateFiles : [String],
+    photoId : String,
+    photo : String,
 })
 
 module.exports = mongoose.model('wshcmForm' , wshcmForm)
