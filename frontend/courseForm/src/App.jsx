@@ -11,6 +11,7 @@ import {BrowserRouter as Router , Routes , Route} from 'react-router-dom'
 import './assets/css/sidebar.css'
 // import Wshcm_form from './courseForms'
 import AdminPanel from './AdminPanel/index.jsx'
+import HomePage from './Home/homePage'
 function App() {
 
   return (
@@ -21,6 +22,8 @@ function App() {
     <Router>
       <Routes>
 
+        
+        <Route path="/" element={<HomePage />} />
         <Route path="/WshcmForm" element={<Wshcm_course />} />
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/admin/*" element={<AdminPanel />} />
