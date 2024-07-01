@@ -87,52 +87,52 @@ export const openFile = async(file , fileId) => {
   // window.open(`${APIURL}/${file}`, "_blank", "noopener");
   };
 
-//  export const downloadDocPdf = async () => {
-//     try {
+ export const downloadDocPdf = async () => {
+    try {
     
-//         const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}`);
-//         const url = `${APIURL}/${response.data.filePath}`; // Use the file path from the backend
-//         window.open(url, '_blank'); // Open the PDF in a new tab
-//     } catch (error) {
-//         console.error(error);
-//     }
-// };
-
-
-export const downloadDocPdf = async () => {
-  try {
-    const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}`);
-
-    // Check response status code for success (optional)
-    if (response.status === 200) {
-      const pdfBuffer = response.data; // Assuming response contains the PDF buffer
-
-      // Option a) Using a Blob
-      const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank'); // Open the PDF in a new tab
-
-      // Option b) Using a Download Link (if applicable)
-      // const downloadUrl = response.data; // Assuming response contains the download URL
-      // const link = document.createElement('a');
-      // link.href = downloadUrl;
-      // link.download = 'userForms.pdf'; // Set a custom filename if needed
-      // document.body.appendChild(link);
-      // link.click();
-      // document.body.removeChild(link);
-
-      // Revoke object URL after a while (for option a)
-      setTimeout(() => URL.revokeObjectURL(url), 10000); // Adjust timeout as needed
-    } else {
-      console.error(`Error downloading PDF: ${response.statusText}`);
-      // Handle download error (show message to user, etc.)
+        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}`);
+        const url = `${APIURL}/${response.data.filePath}`; // Use the file path from the backend
+        window.open(url, '_blank'); // Open the PDF in a new tab
+    } catch (error) {
+        console.error(error);
     }
-
-  } catch (error) {
-    console.error(error);
-    // Handle other errors (network issues, etc.)
-  }
 };
+
+
+// export const downloadDocPdf = async () => {
+//   try {
+//     const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}`);
+
+//     // Check response status code for success (optional)
+//     if (response.status === 200) {
+//       const pdfBuffer = response.data; // Assuming response contains the PDF buffer
+
+//       // Option a) Using a Blob
+//       const blob = new Blob([pdfBuffer], { type: 'application/pdf' });
+//       const url = URL.createObjectURL(blob);
+//       window.open(url, '_blank'); // Open the PDF in a new tab
+
+//       // Option b) Using a Download Link (if applicable)
+//       // const downloadUrl = response.data; // Assuming response contains the download URL
+//       // const link = document.createElement('a');
+//       // link.href = downloadUrl;
+//       // link.download = 'userForms.pdf'; // Set a custom filename if needed
+//       // document.body.appendChild(link);
+//       // link.click();
+//       // document.body.removeChild(link);
+
+//       // Revoke object URL after a while (for option a)
+//       setTimeout(() => URL.revokeObjectURL(url), 10000); // Adjust timeout as needed
+//     } else {
+//       console.error(`Error downloading PDF: ${response.statusText}`);
+//       // Handle download error (show message to user, etc.)
+//     }
+
+//   } catch (error) {
+//     console.error(error);
+//     // Handle other errors (network issues, etc.)
+//   }
+// };
 
 
 
