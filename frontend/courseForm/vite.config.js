@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
+  base: '/courseForm/', // Adjust this if needed
   optimizeDeps: {
     exclude: ['react-bootstrap'], // Exclude react-bootstrap from optimization
   },
@@ -19,6 +20,6 @@ export default defineConfig({
       },
     },
     // Add this line if your app runs under a subdirectory on Render
-    // base: '/your-subdirectory-path/', // Adjust this if needed
+    
   },
 });

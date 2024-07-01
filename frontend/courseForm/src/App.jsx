@@ -21,8 +21,7 @@ function App() {
 
     <Router>
       <Routes>
-
-        
+    
         <Route path="/" element={<HomePage />} />
         <Route path="/WshcmForm" element={<Wshcm_course />} />
         <Route path="/admin" element={<AdminPanel />} />
