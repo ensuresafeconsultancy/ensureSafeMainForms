@@ -3,7 +3,11 @@ const express = new require('express')
 const router = express.Router()
 const multer  = require('multer')
 const WshcmForm  = require('../schema/wshcmFormSchema')
-const formidable = require('formidable');
+// const formidable = require('formidable');
+// const jsPDF = require('jspdf');
+
+
+
 // const puppeteer = require('puppeteer'); // Import Puppeteer
 
 // const PDFDocument = require('pdfkit'); // no need
@@ -884,6 +888,123 @@ router.post("/checkFilesUpload" , async(req , res)=>{
   console.log("  name, certificateFiles, photo  = " ,  name, certificateFiles, photo  )
   res.send({status : 1 , message : "sucess"})
 }) 
+
+
+
+
+
+
+
+// async function generatePdf(wshcmForms, filename) {
+//   const doc = new jsPDF({
+//     orientation: 'landscape',
+//     format: [1414, 987], // A2 page format (in millimeters)
+//     unit: 'mm'
+//   });
+
+//   const headerHeight = 10; // Adjust header height as needed
+//   const margin = 10; // Adjust margins as needed
+
+//   let y = margin + headerHeight; // Starting position for content
+
+//   // Header (optional)
+//   doc.text("WSHCM Form Data", margin, headerHeight, { align: 'center' });
+
+//   // Column Definitions (adjust column widths and data keys as needed)
+//   const columns = [
+//     { title: 'Class Type', dataKey: 'class_type', width: 30 },
+//     { title: 'Participant Name', dataKey: 'participantName', width: 70 },
+//     { title: 'NRIC No', dataKey: 'NRIC_No', width: 40 },
+//     { title: 'Organization', dataKey: 'organization', width: 50 },
+//     { title: 'Date of Birth', dataKey: 'date_of_birth', width: 35 },
+//     { title: 'Sunday Class Timing', dataKey: 'sunday_class_timing', width: 40 }, // Uncommented
+//     { title: 'Work Permit', dataKey: 'work_permit', width: 25 }, // Uncommented
+//     { title: 'Work Permit Expiry', dataKey: 'work_permit_expiry', width: 30 }, // Uncommented
+//     { title: 'Working Day Timing', dataKey: 'working_day_timing', width: 40 }, // Uncommented
+//     { title: 'Contact No', dataKey: 'contact_no', width: 30 }, // Uncommented
+//     { title: 'Identification', dataKey: 'identification', width: 30 }, // Uncommented
+//     { title: 'Company Name', dataKey: 'companyName', width: 50 }, // Added
+//     { title: 'Company UEN', dataKey: 'companyUEN', width: 35 }, // Added
+//     { title: 'Company Person Name', dataKey: 'companyPersonName', width: 50 }, // Added
+//     { title: 'Company Person Email', dataKey: 'companyPersonEmail', width: 50 }, // Added
+//     { title: 'Company Person Contact No', dataKey: 'companyPersonContactNo', width: 40 }, // Added
+//     { title: 'Email ID', dataKey: 'email_id', width: 40 }, // Added
+//     { title: 'Experience', dataKey: 'experience', width: 25 }, // Added
+//     { title: 'Salary', dataKey: 'salary', width: 25 }, // Added
+//     { title: 'Qualifications', dataKey: 'qualifications', width: 50 }, // Added
+//     { title: 'Gender', dataKey: 'gender', width: 20 }, // Added
+//     { title: 'Nationality', dataKey: 'nationality', width: 30 }, // Added
+//     { title: 'Race', dataKey: 'race', width: 25 }, // Added
+//     // { title: 'certificateFilesId', dataKey: 'certificateFilesId', width: ... }, // Not recommended for displaying in PDF (array)
+//     // { title: 'certificateFiles', dataKey: 'certificateFiles', width: ... }, // Not recommended for displaying in PDF (array)
+//     // { title: 'photoId', dataKey: 'photoId', width: ... }, // Not recommended for displaying in PDF (string)
+//     // { title: 'photo', dataKey: 'photo', width: ... }, // Not recommended for displaying in PDF (string)
+//   ];
+  
+//   // Function to format and print a single row of data, handling missing values gracefully
+//   const printRow = (data) => {
+//     let x = margin;
+//     columns.forEach((column) => {
+//       const text = data[column.dataKey] || '';
+//       doc.text(text, x, y, { align: 'left' });
+//       x += column.width;
+//     });
+//     y += 5; // Adjust row spacing as needed
+//   };
+
+//   // Print document data
+//   wshcmForms.forEach((form) => {
+//     printRow(form);
+//   });
+
+//   try {
+//     doc.save(filename);
+//     console.log("PDF generated successfully:", filename);
+//   } catch (error) {
+//     console.error(error);
+//     throw error; // Re-throw for handling in Express route
+//   }
+// }
+
+// router.get('/generate-pdf', async (req, res) => {
+//   try {
+   
+//     const forms = await WshcmForm.find();
+
+
+//     await generatePdf(forms, 'wshcm_data.pdf'); // Replace with desired filename
+//     res.send('PDF generated successfully!');
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error generating PDF');
+//   }
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
