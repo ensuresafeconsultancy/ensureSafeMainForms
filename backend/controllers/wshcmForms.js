@@ -4,6 +4,7 @@ const router = express.Router()
 const multer  = require('multer')
 const WshcmForm  = require('../schema/wshcmFormSchema')
 const formidable = require('formidable');
+const puppeteer = require('puppeteer'); // Import Puppeteer
 
 // const PDFDocument = require('pdfkit'); // no need
 // const { PDFDocument, StandardFonts } = require('pdf-lib');
@@ -640,12 +641,17 @@ router.get('/exportFormPdf', async(req,res)=>{
       const options = {
         format: 'A2',
         orientation: 'landscape',
-        margin: 0, // Set all margins to 0
+        margin: '10mm', // Set all margins to 0
         childProcessOptions: {
           env: { OPENSSL_CONF: '/dev/null' },
         },
       }  
       const ejsData = ejs.render(htmlString , data);
+
+      console.log("EJS Data:", ejsData);
+    console.log("Options used for PDF generation:", options);
+
+
       pdf.create(ejsData, options).toFile('./exportedPdfs/userForms.pdf', (err, response) => {
           if (err) {
               console.log("Error->>>>>>>>>", err);
@@ -661,6 +667,10 @@ router.get('/exportFormPdf', async(req,res)=>{
       res.send({status : 0 , message : err.message})
   }
 })
+
+
+
+
 
 
 router.get("/exportSingleRecordPdf/:id",async(req , res)=>{
