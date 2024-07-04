@@ -826,6 +826,7 @@ router.post("/uploadCertificateFiles/:formId" , upload.fields([{ name: 'certific
     if (!wshcmForm) {
       return res.status(404).send({ message: "Form not found" });
     }
+    deleteAllFiles('files'); 
 
     res.send({ message: "Certificate files uploaded successfully" , updatedForm : wshcmForm });
 
@@ -883,6 +884,7 @@ router.post("/uploadPhoto/:formId" ,upload.fields([{ name: 'photo', maxCount: 1 
       return res.status(404).send({ message: 'Form not found' });
     }
 
+    deleteAllFiles('files'); 
     res.status(200).send({ message: 'Photo uploaded successfully!', updatedForm: updatedForm });
 
 
