@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route , Navigate } from "react-router-dom";
 
 // BrowserRouter as Router ,
 import Login from "./Authentication/login";
@@ -19,6 +19,8 @@ const AdminPanel = () => {
       {!isAuth ? (
         <Routes>
           <Route path="/" element={<Login />} />
+
+          <Route path="*" element={<Navigate to="/admin" replace />} />
         </Routes>
       ) : (
         <div className="d-flex" id="wrapper">
@@ -30,6 +32,8 @@ const AdminPanel = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/WshcmForm" element={<WshcmForm />} />
+
+              <Route path="*" element={<Navigate to="/admin" replace />} />
             </Routes>
           </div>
         </div>

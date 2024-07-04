@@ -1,0 +1,161 @@
+<div
+        className="modal fade editModal"
+        id="exampleModal2"
+        tabIndex="-1"
+        aria-labelledby="exampleModalLabel2"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel2">
+                Edit Modal title
+              </h1>
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              ></button>
+            </div>
+            <div className="modal-body">
+              <table className="data-table">
+                <thead></thead>
+              
+                <tbody>
+         
+                  <tr>
+                    <td className="fw-bold py-1">PARTICIPANT NAME</td>
+                    <input type="text" className="form-control" value={selectedFormData? selectedFormData.participantName : ''} />
+                    {/* <td>Balaji K</td> */}
+                  </tr>
+                  <tr className="py-1">
+                    <td className="fw-bold py-1">CLASS_TYPE</td>
+                    <select name="" id="" className="form-control my-3">
+                      <option value="" className="form-control py-1">Select class type</option>
+                      <option value="" className="form-control py-1">Sunday class</option>
+                      <option value="" className="form-control py-1">Tuesday, Thursday, Saturday</option>
+                    </select>
+                    {/* <td>Sunday class</td> */}
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1"> N R I C_ NO</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.NRIC_No : ''} />
+                
+                  </tr>
+                  <tr>
+                    <td className="fw-bold">ORGANIZATION</td>
+                    <select name="" id="" className="form-control my-3">
+                      <option value="" className="form-control my-1">Select Organization</option>
+                      <option value="" className="form-control my-1">Company</option>
+                      <option value="" className="form-control my-1">Individual</option>
+                    </select>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">DATE_OF_BIRTH</td>
+                    <input type="date" className="form-control my-1" value={selectedFormData? selectedFormData.date_of_birth : ''} />
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">SUNDAY_CLASS_TIMING</td>
+                    <td>7 &amp; 14 Apr 2024(9.00am To 6.00pm) </td>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">WORK_PERMIT</td>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">WORK_PERMIT_EXPIRY</td>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">WORKING_DAY_TIMING</td>
+                    <td>-</td>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">CONTACT_NO</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.contact_no : ''} />
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">IDENTIFICATION</td>
+                    <td>NRIC</td>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">COMPANY NAME</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.companyName : ''} />
+
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">COMPANY U E N</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.companyUEN : ''} />
+
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">COMPANY PERSON NAME</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.companyPersonName : ''} />
+
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">COMPANY PERSON EMAIL</td>
+                    <input type="email" className="form-control my-1" value={selectedFormData? selectedFormData.companyPersonEmail : ''} />
+
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">COMPANY PERSON CONTACT NO</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.companyPersonContactNo : ''} />
+
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">EMAIL_ID</td>
+                    <input type="email" className="form-control my-1" value={selectedFormData? selectedFormData.email_id : ''} />
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">EXPERIENCE</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.experience : ''} />
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">SALARY</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.salary : ''} />
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">QUALIFICATIONS</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.qualifications : ''} />
+                  </tr>
+                  <tr>
+                    <td className="fw-bold py-1">GENDER</td>
+                    <select name="" id="" className="form-control my-3">
+                      <option value="" className="form-control py-1">Select Gender</option>
+                      <option value="male" className="form-control py-1">Male</option>
+                      <option value="female" className="form-control py-1">Female</option>
+                    </select>
+                  </tr>
+                  <tr>
+                    <td className="fw-bold my-1">NATIONALITY</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.nationality : ''} />
+
+                  </tr>
+                  <tr>
+                    <td className="fw-bold my-1">RACE</td>
+                    <input type="text" className="form-control my-1" value={selectedFormData? selectedFormData.race : ''} />
+
+                  </tr>
+
+                
+                
+                </tbody>
+              </table>
+            </div>
+            <div className="modal-footer">
+              <button
+                type="button"
+                className="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Close
+              </button>
+              <button type="button" className="btn btn-primary">
+                Save changes
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>

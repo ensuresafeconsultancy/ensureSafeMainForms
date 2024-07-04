@@ -2,7 +2,7 @@
 import './App.css'
 
 import Wshcm_course from './courseExplanations/wshcm_course.jsx'
-import {BrowserRouter as Router , Routes , Route} from 'react-router-dom'
+import {BrowserRouter as Router , Routes , Route } from 'react-router-dom'
 
 // import { Sidebar } from './layouts/sidebar'
 // import Dashboard from './AdminPanel/Dashboard'
@@ -17,8 +17,6 @@ function App() {
   return (
     <>
 
-
-
     <Router>
       <Routes>
     
@@ -29,15 +27,6 @@ function App() {
 
       </Routes>
       
-  
-    {/* <Wshcm_course /> */}
-        
-        {/* <Route path="/" element={<Sidebar />} /> */}
-        
-        {/* <Wshcm_course /> */}
-
-        {/* <AdminPanel /> */}
-
     </Router>
      
     </>

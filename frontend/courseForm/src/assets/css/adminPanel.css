@@ -45,6 +45,18 @@
 }
 
 
+.addCertificateIconBox{
+    height: 30px;
+    width: 30px;
+}
+.addCertificateIconBox:hover{
+    background: rgb(167, 167, 167);
+}
+.addCertificateIcon{
+   
+    font-size: 25px;
+}
+
 
 /* ---------------------------------------- */
 

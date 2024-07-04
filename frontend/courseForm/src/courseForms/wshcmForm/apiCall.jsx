@@ -177,11 +177,3 @@ export const wshcmApiCall = async (formData, certificateFiles, photo) => {
   }
 };
 
-
-
-
-
-
-
-
-

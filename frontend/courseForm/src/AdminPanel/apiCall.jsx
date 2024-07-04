@@ -178,6 +178,7 @@ export const downloadRecord = async (recordId)=>{
     console.log(err);
   }
 }
+
 export const deleteAllWshcmData = async ()=>{
   try{
 
@@ -377,14 +378,285 @@ export const deleteRecord = async (formId)=>{
         console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
         swal("Error!", "An error occurred while deleting the record.", "error");
       }
-    } else {
-      swal("Record not deleted");
-    }
+    } 
+    // else {
+    //   swal("Record not deleted");
+    // }
     
    
   }catch(err){
     console.log(err);
   }
+}
+
+
+
+export const wshcmEditForm = async(editFormData , editFormId)=>{
+
+  try{
+
+    const response = await axios.post(`${APIURL}${ServerVariables.editWshcmRecord}/${editFormId}` , editFormData);
+
+    if(response.status == 200){
+      swal("Edited", response.data.message, "success")
+      return true;
+    } else {
+      return false;
+    }
+
+  } catch(err){
+    console.log(err);
+  }
+
+}
+
+export const deleteSingleCertificate = async (formId , certificateIndex)=>{
+
+
+  try{
+    const confirmResult = await swal({
+      title: "Are sure to delete this Certificate file?",
+      text: "This will be permanently delete the certificate",
+      icon: "warning",
+      buttons: {
+        cancel: "No, cancel it!",
+        confirm: {
+          text: "Yes, delete it",
+          closeModal: false // Close the dialog only when explicitly closed by user or timer
+        }
+      },
+      dangerMode: true,
+      closeOnEsc: false, // New option for preventing Escape key closing
+      allowOutsideClick: false
+    });
+
+    if (confirmResult) {
+      // Show loading indicator
+      swal({
+        title: "deleting...",
+        text: "Please wait...",
+        closeModal: false,
+        // closeOnConfirm: false, // Prevent automatic closing
+        closeOnEsc: false ,  // Prevent user from closing with Esc
+        allowOutsideClick: false // Prevent user from clicking outside the dialog
+      });
+
+      try {
+        const response = await axios.delete(`${APIURL}${ServerVariables.deleteSingleCertificate}/${formId}/${certificateIndex}`); 
+
+
+        console.log(response.status)
+
+        if(response.status ==200){
+          console.log("success ")
+        } else if(response.status ==400){
+          console.log("error ")
+        }
+
+        swal.close(); // Close loading indicator after response
+
+        swal("Deleted", response.data.message, "success")
+       
+
+
+        return response;
+    
+      } catch (error) {
+        swal.close(); // Close loading indicator on error
+        console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
+        swal("Error!", "An error occurred while deleting the record.", "error");
+
+        if(error.response.status == 400){
+          console.log("please check gdrive")
+    
+        } else if(error.response.status == 500){
+          console.log("its server error check backend")
+        }
+      }
+    }
+   
+
+  }catch(err){
+    console.log(err.response.status)
+    console.log(err.message)
+  }
+}
+
+export const deleteSinglePhoto = async(formId , photoId)=>{
+  try{
+    const confirmResult = await swal({
+      title: "Are sure to delete this Photo?",
+      text: "This will be permanently delete the photo",
+      icon: "warning",
+      buttons: {
+        cancel: "No, cancel it!",
+        confirm: {
+          text: "Yes, delete it",
+          closeModal: false // Close the dialog only when explicitly closed by user or timer
+        }
+      },
+      dangerMode: true,
+      closeOnEsc: false, // New option for preventing Escape key closing
+      allowOutsideClick: false
+    });
+
+    if (confirmResult) {
+      // Show loading indicator
+      swal({
+        title: "deleting...",
+        text: "Please wait...",
+        closeModal: false,
+        // closeOnConfirm: false, // Prevent automatic closing
+        closeOnEsc: false ,  // Prevent user from closing with Esc
+        allowOutsideClick: false // Prevent user from clicking outside the dialog
+      });
+
+      try {
+        const response = await axios.delete(`${APIURL}${ServerVariables.deleteSinglePhoto}/${formId}/${photoId}`); 
+
+
+        console.log(response.status)
+
+        if(response.status ==200){
+          console.log("success ")
+        } else if(response.status ==400){
+          console.log("error ")
+        }
+
+        swal.close(); // Close loading indicator after response
+
+        swal("Deleted", response.data.message, "success")
+       
+        return response;
+    
+      } catch (error) {
+        swal.close(); // Close loading indicator on error
+        console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
+        swal("Error!", "An error occurred while deleting the record.", "error");
+
+        if(error.response.status == 400){
+          console.log("please check gdrive")
+    
+        } else if(error.response.status == 500){
+          console.log("its server error check backend")
+        }
+      }
+    }
+   
+
+  }catch(err){
+    console.log(err.response.status)
+    console.log(err.message)
+  }
+
+}
+
+
+export const uploadCertificateFiles = async(certificateFiles , formId)=>{
+
+  try {
+    const newFormData = new FormData();
+
+    // Append certificate files (assuming they are in an array)
+    for (let i = 0; i < certificateFiles.length; i++) {
+        newFormData.append('certificateFiles', certificateFiles[i]);
+      }
+
+      swal({
+        title: "Submitting...",
+        text: "Please wait...",
+        closeModal: false,
+        // closeOnConfirm: false, // Prevent automatic closing
+        closeOnEsc: false ,  // Prevent user from closing with Esc
+        allowOutsideClick: false // Prevent user from clicking outside the dialog
+      });
+
+
+      try {
+        const response = await axios.post(
+          `${APIURL}${ServerVariables.uploadCertificateFiles}/${formId}`,newFormData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        );
+
+        swal.close(); // Close loading indicator after response
+
+        if (response.data.message) {
+          swal("Certificates Uploaded!", response.data.message, "success");
+        } else {
+          swal("Error!", "An error occurred while Uploading the certificates.", "error");
+        }
+
+        console.log(response.data.message);
+        console.table(response.data.userObj);
+
+        return response;
+      } catch (error) {
+        swal.close(); // Close loading indicator on error
+        console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
+        swal("Error!", "An error occurred while submitting the form.", "error");
+      }
+
+
+
+
+  } catch(error){
+    console.log(error.message)
+  }
+
+}
+
+export const uploadPhotoFile = async(photo , formId)=>{
+
+  
+  try {
+    const newFormData = new FormData();
+
+    if (photo) {
+      newFormData.append('photo', photo);
+    }
+
+      swal({
+        title: "Submitting...",
+        text: "Please wait...",
+        closeModal: false,
+        // closeOnConfirm: false, // Prevent automatic closing
+        closeOnEsc: false ,  // Prevent user from closing with Esc
+        allowOutsideClick: false // Prevent user from clicking outside the dialog
+      });
+
+
+      try {
+        const response = await axios.post(
+          `${APIURL}${ServerVariables.uploadPhoto}/${formId}`,newFormData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        );
+
+        swal.close(); // Close loading indicator after response
+
+        if (response.data.message) {
+          swal("Photo Uploaded!", response.data.message, "success");
+        } else {
+          swal("Error!", "An error occurred while Uploading the certificates.", "error");
+        }
+
+        console.log(response.data.message);
+        console.table(response.data.userObj);
+
+        return response;
+      } catch (error) {
+        swal.close(); // Close loading indicator on error
+        console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
+        swal("Error!", "An error occurred while submitting the form.", "error");
+      }
+
+  } catch(error){
+    console.log(error.message)
+  }
+
 }
 
 

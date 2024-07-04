@@ -15,6 +15,13 @@ export const ServerVariables = {
     openFile : "/wshcmForm/openFile",
     deleteWshcmRecord : "/wshcmForm/deleteWshcmRecord",
 
+    editWshcmRecord : "/wshcmForm/editWshcmRecord",
+    deleteSingleCertificate : "/wshcmForm/deleteSingleCertificate",
+    uploadCertificateFiles : "/wshcmForm/uploadCertificateFiles",
+
+    deleteSinglePhoto : "/wshcmForm/deleteSinglePhoto",
+    uploadPhoto : "/wshcmForm/uploadPhoto",
+
     checkFilesUpload : "/wshcmForm/checkFilesUpload"
 
 }

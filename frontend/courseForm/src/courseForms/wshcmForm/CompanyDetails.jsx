@@ -5,7 +5,7 @@ import {useState} from 'react';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 
-const CompanyDetails = ({classTypeChange , setContactNoFunc, companyPersonContactError, setCompanyPersonContactError , companyOrNot ,companyName, companyUEN, companyPersonName, companyPersonEmail }) => {
+const CompanyDetails = ({handleInputChange , setContactNoFunc, companyPersonContactError, setCompanyPersonContactError , companyOrNot ,companyName, companyUEN, companyPersonName, companyPersonEmail }) => {
 
   const [companyNameError , setCompanyNameError] = useState(false);
   const [companyRegError , setCompanyRegError] = useState(false);
@@ -86,25 +86,25 @@ const CompanyDetails = ({classTypeChange , setContactNoFunc, companyPersonContac
         <div className="form-group">
           <div className="py-3">
             <label htmlFor="">Company Name *</label>
-            <input type="text" className='form-control' id='companyName' onChange={classTypeChange} onKeyUp={checkKeyup} value={companyName} name="companyName" required />
+            <input type="text" className='form-control' id='companyName' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyName} name="companyName" required />
             {companyNameError && <span className='text-danger'>Company name required *</span>}
           </div>
             
           <div className="pb-3">
             <label htmlFor="">Company UEN/Reg No *</label>
-            <input type="text" className='form-control' id='companyUEN' onChange={classTypeChange} onKeyUp={checkKeyup} value={companyUEN} name="companyUEN" required />
+            <input type="text" className='form-control' id='companyUEN' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyUEN} name="companyUEN" required />
             {companyRegError && <span className='text-danger'>Company Reg no required *</span>}
           </div>
             
           <div className="pb-3">
             <label htmlFor="">Contact Person Name *</label>
-            <input type="text" className='form-control' id='companyPersonName' onChange={classTypeChange} onKeyUp={checkKeyup} value={companyPersonName} name="companyPersonName" required />
+            <input type="text" className='form-control' id='companyPersonName' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyPersonName} name="companyPersonName" required />
             {companyPersonNameError && <span className='text-danger'>Company Person name required *</span>}
           </div>
             
           <div className="pb-3">
             <label htmlFor="">Contact Person Email *</label>
-            <input type="email" className='form-control' id="companyPersonEmail" onChange={classTypeChange} onKeyUp={checkKeyup} value={companyPersonEmail} name="companyPersonEmail" required />
+            <input type="email" className='form-control' id="companyPersonEmail" onChange={handleInputChange} onKeyUp={checkKeyup} value={companyPersonEmail} name="companyPersonEmail" required />
             {companyPersonEmailError && <span className='text-danger'>Company Email ID required *</span>}
 
           </div>
@@ -142,7 +142,7 @@ CompanyDetails.propTypes = {
     companyPersonEmail: PropTypes.string.isRequired,
     companyPersonContactNo: PropTypes.string.isRequired,
     companyPersonContactError: PropTypes.bool.isRequired,
-    classTypeChange: PropTypes.func.isRequired,
+    handleInputChange: PropTypes.func.isRequired,
     setContactNoFunc: PropTypes.func.isRequired,
     setCompanyPersonContactError: PropTypes.func.isRequired,
 }

@@ -40,10 +40,8 @@ async function deleteFile(authClient, fileId) {
   try {
     await drive.files.delete({ fileId });
     console.log(`File with ID ${fileId} deleted successfully.`);
-    return true;
   } catch (error) {
-    console.log('Error deleting file:', error);
-    return false
+    console.error('Error deleting file:', error);
   }
 }
 
@@ -65,6 +63,24 @@ router.get('/openFile/:fileId', async (req, res) => {
       res.status(404).send('File not found or unsupported format');
     }
 
+    // console.log("response.data.exportLinks = " , response.data.exportLinks)
+    // if (response.data.exportLinks) {
+    //   const downloadUrl = response.data.exportLinks[desiredMimeType]; // Choose the desired format
+    //   console.log("downloadUrl = " , downloadUrl)
+    //   res.json({ downloadUrl });
+    // } else {
+    //   res.status(404).send('File not found or unsupported format');
+    // }
+
+    // const response = await drive.files.get({ fileId, fields: 'downloadUrl' });
+
+    // if (response.data.downloadUrl) {
+    //   const signedUrl = response.data.downloadUrl;
+    //   console.log("signedUrl = " , signedUrl)
+    //   res.json({ downloadUrl: signedUrl }); // Send signed URL in response
+    // } else {
+    //   res.status(404).send('File not found'); // Handle non-existent file
+    // }
   } catch (err) {
     console.error(err);
     res.status(500).send('Internal server error'); // Handle errors
@@ -72,7 +88,10 @@ router.get('/openFile/:fileId', async (req, res) => {
 });
 
 // A Function that will upload the desired file to google drive folder
+var fileLocation = '';
+var mimeTypeParams = '';
 
+// folder id = 1k0JF9dMxTV-97il_aaqSkSgsy2aIxb5b
 async function uploadFile(authClient, fileLocation , mimeTypeParams , fileName){
   console.log("outside fileLocation = " ,fileLocation)
   console.log("outside mimeTypeParams = " ,mimeTypeParams)
@@ -126,6 +145,83 @@ router.get("/fetchWshcmForms" , async(req,res)=>{
 
 
 })
+
+
+// router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photo', maxCount: 1 }]), async (req, res) => {
+//     try{
+
+//         // console.table(req.body)
+
+//         const certificateFiles = req.files['certificateFiles'].map(file => file.filename);
+//         // For single file, use req.file
+//         const photo = req.files['photo'][0].filename;
+
+
+//       const newForm = new WshcmForm({
+//         class_type: req.body.class_type,
+//         participantName: req.body.participantName,
+//         NRIC_No: req.body.NRIC_No,
+//         organization: req.body.organization,
+//         date_of_birth: req.body.date_of_birth, // Assuming date format is handled appropriately
+//         sunday_class_timing: req.body.sunday_class_timing,
+//         work_permit: req.body.work_permit,
+//         work_permit_expiry: req.body.work_permit_expiry, // Assuming date format is handled appropriately
+//         working_day_timing: req.body.working_day_timing,
+//         contact_no: req.body.contact_no,
+//         identification: req.body.identification,
+//         companyName: req.body.companyName,
+//         companyUEN: req.body.companyUEN,
+//         companyPersonName: req.body.companyPersonName,
+//         companyPersonEmail: req.body.companyPersonEmail,
+//         companyPersonContactNo: req.body.companyPersonContactNo,
+//         email_id: req.body.email_id,
+//         experience: req.body.experience,
+//         salary: req.body.salary,
+//         qualifications: req.body.qualifications,
+//         gender: req.body.gender,
+//         nationality: req.body.nationality,
+//         race: req.body.race,
+      
+//         // Handle certificate files (assuming an array of filenames in req.body.certificateFiles)
+//         certificateFiles: req.body.certificateFiles ? req.body.certificateFiles : [],
+      
+//         // Handle photo filename (assuming a single filename in req.body.photo)
+//         photo: req.body.photo,
+//       });
+
+//       const response = await newForm.save();
+
+      
+//     res.send({status : 1 , message : "Successfully received"})
+
+
+//     } catch(err){
+//         console.log("Something went wrong");
+//         res.send({status : 0 , message : "Something went wrong"})
+//     }
+    
+// });
+
+
+// function isValidDate(dateString) {
+//     // Regex pattern for YYYY-MM-DD format
+//     const regex = /^\d{4}-\d{2}-\d{2}$/;
+  
+//     // Check if the date string matches the format
+//     if (!regex.test(dateString)) {
+//       return false;
+//     }
+  
+//     // Split the date string into year, month, and day components
+//     const parts = dateString.split('-');
+//     const year = parseInt(parts[0], 10);
+//     const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed
+//     const day = parseInt(parts[2], 10);
+  
+//     // Check for valid date ranges (considering leap years)
+//     return new Date(year, month, day).getTime() !== NaN &&
+//            (year >= 1900 && year <= new Date().getFullYear());
+//   }
 
 
 function validateFileSize(file) {
@@ -195,6 +291,31 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
         if (!req.body.organization || typeof req.body.organization !== 'string') {
             validationErrors.push('"organization" is required and must be a string.');
         }
+        
+        // Date of birth (required, valid date format)
+        //   if (!req.body.date_of_birth || !isValidDate(req.body.date_of_birth)) {
+    //     validationErrors.push('"date_of_birth" is required and must be a valid date format.');
+    //   }
+  
+      // Sunday class timing (required, string)
+      if (req.body.sunday_class_timing && typeof req.body.sunday_class_timing !== 'string' || req.body.work_permit && typeof req.body.work_permit !== 'string' ) {
+        validationErrors.push('"sunday_class_timing" is required and must be a string or "work_permit" must be a string if provided.');
+      }
+  
+      // Work permit (optional, string)
+    //   if () {
+    //     validationErrors.push('');
+    //   }
+  
+      // Work permit expiry (optional, valid date format if work permit is provided)
+    //   if (req.body.work_permit && (!req.body.work_permit_expiry || !isValidDate(req.body.work_permit_expiry))) {
+    //     validationErrors.push('"work_permit_expiry" is required and must be a valid date format if "work_permit" is provided.');
+    //   }
+  
+      // Working day timing (required, string)
+      // if (!req.body.working_day_timing || typeof req.body.working_day_timing !== 'string') {
+      //   validationErrors.push('"working_day_timing" is required and must be a string.');
+      // }
   
       // Contact number (required, string)
       if (!req.body.contact_no || typeof req.body.contact_no !== 'string') {
@@ -206,36 +327,31 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
         validationErrors.push('"identification" is required and must be a string.');
       }
   
-
-      if(req.body.organization == "Company"){
-         // Company name (required, string)
-        if (!req.body.companyName || typeof req.body.companyName !== 'string') {
-          validationErrors.push('"companyName" is required and must be a string.');
-        }
-    
-        // Company UEN (optional, string)
-        if (req.body.companyUEN && typeof req.body.companyUEN !== 'string') {
-          validationErrors.push('"companyUEN" must be a string if provided.');
-        }
-    
-        // Company person name (required, string)
-        if (!req.body.companyPersonName || typeof req.body.companyPersonName !== 'string') {
-            validationErrors.push('"companyPersonName" is required and must be a string.');
-        }
-    
-        // Company person email (required, string)
-        if (!req.body.companyPersonEmail || typeof req.body.companyPersonEmail !== 'string') {
-          validationErrors.push('"companyPersonEmail" is required and must be a string.');
-        }
-
-        // Company person contact number (optional, string)
-          if (req.body.companyPersonContactNo && typeof req.body.companyPersonContactNo !== 'string') {
-              validationErrors.push('"companyPersonContactNo" must be a string if provided.');
-          }
-        
-
+      // Company name (required, string)
+      if (!req.body.companyName || typeof req.body.companyName !== 'string') {
+        validationErrors.push('"companyName" is required and must be a string.');
       }
-     
+  
+      // Company UEN (optional, string)
+      if (req.body.companyUEN && typeof req.body.companyUEN !== 'string') {
+        validationErrors.push('"companyUEN" must be a string if provided.');
+      }
+  
+      // Company person name (required, string)
+      if (!req.body.companyPersonName || typeof req.body.companyPersonName !== 'string') {
+          validationErrors.push('"companyPersonName" is required and must be a string.');
+      }
+  
+      // Company person email (required, string)
+      if (!req.body.companyPersonEmail || typeof req.body.companyPersonEmail !== 'string') {
+        validationErrors.push('"companyPersonEmail" is required and must be a string.');
+      }
+
+      // Company person contact number (optional, string)
+        if (req.body.companyPersonContactNo && typeof req.body.companyPersonContactNo !== 'string') {
+            validationErrors.push('"companyPersonContactNo" must be a string if provided.');
+        }
+        
         // Email ID (required, string)
         if (!req.body.email_id || typeof req.body.email_id !== 'string') {
             validationErrors.push('"email_id" is required and must be a string.');
@@ -245,7 +361,12 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
         if (req.body.experience && typeof req.body.experience !== 'string') {
             validationErrors.push('"experience" must be a string if provided.');
         }
-
+        
+        // Salary (optional, number)
+        // if (req.body.salary && (typeof req.body.salary !== 'number' || isNaN(req.body.salary))) {
+        //     validationErrors.push('"salary" must be a number if provided.');
+        // }
+        
         // Qualifications (optional, string)
         if (req.body.qualifications && typeof req.body.qualifications !== 'string') {
             validationErrors.push('"qualifications" must be a string if provided.');
@@ -268,7 +389,36 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
         
 
 
+        // const uploadResult = await upload.fields([
+        //     { name: 'certificateFiles', maxCount: 12 },
+        //     { name: 'photo', maxCount: 1 },
+        //   ])(req, res, (err) => {
+        //     if (err) {
+        //       console.error(err);
+        //       return res.status(500).send({ status: 0, message: "Internal server error" });
+        //     }
+      
+        //     // Continue with processing the request after successful upload
+        //     // Access uploaded files through req.files
+        //   });
+        
+
+
         console.log("check 1")
+
+        // const form = formidable({ multiples: true });
+
+    // Parse form data and extract files
+        // const { fields, files } = await new Promise((resolve, reject) => {
+        //   form.parse(req, (err, fields, files) => {
+        //     if (err) {
+        //       reject(err);
+        //     } else {
+        //       resolve({ fields, files });
+        //     }
+        //   });
+        // });
+
 
         
         // Validate certificate files
@@ -286,12 +436,31 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
           validationErrors.push(`Photo file exceeds the maximum size of 30MB.`);
       }
   
+
+
+
     
     if (validationErrors.length > 0) {
       // If there are validation errors, return a bad request with the errors
       return res.status(400).send({ status: 0, message: 'Validation errors:', errors: validationErrors });
     }
     
+
+    // const certificateFiles = files['certificateFiles'] || [];
+    // const photo = files['photo'] ? files['photo'][0] : null;
+
+    // console.log("files['certificateFiles'] = " , files['certificateFiles'])
+
+    // // Check for required files
+    // if (certificateFiles.length === 0 || !photo) {
+    //   validationErrors.push('Certificate files and photo are required.');
+    // }
+    
+    
+    
+    // const certificateFiles = req.files['certificateFiles'].map(file => file.filename);
+    // For single file, use req.file
+    // const photo = req.files['photo'][0].filename;
     
     const certificateFiles = req.files['certificateFiles'];
     console.log("check 3")
@@ -305,66 +474,100 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
       console.log(typeof certificate.path)
       
     }
+    
+
+    // const certificateFileIds = [];
+    // const certificateFileNames = [];
+
+    // for (const certificateFile of certificateFiles) {
+    //   const fileId = await uploadFile(authClient, certificateFile, certificateFile.originalFilename);
+    //   certificateFileIds.push(fileId);
+    //   certificateFileNames.push(certificate.filename); // Optional: Store original filename
+
+    // }
+
+    // const photoId = photo ? await uploadFile(authClient, photo, photo.originalFilename) : null;
 
 
-    //uploading files to gdrive
-    const authClient = await authorize();
 
-    const certificateFileIds = [];
-    const certificateFileNames = [];
-    for (const certificate of certificateFiles) {
-      fileLocation = certificate.path;
-      mimeTypeParams = certificate.mimetype;
-      const fileId = await uploadFile(authClient, certificate.path, certificate.mimetype , certificate.originalname);
-      certificateFileIds.push(fileId.data.id);
-      certificateFileNames.push(certificate.originalname); // Optional: Store original filename
-    }
 
-    console.log("certificateFileIds = " , certificateFileIds)
-    console.log("certificateFileNames = " , certificateFileNames)
+          const authClient = await authorize();
+
+          const certificateFileIds = [];
+          const certificateFileNames = [];
+          for (const certificate of certificateFiles) {
+            fileLocation = certificate.path;
+            mimeTypeParams = certificate.mimetype;
+            const fileId = await uploadFile(authClient, certificate.path, certificate.mimetype , certificate.originalname);
+            certificateFileIds.push(fileId.data.id);
+            certificateFileNames.push(certificate.originalname); // Optional: Store original filename
+          }
+
+          console.log("certificateFileIds = " , certificateFileIds)
+          console.log("certificateFileNames = " , certificateFileNames)
+
+
+          // const certificateFileIds = [];
+          // const certificateFileNames = [];
+          // for (const certificate of certificateFiles) {
+          //   fileLocation = certificate.path;
+          //   mimeTypeParams = certificate.mimetype;
+          //   const fileId = await uploadFile(authClient, certificate.path, certificate.mimetype);
+          //   certificateFileIds.push(fileId); // Push extracted ID here
+          //   certificateFileNames.push(certificate.filename); // Optional
+          // }
+
 
       
-    const photoId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
+          const photoId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
 
 
-    console.log("photoId = " , photoId.data.id)
+          console.log("photoId = " , photoId.data.id)
           
+
+        // } catch (error) {
+        //   console.error('Error:', error);
+        //   res.status(500).send('Error uploading or deleting file');
+        // }
+
+
 
       
       // Create a new form instance
-    const newForm = new WshcmForm({
-      class_type: req.body.class_type,
-      participantName: req.body.participantName,
-      NRIC_No: req.body.NRIC_No,
-      organization: req.body.organization,
-      date_of_birth: req.body.date_of_birth, // Assuming date format is handled appropriately
-      sunday_class_timing: req.body.sunday_class_timing,
-      work_permit: req.body.work_permit,
-      work_permit_expiry: req.body.work_permit_expiry, // Assuming date format is handled appropriately
-      working_day_timing: req.body.working_day_timing,
-      contact_no: req.body.contact_no,
-      identification: req.body.identification,
-      companyName: req.body.companyName,
-      companyUEN: req.body.companyUEN,
-      companyPersonName: req.body.companyPersonName,
-      companyPersonEmail: req.body.companyPersonEmail,
-      companyPersonContactNo: req.body.companyPersonContactNo, // Assuming this field exists
-      email_id: req.body.email_id,
-      experience: req.body.experience,
-      salary: req.body.salary,
-      qualifications: req.body.qualifications,
-      gender: req.body.gender,
-      nationality: req.body.nationality,
-      race: req.body.race,
-
-      certificateFiles: certificateFileNames,
-      certificateFilesId : certificateFileIds,
+      const newForm = new WshcmForm({
+        class_type: req.body.class_type,
+        participantName: req.body.participantName,
+        NRIC_No: req.body.NRIC_No,
+        organization: req.body.organization,
+        date_of_birth: req.body.date_of_birth, // Assuming date format is handled appropriately
+        sunday_class_timing: req.body.sunday_class_timing,
+        work_permit: req.body.work_permit,
+        work_permit_expiry: req.body.work_permit_expiry, // Assuming date format is handled appropriately
+        working_day_timing: req.body.working_day_timing,
+        contact_no: req.body.contact_no,
+        identification: req.body.identification,
+        companyName: req.body.companyName,
+        companyUEN: req.body.companyUEN,
+        companyPersonName: req.body.companyPersonName,
+        companyPersonEmail: req.body.companyPersonEmail,
+        companyPersonContactNo: req.body.companyPersonContactNo, // Assuming this field exists
+        email_id: req.body.email_id,
+        experience: req.body.experience,
+        salary: req.body.salary,
+        qualifications: req.body.qualifications,
+        gender: req.body.gender,
+        nationality: req.body.nationality,
+        race: req.body.race,
+        certificateFiles: certificateFileNames,
+        certificateFilesId : certificateFileIds,
+       
+        
+        photo: photo.originalname,
+        photoId : photoId.data.id,
       
-      photo: photo.originalname,
-      photoId : photoId.data.id,
-    
-    });
- 
+      });
+      // certificateFiles,
+        // photo,
   
       const response = await newForm.save();
 
@@ -425,6 +628,8 @@ router.get('/exportFormPdf', async(req,res)=>{
       res.send({status : 0 , message : err.message})
   }
 })
+
+
 
 
 
@@ -545,8 +750,6 @@ router.delete('/delete-all', async (req, res) => {
 router.delete('/deleteWshcmRecord/:id', async(req,res)=>{
   try {
     const formId = req.params.id;
-
-    console.log("formId = " , formId)
     const deletedForm = await WshcmForm.findByIdAndDelete(formId);
     const authClient = await authorize();
     console.log("deletedForm = " , deletedForm)
@@ -577,17 +780,15 @@ router.delete('/deleteWshcmRecord/:id', async(req,res)=>{
 })
 
 
-// async function deleteFile(authClient, fileId) {
-//   const drive = google.drive({ version: 'v3', auth: authClient });
-//   try {
-//     await drive.files.delete({ fileId });
-//     console.log(`File with ID ${fileId} deleted successfully.`);
-//     return true;
-//   } catch (error) {
-//     console.error('Error deleting file:', error.message);
-//     return false;
-//   }
-// }
+async function deleteFile(authClient, fileId) {
+  const drive = google.drive({ version: 'v3', auth: authClient });
+  try {
+    await drive.files.delete({ fileId });
+    console.log(`File with ID ${fileId} deleted successfully.`);
+  } catch (error) {
+    console.error('Error deleting file:', error);
+  }
+}
 
 
 async function deleteAllFilesInFolder(authClient, folderId) {
@@ -631,272 +832,7 @@ async function deleteAllFilesInFolder(authClient, folderId) {
   }
 }
 
-
-//edit forms
-
-router.post("/editWshcmRecord/:editFormId", async(req,res)=>{
-  try{
-    
-    if(req.body.organization == "Individual"){
-      req.body.companyName = '';
-      req.body.companyUEN = '';
-      req.body.companyPersonName = '';
-      req.body.companyPersonEmail = '';
-      req.body.companyPersonContactNo = '';
-    } 
-    if(req.body.identification == "NRIC"){
-      req.body.work_permit = '';
-      req.body.work_permit_expiry = '';
-    } else {
-      req.body.NRIC_No = '';
-    }
-
-
-    console.log(req.body);
-    const updatedWshcmForm = await WshcmForm.findByIdAndUpdate(req.params.editFormId, req.body, { new: true });
-
-
-    if (!updatedProduct) {
-        return res.send({
-            message: 'Form not found',
-            status: 0
-        });
-    }
-    res.send({
-        message: 'Form updated successfully',
-        status: 1,
-      
-    });
-    
-    // res.send({message : "Success"})
-  }catch(err){
-    res.send({message : err.message});
-  }
-})
-
-router.delete("/deleteSingleCertificate/:formId/:certificateIndex", async (req, res) => {
-  try {
-    const formId = req.params.formId;
-    const certificateIndex = parseInt(req.params.certificateIndex); // Ensure valid integer
-
-    // Find the form document using the form ID
-    const wshcmForm = await WshcmForm.findOne({ _id: formId });
-
-    if (!wshcmForm) {
-      return res.status(404).send({ message: "Form not found" });
-    }
-
-    // Validate certificate index within bounds
-    if (certificateIndex < 0 || certificateIndex >= wshcmForm.certificateFilesId.length) {
-      return res.status(400).send({ message: "Invalid certificate index" });
-    }
-
-    // Extract the certificate details to be deleted
-    const certificateFileIdToDelete = wshcmForm.certificateFilesId[certificateIndex];
-    const certificateFileToDelete = wshcmForm.certificateFiles[certificateIndex];
-
-    
-    console.log("certificateFileIdToDelete = " , certificateFileIdToDelete)
-    console.log("certificateFileToDelete = " , certificateFileToDelete)
-    
-    try{
-      const authClient = await authorize();
-      await deleteFile(authClient, certificateFileIdToDelete);
-     
-      wshcmForm.certificateFilesId.splice(certificateIndex, 1);
-      wshcmForm.certificateFiles.splice(certificateIndex, 1);
-  
-      // Save the updated form document
-      const updatedForm = await wshcmForm.save();
-  
-      res.send({ message: `Certificate ${certificateFileToDelete} deleted successfully` , updatedForm : updatedForm });
-      
-    } catch(err){
-      return res.status(400).send({message : "File not found"})
-    }
-
-    // Update the arrays using splice to remove the specified element
-   
-  
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ message: "Error deleting certificate" });
-  }
-});
-
-
-router.delete("/deleteSinglePhoto/:formId/:photoId", async (req, res) => {
-  try {
-    const formId = req.params.formId;
-    const photoId = req.params.photoId;
-
-    console.log("formId = ", formId);
-    console.log("photoId = ", photoId);
-
-    // 1. Find the form document
-    const wshcmForm = await WshcmForm.findById(formId);
-
-    if (!wshcmForm) {
-      return res.status(404).send({ message: "Form not found" });
-    }
-
-    // 2. Check if photoId matches existing photoId (optional)
-    if (wshcmForm.photoId !== photoId) {
-      return res.status(400).send({ message: "Photo ID does not match existing photo" });
-    }
-
-    // 3. Delete photo from Google Drive (if applicable)
-    try {
-      const authClient = await authorize();
-      await deleteFile(authClient, photoId); // Replace with your implementation
-    } catch (err) {
-      console.error("Error deleting file from Google Drive:", err);
-      // Handle file deletion error gracefully (e.g., log and continue deletion)
-    }
-
-    // 4. Update the form document
-    wshcmForm.photoId = undefined;
-    wshcmForm.photo = undefined; // Set both fields to undefined to delete
-    const updatedForm = await wshcmForm.save();
-
-    res.send({ message: "Photo and photoId deleted successfully" , updatedForm : updatedForm });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Error deleting photo" });
-  }
-});
-
-
-router.post("/uploadCertificateFiles/:formId" , upload.fields([{ name: 'certificateFiles', maxCount: 12 }]) , async(req,res)=>{
-  try{
-
-
-    const validationErrors = [];
-
-    if (req.files['certificateFiles']) {
-      for (const file of req.files['certificateFiles']) {
-        if (!validateFileSize(file)) {
-          validationErrors.push(`Certificate file "${file.originalname}" exceeds the maximum size of 30MB.`);
-        }
-      }
-    }
-
-    if (validationErrors.length > 0) {
-      // If there are validation errors, return a bad request with the errors
-      return res.status(400).send({ status: 0, message: 'Validation errors:', errors: validationErrors });
-    }
-
-
-    const certificateFiles = req.files['certificateFiles'];
-    console.log("check 3")
-  
-    console.log(req.files['certificateFiles'])
-   
-    for(let certificate of certificateFiles){
-      console.log(typeof certificate.path)
-    }
-
-    //uploading files to gdrive
-    const authClient = await authorize();
-
-    const certificateFileIds = [];
-    const certificateFileNames = [];
-    for (const certificate of certificateFiles) {
-      fileLocation = certificate.path;
-      mimeTypeParams = certificate.mimetype;
-      const fileId = await uploadFile(authClient, certificate.path, certificate.mimetype , certificate.originalname);
-      certificateFileIds.push(fileId.data.id);
-      certificateFileNames.push(certificate.originalname); // Optional: Store original filename
-    }
-
-    console.log("certificateFileIds = " , certificateFileIds)
-    console.log("certificateFileNames = " , certificateFileNames)
-
-
-
-    const formId = req.params.formId;
-
-    const wshcmForm = await WshcmForm.findByIdAndUpdate(formId, {
-      $push: {
-        certificateFilesId: certificateFileIds,
-        certificateFiles: certificateFileNames,
-      },
-    }, { new: true }); // Ensure you get the updated document
-
-    if (!wshcmForm) {
-      return res.status(404).send({ message: "Form not found" });
-    }
-
-    res.send({ message: "Certificate files uploaded successfully" , updatedForm : wshcmForm });
-
-  }catch(error){
-
-    return res.status(404).send({ message: "Something went wrong sorrrry" });
-
-  }
-
-})
-
-
-
-
-
-router.post("/uploadPhoto/:formId" ,upload.fields([{ name: 'photo', maxCount: 1 }]) , async(req , res)=>{
-
-  try{
-
-
-    const validationErrors = [];
-
-    // Validate photo file size
-    if (req.files['photo'] && !validateFileSize(req.files['photo'][0])) {
-      validationErrors.push(`Photo file exceeds the maximum size of 30MB.`);
-    }
-
-    if (validationErrors.length > 0) {
-      // If there are validation errors, return a bad request with the errors
-      return res.status(400).send({ status: 0, message: 'Validation errors:', errors: validationErrors });
-    }
-
-
-    const photo = req.files['photo'][0];
-    console.log("check photo")
-
-    console.log("photo = " ,req.files['photo'][0].path)
-
-    //uploading files to gdrive
-    const authClient = await authorize();
-
-    const photoId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
-
-    console.log("photoId = " , photoId.data.id)
-
-
-    const formId = req.params.formId;
-
-    const updatedForm = await WshcmForm.findByIdAndUpdate(formId, {
-      photo: photo.originalname,
-      photoId : photoId.data.id,
-    }, { new: true }); // Return the updated document
-
-    if (!updatedForm) {
-      return res.status(404).send({ message: 'Form not found' });
-    }
-
-    res.status(200).send({ message: 'Photo uploaded successfully!', updatedForm: updatedForm });
-
-
-  }catch(error){
-
-    return res.status(404).send({ message: "Something went wrong sorrrry" });
-
-  }
-
-} )
-
-
-
-
+// Usage example (replace with your actual authClient and folder ID)
 
 
 router.post("/checkFilesUpload" , async(req , res)=>{
@@ -910,4 +846,117 @@ router.post("/checkFilesUpload" , async(req , res)=>{
 
 
 
+
+
+// async function generatePdf(wshcmForms, filename) {
+//   const doc = new jsPDF({
+//     orientation: 'landscape',
+//     format: [1414, 987], // A2 page format (in millimeters)
+//     unit: 'mm'
+//   });
+
+//   const headerHeight = 10; // Adjust header height as needed
+//   const margin = 10; // Adjust margins as needed
+
+//   let y = margin + headerHeight; // Starting position for content
+
+//   // Header (optional)
+//   doc.text("WSHCM Form Data", margin, headerHeight, { align: 'center' });
+
+//   // Column Definitions (adjust column widths and data keys as needed)
+//   const columns = [
+//     { title: 'Class Type', dataKey: 'class_type', width: 30 },
+//     { title: 'Participant Name', dataKey: 'participantName', width: 70 },
+//     { title: 'NRIC No', dataKey: 'NRIC_No', width: 40 },
+//     { title: 'Organization', dataKey: 'organization', width: 50 },
+//     { title: 'Date of Birth', dataKey: 'date_of_birth', width: 35 },
+//     { title: 'Sunday Class Timing', dataKey: 'sunday_class_timing', width: 40 }, // Uncommented
+//     { title: 'Work Permit', dataKey: 'work_permit', width: 25 }, // Uncommented
+//     { title: 'Work Permit Expiry', dataKey: 'work_permit_expiry', width: 30 }, // Uncommented
+//     { title: 'Working Day Timing', dataKey: 'working_day_timing', width: 40 }, // Uncommented
+//     { title: 'Contact No', dataKey: 'contact_no', width: 30 }, // Uncommented
+//     { title: 'Identification', dataKey: 'identification', width: 30 }, // Uncommented
+//     { title: 'Company Name', dataKey: 'companyName', width: 50 }, // Added
+//     { title: 'Company UEN', dataKey: 'companyUEN', width: 35 }, // Added
+//     { title: 'Company Person Name', dataKey: 'companyPersonName', width: 50 }, // Added
+//     { title: 'Company Person Email', dataKey: 'companyPersonEmail', width: 50 }, // Added
+//     { title: 'Company Person Contact No', dataKey: 'companyPersonContactNo', width: 40 }, // Added
+//     { title: 'Email ID', dataKey: 'email_id', width: 40 }, // Added
+//     { title: 'Experience', dataKey: 'experience', width: 25 }, // Added
+//     { title: 'Salary', dataKey: 'salary', width: 25 }, // Added
+//     { title: 'Qualifications', dataKey: 'qualifications', width: 50 }, // Added
+//     { title: 'Gender', dataKey: 'gender', width: 20 }, // Added
+//     { title: 'Nationality', dataKey: 'nationality', width: 30 }, // Added
+//     { title: 'Race', dataKey: 'race', width: 25 }, // Added
+//     // { title: 'certificateFilesId', dataKey: 'certificateFilesId', width: ... }, // Not recommended for displaying in PDF (array)
+//     // { title: 'certificateFiles', dataKey: 'certificateFiles', width: ... }, // Not recommended for displaying in PDF (array)
+//     // { title: 'photoId', dataKey: 'photoId', width: ... }, // Not recommended for displaying in PDF (string)
+//     // { title: 'photo', dataKey: 'photo', width: ... }, // Not recommended for displaying in PDF (string)
+//   ];
+  
+//   // Function to format and print a single row of data, handling missing values gracefully
+//   const printRow = (data) => {
+//     let x = margin;
+//     columns.forEach((column) => {
+//       const text = data[column.dataKey] || '';
+//       doc.text(text, x, y, { align: 'left' });
+//       x += column.width;
+//     });
+//     y += 5; // Adjust row spacing as needed
+//   };
+
+//   // Print document data
+//   wshcmForms.forEach((form) => {
+//     printRow(form);
+//   });
+
+//   try {
+//     doc.save(filename);
+//     console.log("PDF generated successfully:", filename);
+//   } catch (error) {
+//     console.error(error);
+//     throw error; // Re-throw for handling in Express route
+//   }
+// }
+
+// router.get('/generate-pdf', async (req, res) => {
+//   try {
+   
+//     const forms = await WshcmForm.find();
+
+
+//     await generatePdf(forms, 'wshcm_data.pdf'); // Replace with desired filename
+//     res.send('PDF generated successfully!');
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).send('Error generating PDF');
+//   }
+// });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 module.exports = router;
+
+// module.exports = submitForm;

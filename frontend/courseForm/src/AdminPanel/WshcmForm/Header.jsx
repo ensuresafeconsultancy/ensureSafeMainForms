@@ -4,7 +4,6 @@ import { downloadDocPdf , downloadDocCsv , deleteAllWshcmData} from "../apiCall"
 const Header = () => {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [excelLoading, setExcelLoading] = useState(false);
-  // const [deleteAllLoading, setDeleteAll] = useState(false);
 
   const getDocPdf = async () => {
     try {
@@ -26,9 +25,7 @@ const Header = () => {
   };
   const deleteAll = async () => {
     try {
-      // setDeleteAll(true);
       await deleteAllWshcmData();
-      // setDeleteAll(false);
     } catch (error) {
       console.error(error);
     }
