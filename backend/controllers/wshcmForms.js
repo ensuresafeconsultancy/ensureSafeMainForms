@@ -170,7 +170,7 @@ async function deleteAllFiles(folderPath) {
 // const submitForm = async(req,res) =>{
 
   // upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photo', maxCount: 1 }]) ,
-router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photo', maxCount: 1 }]) , async (req, res) => {
+router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photos', maxCount: 12 }]) , async (req, res) => {
     try {
       // Comprehensive validation
       const validationErrors = [];
@@ -280,11 +280,20 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
           }
         }
         
+        // Validate certificate files
+        if (req.files['photos']) {
+          for (const file of req.files['photos']) {
+            if (!validateFileSize(file)) {
+              validationErrors.push(`Photos file "${file.originalname}" exceeds the maximum size of 30MB.`);
+            }
+          }
+        }
+        
         console.log("check 2")
         // Validate photo file size
-        if (req.files['photo'] && !validateFileSize(req.files['photo'][0])) {
-          validationErrors.push(`Photo file exceeds the maximum size of 30MB.`);
-      }
+      //   if (req.files['photos'] && !validateFileSize(req.files['photos'][0])) {
+      //     validationErrors.push(`Photo file exceeds the maximum size of 30MB.`);
+      // }
   
     
     if (validationErrors.length > 0) {
@@ -295,15 +304,16 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
     
     const certificateFiles = req.files['certificateFiles'];
     console.log("check 3")
-    const photo = req.files['photo'][0];
+
+    const photoFiles = req.files['photos']; // new added
+    // const photos = req.files['photos'][0];
     console.log("check 4")
 
     console.log(req.files['certificateFiles'])
-    console.log("photo = " ,req.files['photo'][0].path)
+    // console.log("photos = " ,req.files['photos'][0].path)
 
     for(let certificate of certificateFiles){
       console.log(typeof certificate.path)
-      
     }
 
 
@@ -323,11 +333,23 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
     console.log("certificateFileIds = " , certificateFileIds)
     console.log("certificateFileNames = " , certificateFileNames)
 
+    const photoFileIds = [];
+    const photoFileNames = [];
+    for (const photo of photoFiles) {
+      fileLocation = photo.path;
+      mimeTypeParams = photo.mimetype;
+      const fileId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
+      photoFileIds.push(fileId.data.id);
+      photoFileNames.push(photo.originalname); // Optional: Store original filename
+    }
+
+    console.log("photoFileIds = " , photoFileIds)
+    console.log("photoFileNames = " , photoFileNames)
+
       
-    const photoId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
+    // const photoIds = await uploadFile(authClient, photos.path, photos.mimetype , photos.originalname);
 
-
-    console.log("photoId = " , photoId.data.id)
+    // console.log("photoId = " , photoId.data.id)
           
 
       
@@ -360,10 +382,13 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
       certificateFiles: certificateFileNames,
       certificateFilesId : certificateFileIds,
       
-      photo: photo.originalname,
-      photoId : photoId.data.id,
+      photos: photoFileNames,
+      photoId : photoFileIds,
     
     });
+
+    // photo: photo.originalname,
+    //   photoId : photoId.data.id,
  
   
       const response = await newForm.save();
@@ -498,7 +523,7 @@ router.get('/exportFormCsv', async(req,res)=>{
       'race',
       // Include certificateFiles and photo if needed (adjust format)
       'certificateFiles',
-      'photo',
+      'photos',
     ];
     const csvParser = new Json2csvParser({ fields });
 
@@ -558,9 +583,14 @@ router.delete('/deleteWshcmRecord/:id', async(req,res)=>{
     for(let certificateFile of certificateFileIds){
       await deleteFile(authClient, certificateFile);
     }
+
+     // multiple Photo are deleting
+    for(let photo of photoId){
+      await deleteFile(authClient, photo);
+    }
   
     // single photo is deleting
-    await deleteFile(authClient, photoId);
+    // await deleteFile(authClient, photoId);
 
 
     if (deletedForm) {
@@ -575,19 +605,6 @@ router.delete('/deleteWshcmRecord/:id', async(req,res)=>{
     res.send({status : 0 , message :"Record not found or server error"})
   }
 })
-
-
-// async function deleteFile(authClient, fileId) {
-//   const drive = google.drive({ version: 'v3', auth: authClient });
-//   try {
-//     await drive.files.delete({ fileId });
-//     console.log(`File with ID ${fileId} deleted successfully.`);
-//     return true;
-//   } catch (error) {
-//     console.error('Error deleting file:', error.message);
-//     return false;
-//   }
-// }
 
 
 async function deleteAllFilesInFolder(authClient, folderId) {
@@ -724,47 +741,57 @@ router.delete("/deleteSingleCertificate/:formId/:certificateIndex", async (req, 
   }
 });
 
-
-router.delete("/deleteSinglePhoto/:formId/:photoId", async (req, res) => {
+router.delete("/deleteSinglePhoto/:formId/:photoIndex", async (req, res) => {
   try {
     const formId = req.params.formId;
-    const photoId = req.params.photoId;
+    const photoIndex = parseInt(req.params.photoIndex); // Ensure valid integer
 
-    console.log("formId = ", formId);
-    console.log("photoId = ", photoId);
-
-    // 1. Find the form document
-    const wshcmForm = await WshcmForm.findById(formId);
+    // Find the form document using the form ID
+    const wshcmForm = await WshcmForm.findOne({ _id: formId });
 
     if (!wshcmForm) {
       return res.status(404).send({ message: "Form not found" });
     }
 
-    // 2. Check if photoId matches existing photoId (optional)
-    if (wshcmForm.photoId !== photoId) {
-      return res.status(400).send({ message: "Photo ID does not match existing photo" });
+    // Validate certificate index within bounds
+    if (photoIndex < 0 || photoIndex >= wshcmForm.photoId.length) {
+      return res.status(400).send({ message: "Invalid photo index" });
     }
 
-    // 3. Delete photo from Google Drive (if applicable)
-    try {
+    // Extract the certificate details to be deleted
+    const photoFileIdToDelete = wshcmForm.photoId[photoIndex];
+    const photoFileToDelete = wshcmForm.photos[photoIndex];
+
+    
+    console.log("photoFileIdToDelete = " , photoFileIdToDelete)
+    console.log("photoFileToDelete = " , photoFileToDelete)
+    
+    try{
       const authClient = await authorize();
-      await deleteFile(authClient, photoId); // Replace with your implementation
-    } catch (err) {
-      console.error("Error deleting file from Google Drive:", err);
-      // Handle file deletion error gracefully (e.g., log and continue deletion)
+      await deleteFile(authClient, photoFileIdToDelete);
+     
+      wshcmForm.photoId.splice(photoIndex, 1);
+      wshcmForm.photos.splice(photoIndex, 1);
+  
+      // Save the updated form document
+      const updatedForm = await wshcmForm.save();
+  
+      res.send({ message: `Photo ${photoFileToDelete} deleted successfully` , updatedForm : updatedForm });
+      
+    } catch(err){
+      return res.status(400).send({message : "File not found"})
     }
 
-    // 4. Update the form document
-    wshcmForm.photoId = undefined;
-    wshcmForm.photo = undefined; // Set both fields to undefined to delete
-    const updatedForm = await wshcmForm.save();
-
-    res.send({ message: "Photo and photoId deleted successfully" , updatedForm : updatedForm });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Error deleting photo" });
+    // Update the arrays using splice to remove the specified element
+   
+  
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Error deleting certificate" });
   }
 });
+
+
 
 
 router.post("/uploadCertificateFiles/:formId" , upload.fields([{ name: 'certificateFiles', maxCount: 12 }]) , async(req,res)=>{
@@ -840,18 +867,18 @@ router.post("/uploadCertificateFiles/:formId" , upload.fields([{ name: 'certific
 
 
 
-
-
-router.post("/uploadPhoto/:formId" ,upload.fields([{ name: 'photo', maxCount: 1 }]) , async(req , res)=>{
-
+router.post("/uploadPhotos/:formId" , upload.fields([{ name: 'photos', maxCount: 12 }]) , async(req,res)=>{
   try{
 
 
     const validationErrors = [];
 
-    // Validate photo file size
-    if (req.files['photo'] && !validateFileSize(req.files['photo'][0])) {
-      validationErrors.push(`Photo file exceeds the maximum size of 30MB.`);
+    if (req.files['photos']) {
+      for (const file of req.files['photos']) {
+        if (!validateFileSize(file)) {
+          validationErrors.push(`photos file "${file.originalname}" exceeds the maximum size of 30MB.`);
+        }
+      }
     }
 
     if (validationErrors.length > 0) {
@@ -860,33 +887,48 @@ router.post("/uploadPhoto/:formId" ,upload.fields([{ name: 'photo', maxCount: 1 
     }
 
 
-    const photo = req.files['photo'][0];
-    console.log("check photo")
-
-    console.log("photo = " ,req.files['photo'][0].path)
+    const photoFiles = req.files['photos'];
+    console.log("check 3")
+  
+    console.log(req.files['photos'])
+   
+    for(let photo of photoFiles){
+      console.log(typeof photo.path)
+    }
 
     //uploading files to gdrive
     const authClient = await authorize();
 
-    const photoId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
+    const photoFileIds = [];
+    const photoFileNames = [];
+    for (const photo of photoFiles) {
+      fileLocation = photo.path;
+      mimeTypeParams = photo.mimetype;
+      const fileId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
+      photoFileIds.push(fileId.data.id);
+      photoFileNames.push(photo.originalname); // Optional: Store original filename
+    }
 
-    console.log("photoId = " , photoId.data.id)
+    console.log("photoFileIds = " , photoFileIds)
+    console.log("photoFileNames = " , photoFileNames)
+
 
 
     const formId = req.params.formId;
 
-    const updatedForm = await WshcmForm.findByIdAndUpdate(formId, {
-      photo: photo.originalname,
-      photoId : photoId.data.id,
-    }, { new: true }); // Return the updated document
+    const wshcmForm = await WshcmForm.findByIdAndUpdate(formId, {
+      $push: {
+        photoId: photoFileIds,
+        photos: photoFileNames,
+      },
+    }, { new: true }); // Ensure you get the updated document
 
-    if (!updatedForm) {
-      return res.status(404).send({ message: 'Form not found' });
+    if (!wshcmForm) {
+      return res.status(404).send({ message: "Form not found" });
     }
-
     deleteAllFiles('files'); 
-    res.status(200).send({ message: 'Photo uploaded successfully!', updatedForm: updatedForm });
 
+    res.send({ message: "Photo files uploaded successfully" , updatedForm : wshcmForm });
 
   }catch(error){
 
@@ -894,9 +936,7 @@ router.post("/uploadPhoto/:formId" ,upload.fields([{ name: 'photo', maxCount: 1 
 
   }
 
-} )
-
-
+})
 
 
 

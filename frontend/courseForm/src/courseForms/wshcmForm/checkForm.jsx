@@ -56,10 +56,10 @@ const CheckForm = () => {
            <div className="form-group py-4">
 
                <input type="text" onChange={(e)=>setName(e.target.value)} />
-               <label htmlFor="">Upload Educational Certificates *</label>
+               <label htmlFor="" className="fw-bold">Upload Educational Certificates *</label>
             <input type="file" className='form-control mb-3' name="educationalCertificates"  onChange={(e)=> setCertificateFiles(e.target.files)} multiple required />
 
-            <label htmlFor="">Photo of the Student *</label>
+            <label htmlFor="" className="fw-bold">Photo of the Student *</label>
             <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhoto(e.target.files[0])} required />
 
 

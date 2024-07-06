@@ -27,7 +27,7 @@ const ContactBtn = ({setContactNoFunc , setContactNoError , contactNoError}) => 
 
   return (
     <div className='pb-3'>
-    <label htmlFor="">Contact No *</label>
+    <label htmlFor="" className="fw-bold">Contact No *</label>
     {/* <input id="phone" type="text" className="form-control mb-3" onChange={handleInputChange} value={contact_no} name="contact_no" required /> */}
 
     <PhoneInput country={'sg'} id="companyPersonContactNo"  onChange={handleContactNo} inputProps={{ required: true }} />

@@ -1,7 +1,10 @@
 import LoadingImg from "../../assets/Loading/loading.gif";
 import { useState } from "react";
 import { downloadDocPdf , downloadDocCsv , deleteAllWshcmData} from "../apiCall";
-const Header = () => {
+import PropTypes from 'prop-types';
+
+import { LuRefreshCcw } from "react-icons/lu";
+const Header = ({handleRefreshClick}) => {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [excelLoading, setExcelLoading] = useState(false);
 
@@ -31,7 +34,16 @@ const Header = () => {
     }
   };
   return (
-    <div className="d-flex justify-content-end py-3 pb-5 px-lg-5 px-2 gap-2">
+    <div className="d-flex justify-content-end align-items-center gap-2 py-3 pb-5 px-lg-5 px-2">
+
+     
+
+      {/* <div className="d-flex justify-content-center align-items-center gap-2" > */}
+
+        <span className="refreshBox d-flex justify-content-center align-items-center rounded-circle cursor_pointer" onClick={()=>handleRefreshClick()}>
+          <LuRefreshCcw className="refreshIcon" />
+        </span>
+
       <span
         className="cursor_pointer px-3 py-2 border rounded-pill exportPdf d-flex justify-content-center align-items-center gap-1"
         onClick={() => getDocExcel()}
@@ -59,14 +71,19 @@ const Header = () => {
         onClick={() => deleteAll()}
       >
         Delete all data{" "}
-        {/* {deleteAllLoading ? (
-          <img src={LoadingImg} className="loadingImg" alt="loading" />
-        ) : (
-          ""
-        )} */}
       </span>
+
+      {/* </div> */}
+
+
+     
     </div>
   );
 };
+
+Header.propTypes = {
+  handleRefreshClick : PropTypes.func.isRequired
+}
+
 
 export default Header;

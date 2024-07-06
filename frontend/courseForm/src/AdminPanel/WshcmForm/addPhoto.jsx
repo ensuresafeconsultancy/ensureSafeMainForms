@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 
 import { uploadPhotoFile } from "../apiCall";
 
-const AddPhoto = ({ updateFormData, setIsPhotoUploadModalOpen , editFormId}) => {
+const AddPhotos = ({ updateFormData, setIsPhotoUploadModalOpen , editFormId}) => {
 
 
-    const [photo , setPhoto] = useState([]);
+    const [photos , setPhotos] = useState([]);
 
     const closeEditModal = () => {
         setIsPhotoUploadModalOpen(false);
@@ -16,7 +16,7 @@ const AddPhoto = ({ updateFormData, setIsPhotoUploadModalOpen , editFormId}) => 
     const validateForm = async(event)=>{
         event.preventDefault();
 
-        const response = await uploadPhotoFile(photo , editFormId);
+        const response = await uploadPhotoFile(photos , editFormId);
 
         if(response.status == 200){
           updateFormData(response.data.updatedForm , editFormId)
@@ -55,7 +55,7 @@ const AddPhoto = ({ updateFormData, setIsPhotoUploadModalOpen , editFormId}) => 
             <div className="modal-body"> 
 
             <label htmlFor="Add photo">Add Photo :</label>
-            <input type="file" className='form-control my-3' name="studentPhoto" onChange={(e)=> setPhoto(e.target.files[0])} required />
+            <input type="file" className='form-control my-3' name="studentPhoto" onChange={(e)=> setPhotos(e.target.files)} multiple required />
 
             
             </div>
@@ -84,7 +84,7 @@ const AddPhoto = ({ updateFormData, setIsPhotoUploadModalOpen , editFormId}) => 
 }
 
 
-AddPhoto.propTypes = {
+AddPhotos.propTypes = {
     setIsPhotoUploadModalOpen: PropTypes.func.isRequired,
 
     editFormId: PropTypes.string.isRequired,
@@ -92,4 +92,4 @@ AddPhoto.propTypes = {
     updateFormData: PropTypes.func.isRequired,
 }
 
-export default AddPhoto;
+export default AddPhotos;

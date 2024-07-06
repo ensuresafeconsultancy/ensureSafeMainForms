@@ -481,12 +481,13 @@ export const deleteSingleCertificate = async (formId , certificateIndex)=>{
     console.log(err.message)
   }
 }
+export const deleteSinglePhoto = async (formId , photoIndex)=>{
 
-export const deleteSinglePhoto = async(formId , photoId)=>{
+
   try{
     const confirmResult = await swal({
-      title: "Are sure to delete this Photo?",
-      text: "This will be permanently delete the photo",
+      title: "Are sure to delete this Photo file?",
+      text: "This will be permanently delete the Photo",
       icon: "warning",
       buttons: {
         cancel: "No, cancel it!",
@@ -512,7 +513,7 @@ export const deleteSinglePhoto = async(formId , photoId)=>{
       });
 
       try {
-        const response = await axios.delete(`${APIURL}${ServerVariables.deleteSinglePhoto}/${formId}/${photoId}`); 
+        const response = await axios.delete(`${APIURL}${ServerVariables.deleteSinglePhoto}/${formId}/${photoIndex}`); 
 
 
         console.log(response.status)
@@ -527,6 +528,8 @@ export const deleteSinglePhoto = async(formId , photoId)=>{
 
         swal("Deleted", response.data.message, "success")
        
+
+
         return response;
     
       } catch (error) {
@@ -542,14 +545,13 @@ export const deleteSinglePhoto = async(formId , photoId)=>{
         }
       }
     }
-   
 
   }catch(err){
     console.log(err.response.status)
     console.log(err.message)
   }
-
 }
+
 
 
 export const uploadCertificateFiles = async(certificateFiles , formId)=>{
@@ -606,16 +608,15 @@ export const uploadCertificateFiles = async(certificateFiles , formId)=>{
   }
 
 }
+export const uploadPhotoFile = async(photos , formId)=>{
 
-export const uploadPhotoFile = async(photo , formId)=>{
-
-  
   try {
     const newFormData = new FormData();
 
-    if (photo) {
-      newFormData.append('photo', photo);
-    }
+    // Append certificate files (assuming they are in an array)
+    for (let i = 0; i < photos.length; i++) {
+        newFormData.append('photos', photos[i]);
+      }
 
       swal({
         title: "Submitting...",
@@ -629,7 +630,7 @@ export const uploadPhotoFile = async(photo , formId)=>{
 
       try {
         const response = await axios.post(
-          `${APIURL}${ServerVariables.uploadPhoto}/${formId}`,newFormData,
+          `${APIURL}${ServerVariables.uploadPhotos}/${formId}`,newFormData,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
           }
@@ -638,9 +639,9 @@ export const uploadPhotoFile = async(photo , formId)=>{
         swal.close(); // Close loading indicator after response
 
         if (response.data.message) {
-          swal("Photo Uploaded!", response.data.message, "success");
+          swal("Photos Uploaded!", response.data.message, "success");
         } else {
-          swal("Error!", "An error occurred while Uploading the certificates.", "error");
+          swal("Error!", "An error occurred while Uploading the photos.", "error");
         }
 
         console.log(response.data.message);
@@ -653,11 +654,12 @@ export const uploadPhotoFile = async(photo , formId)=>{
         swal("Error!", "An error occurred while submitting the form.", "error");
       }
 
+
+
+
   } catch(error){
     console.log(error.message)
   }
 
 }
-
-
 

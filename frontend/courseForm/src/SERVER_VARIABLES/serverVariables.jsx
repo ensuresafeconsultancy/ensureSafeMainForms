@@ -20,7 +20,7 @@ export const ServerVariables = {
     uploadCertificateFiles : "/wshcmForm/uploadCertificateFiles",
 
     deleteSinglePhoto : "/wshcmForm/deleteSinglePhoto",
-    uploadPhoto : "/wshcmForm/uploadPhoto",
+    uploadPhotos : "/wshcmForm/uploadPhotos",
 
     checkFilesUpload : "/wshcmForm/checkFilesUpload"
 

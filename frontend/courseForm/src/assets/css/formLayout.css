@@ -1,0 +1,51 @@
+.mainColor{
+    color: #1c1c91;
+}
+.mainBgColor{
+    background-color: rgb(50, 115, 255);
+}
+
+#formMainBox{
+    background: rgb(123, 165, 255);
+    /* background: #1c1c91; */
+}
+#formMainBox .formMainBoxBorder{
+    /* border-radius: 36px; */
+    box-shadow: 0px 0px 16px -4px rgb(255, 255, 255);
+    /* box-shadow: 0px 0px 16px -4px rgb(255, 255, 255); */
+    background: white;
+}
+
+.registrationLogoBox:hover{
+    /* background-color: rgb(236, 236, 236); */
+    background-color: rgb(50, 115, 255);
+    color: #fff;
+    box-shadow: 0px 0px 6px 0px rgb(50, 115, 255);
+}
+
+.registrationLogoBoxActive{
+    background-color: rgb(50, 115, 255);
+    color: #fff;
+    font-weight: 600;
+    /* background-color: rgb(236, 236, 236); */
+    box-shadow: 0px 0px 6px 0px rgb(50, 115, 255);
+}
+
+.ensureSafeMainLogo{
+    height: 147px;
+}
+
+.registrationLogo{
+    height: 35px;
+    width: 35px;
+}
+/* 
+label{
+    font-weight: 600;
+} */
+
+@media (min-width: 1400px) {
+    #formMainBox .container{
+        max-width: 1108px;
+    }
+}

@@ -7,6 +7,12 @@ import ContactBtn from './contactBtn'
 
 import { wshcmApiCall } from './apiCall'
 
+import { FaUserTie } from "react-icons/fa";
+import { GrOrganization } from "react-icons/gr";
+
+import { FaMale } from "react-icons/fa";
+import { FaFemale } from "react-icons/fa";
+
 const Wshcm_form = () => {
 
     const [formData , setFormData] = useState({
@@ -44,7 +50,7 @@ const Wshcm_form = () => {
     const [companyPersonContactError , setCompanyPersonContactError] = useState(false);
     const [contactNoError , setContactNoError] = useState(false);
     const [certificateFiles , setCertificateFiles] = useState([]);
-    const [photo , setPhoto] = useState([]);
+    const [photos , setPhotos] = useState([]);
 
 
     const validateForm=(event)=>{
@@ -55,9 +61,11 @@ const Wshcm_form = () => {
                 return alert("Company Contact No invalid")
             }
         } else if(formData.contact_no.length<1 || contactNoError){
-            return alert("Phone number error")
+            return alert("Enter Contact No  properly")
+        } else if(formData.class_type == ''){
+            return alert("Select class type")
         }
-        wshcmApiCall(formData , certificateFiles , photo);
+        wshcmApiCall(formData , certificateFiles , photos);
     }
 
 
@@ -65,6 +73,8 @@ const Wshcm_form = () => {
         const classTypeValue = event.target.value || event.target.innerHTML;
         const elementName = event.target.name || event.target.parentElement.children[0].name;
         elementName? setFormData((formData)=> ({...formData , [elementName] : classTypeValue})) : ''
+
+        console.table(formData)
     }
 
  
@@ -100,7 +110,47 @@ const Wshcm_form = () => {
 
     }
    
+
+    const [classType, setClassType] = useState(null); // Track currently active logo (index)
+    const [activeLogo, setActiveLogo] = useState(null); // Track currently active logo (index)
+    const [genderIndex, setGenderIndex] = useState(null); // Track currently active logo (index)
+
+//   const handleLogoClick = (index) => {
+//     setActiveLogo(index); // Set the clicked logo as active
+//   };
    
+
+  const handleClassType = (index) => {
+    setClassType(index); // Update the active logo state
+    // Directly update the organization field in formData based on the index
+    setFormData((formData) => ({
+      ...formData,
+      class_type: index === 0 ? 'Sunday class' : 'Tuesday, Thursday, Saturday',
+    }));
+
+    console.table(formData)
+  };
+  const handleLogoClick = (index) => {
+    setActiveLogo(index); // Update the active logo state
+    // Directly update the organization field in formData based on the index
+    setFormData((formData) => ({
+      ...formData,
+      organization: index === 0 ? 'Company' : 'Individual',
+    }));
+
+    console.table(formData)
+  };
+
+  const handleGenderClick = (index) => {
+    setGenderIndex(index); // Update the active logo state
+    // Directly update the organization field in formData based on the index
+    setFormData((formData) => ({
+      ...formData,
+      gender: index === 0 ? 'Male' : 'Female',
+    }));
+
+    console.table(formData)
+  };
 
   return (
     <div className="container px-lg-5 px-2">
@@ -108,47 +158,79 @@ const Wshcm_form = () => {
 
         <form action="" onSubmit={validateForm}>
             <div className="form-group py-4">
-        <h5 className="fw-bold">Class Type</h5>
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Sunday class" name="class_type" id="flexRadioDefault1" required />
-                    <label className="form-check-label" >
+                <h5 className="fw-bold pb-3">Class Type</h5>
+                
+
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                    <div
+                        className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
+                            classType === 0 ? 'registrationLogoBoxActive' : ''
+                        }`}
+                        onClick={() => handleClassType(0)}
+                    >
+                        
                         Sunday class
-                    </label>
+                    </div>
+                    <div
+                        className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
+                            classType === 1 ? 'registrationLogoBoxActive' : ''
+                        }`}
+                        onClick={() => handleClassType(1)}
+                    >
+
+                        <span>Tuesday, Thursday, Saturday</span>
+                        
+                        {/* Tuesday, Thursday, Saturday */}
+                    </div>
                 </div>
 
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio"  name="class_type" value="Tuesday, Thursday, Saturday" id="flexRadioDefault2" />
-                    <label className="form-check-label">
-                        Tuesday, Thursday, Saturday
-                    </label>
-                </div>
+                {/* <div className="row">
+                    <div className="col">
+
+                    </div>
+                    <div className="col"></div>
+                </div> */}
+
+            
             </div>
         
 
         <Timings class_type = {formData.class_type} handleInputChange={handleInputChange} /> 
 
         <div className="form-group pb-4">
-        <h5 className='fw-bold'>Type Of Registration</h5>
-                <div className="form-check" onClick={handleInputChange}>
-                        <input className="form-check-input" type="radio" value="Company" name="organization" required />
-                        <label className="form-check-label" >
-                        Company  
-                        </label>
-                </div>
+        <h5 className='fw-bold pb-3'>Type Of Registration</h5>
 
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Individual" name="organization" />
-                    <label className="form-check-label">
-                    Individual
-                    </label>
+            
+
+            <div className="d-flex justify-content-start align-items-center gap-3">
+                <div
+                    className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
+                    activeLogo === 0 ? 'registrationLogoBoxActive' : ''
+                    }`}
+                    onClick={() => handleLogoClick(0)}
+                >
+                    <GrOrganization className='registrationLogo' />
+                    Company
                 </div>
+                <div
+                    className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
+                    activeLogo === 1 ? 'registrationLogoBoxActive' : ''
+                    }`}
+                    onClick={() => handleLogoClick(1)}
+                >
+                    <FaUserTie className='registrationLogo' />
+                    Individual
+                </div>
+            </div>
+          
+                
 
         </div>
-        
+         
 
         <CompanyDetails handleInputChange={handleInputChange} setContactNoFunc={setContactNoFunc} companyPersonContactError={companyPersonContactError} setCompanyPersonContactError={setCompanyPersonContactError} companyOrNot={formData.organization} companyName = {formData.companyName} companyUEN={formData.companyUEN} companyPersonName={formData.companyPersonName} companyPersonEmail={formData.companyPersonEmail} companyPersonContactNo={formData.companyPersonContactNo} />
 
-        <Identification handleInputChange={handleInputChange} companyOrNot={formData.organization} identification={formData.identification} participantName={formData.participantName} NRIC_No={formData.NRIC_No} work_permit={formData.work_permit} work_permit_expiry={formData.work_permit_expiry} />
+        <Identification handleInputChange={handleInputChange} companyOrNot={formData.organization} identification={formData.identification} participantName={formData.participantName} NRIC_No={formData.NRIC_No} work_permit={formData.work_permit} work_permit_expiry={formData.work_permit_expiry} setFormData={setFormData} formData={formData} />
 
         
         {formData.identification && <div className='form-group pb-4'>
@@ -157,29 +239,49 @@ const Wshcm_form = () => {
             <h4 className='fw-bold'>Enter Personal Details</h4>
         <div className="form-group">
             <div className="form-group pb-3">
-            <label htmlFor="">Date of Birth *</label>
-                <input type="date" className="form-control" onChange={handleInputChange} value={formData.date_of_birth} name="date_of_birth" required />
+            <label htmlFor="" className="fw-bold pb-2">Date of Birth *</label>
+                <input type="date" className="form-control d-lg-block d-none w-25" onChange={handleInputChange} value={formData.date_of_birth} name="date_of_birth" required />
+                <input type="date" className="form-control d-lg-none d-inline" onChange={handleInputChange} value={formData.date_of_birth} name="date_of_birth" required />
 
             </div>
 
             <div className="pb-3">
-             <label htmlFor="">Gender *</label>
-            <div className="form-check" onClick={handleInputChange}>
-                <input className="form-check-input" type="radio" value="male" name="gender" required />
-                <label className="form-check-label">
-                Male
-                </label>
+                <label htmlFor="" className='pb-2 fw-bold'>Gender *</label>
+
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                <div
+                    className={`registrationLogoBox py-4 px-5 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
+                        genderIndex === 0 ? 'registrationLogoBoxActive' : ''
+                    }`}
+                    onClick={() => handleGenderClick(0)}
+                >
+                    <FaMale className='registrationLogo' />
+                    Male
+                </div>
+                <div
+                    className={`registrationLogoBox py-4 px-5 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
+                        genderIndex === 1 ? 'registrationLogoBoxActive' : ''
+                    }`}
+                    onClick={() => handleGenderClick(1)}
+                >
+                    <FaFemale className='registrationLogo' />
+                    Female
+                </div>
             </div>
-            <div className="form-check" onClick={handleInputChange} >
-                <input className="form-check-input" type="radio" value="female" name="gender" />
-                <label className="form-check-label">
-                female
-                </label>
-            </div>   
+          
+
+
+
             </div>
+
+            
+
+           
+
+            
             
             <div className="pb-3">
-            <label htmlFor="">Nationality *</label>
+            <label htmlFor="" className="fw-bold">Nationality *</label>
             <div className="form-check" onClick={handleInputChange}>
                 <input className="form-check-input" type="radio" value="Singaporean" name="nationality" required />
                 <label className="form-check-label">
@@ -213,7 +315,7 @@ const Wshcm_form = () => {
             </div>
             
             <div className="pb-3">
-            <label htmlFor="">Race *</label>
+            <label htmlFor="" className="fw-bold">Race *</label>
 
                 <div className="form-check" onClick={handleInputChange}>
                     <input className="form-check-input" type="radio" value="Chinese" name="race" required />
@@ -251,19 +353,19 @@ const Wshcm_form = () => {
 
             <ContactBtn setContactNoFunc={setContactNoFunc} setContactNoError={setContactNoError} contactNoError={contactNoError} />
            <div className="mb-3">
-               <label htmlFor="">Email *</label>
+               <label htmlFor="" className="fw-bold">Email *</label>
                 <input type="text" className="form-control" onChange={handleInputChange} onKeyUp={checkErrors} value={formData.email_id} name="email_id" id="email_id" required />
                 {emailIDError && <span className='text-danger'>Email id invalid *</span>}
            </div>
             
             <div className="mb-3">
-               <label htmlFor="">Years of Experience *</label>
+               <label htmlFor="" className="fw-bold">Years of Experience *</label>
                 <input type="text" className="form-control " onChange={handleInputChange} onKeyUp={checkErrors} value={formData.experience} name="experience" id="experience"  required />
                 {experienceError && <span className='text-danger '>Enter the experience *</span>}
             </div>
             
             <div className="pb-3">
-            <label htmlFor="">Salary Range *</label>
+            <label htmlFor="" className="fw-bold">Salary Range *</label>
                     <div className="form-check" onClick={handleInputChange}>
                         <input className="form-check-input" type="radio" value="Less Then $1000" name="salary" required />
                         <label className="form-check-label">
@@ -293,7 +395,7 @@ const Wshcm_form = () => {
 
 
             <div className="pb-3">
-            <label htmlFor="">Highest Qualification *</label>
+            <label htmlFor="" className="fw-bold">Highest Qualification *</label>
 
                         <div className="form-check" onClick={handleInputChange}>
                             <input className="form-check-input" type="radio" value="Degree" name="qualifications" required />
@@ -324,14 +426,15 @@ const Wshcm_form = () => {
 
 
             
-            <label htmlFor="">Upload Educational Certificates *</label>
+            <label htmlFor="" className="fw-bold">Upload Educational Certificates *</label>
             <input type="file" className='form-control mb-3' name="educationalCertificates"  onChange={(e)=> setCertificateFiles(e.target.files)} multiple required />
 
-            <label htmlFor="">Photo of the Student *</label>
-            <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhoto(e.target.files[0])} required />
+            <label htmlFor="" className="fw-bold">Photo of the Student *</label>
+            <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhotos(e.target.files)} multiple required />
+            {/* <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhoto(e.target.files[0])} required /> */}
 
 
-            <div className="pb-3">
+            <div className="pb-3 d-flex justify-content-start align-items-center">
                 <input type="checkbox" className='form-checkbox' required />
                 <span className='ms-2'>I declare that all the above details are provided</span>
             </div>
@@ -340,7 +443,9 @@ const Wshcm_form = () => {
         </div>
       
 
-      <button className='btn btn-primary'>Submit</button>
+<div className="text-center pt-3">
+      <button className='btn px-5 fw-bold mainBgColor'>Submit</button>
+</div>
 
         
         

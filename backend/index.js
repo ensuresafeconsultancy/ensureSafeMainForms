@@ -61,5 +61,3 @@ app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-
-// http://localhost:3000/wshcmForm/uploadCertificateFiles/668251cad8033905aa357bf4

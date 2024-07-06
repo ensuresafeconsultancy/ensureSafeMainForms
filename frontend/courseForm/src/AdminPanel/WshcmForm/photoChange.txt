@@ -1,0 +1,178 @@
+<td>
+                          {item.photo ? (
+                            <div className="d-flex justify-content-between align-items-center ">
+                              <span
+                                onClick={() =>
+                                  openFile(item.photo, item.photoId)
+                                }
+                                className="text-truncate cursor_pointer fileName "
+                                style={{ maxWidth: "150px" }}
+                              >
+                                {item.photo.substr(0, 23).concat("...") +
+                                  item.photo.split(".")[1]}
+                              </span>
+
+                              <div className="d-flex justify-content-center align-items-center">
+
+                              <span
+                                onClick={() =>
+                                  downloadFile(item.photo, item.photoId)
+                                }
+                                className="text-success cursor_pointer  rounded-circle download_bg"
+                              >
+                                <MdDownloadForOffline className="downloadIcon rounded-circle" />
+                              </span>
+
+                              <span>
+
+                              <MdDelete
+                                className="actionIcon p-2 rounded-circle cursor_pointer deleteIcon"
+                                onClick={() => deletePhoto(item._id , item.photoId)}
+                              />
+                              </span>
+
+
+
+                              </div>
+                             
+                             
+
+
+                            </div>
+                          ) : (
+                            <div className="d-flex justify-content-center align-items-center flex-column">
+                              Add Photo
+                              <span className="addCertificateIconBox d-flex justify-content-center align-items-center rounded-circle">
+
+                              <IoAddCircleSharp className="addCertificateIcon cursor_pointer" onClick={()=> handlePhotoUpload(item._id)} />
+                              </span>
+                              </div>
+                          )}
+                        </td>
+
+
+export const deleteSinglePhoto = async(formId , photoId)=>{
+  try{
+    const confirmResult = await swal({
+      title: "Are sure to delete this Photo?",
+      text: "This will be permanently delete the photo",
+      icon: "warning",
+      buttons: {
+        cancel: "No, cancel it!",
+        confirm: {
+          text: "Yes, delete it",
+          closeModal: false // Close the dialog only when explicitly closed by user or timer
+        }
+      },
+      dangerMode: true,
+      closeOnEsc: false, // New option for preventing Escape key closing
+      allowOutsideClick: false
+    });
+
+    if (confirmResult) {
+      // Show loading indicator
+      swal({
+        title: "deleting...",
+        text: "Please wait...",
+        closeModal: false,
+        // closeOnConfirm: false, // Prevent automatic closing
+        closeOnEsc: false ,  // Prevent user from closing with Esc
+        allowOutsideClick: false // Prevent user from clicking outside the dialog
+      });
+
+      try {
+        const response = await axios.delete(`${APIURL}${ServerVariables.deleteSinglePhoto}/${formId}/${photoId}`); 
+
+
+        console.log(response.status)
+
+        if(response.status ==200){
+          console.log("success ")
+        } else if(response.status ==400){
+          console.log("error ")
+        }
+
+        swal.close(); // Close loading indicator after response
+
+        swal("Deleted", response.data.message, "success")
+       
+        return response;
+    
+      } catch (error) {
+        swal.close(); // Close loading indicator on error
+        console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
+        swal("Error!", "An error occurred while deleting the record.", "error");
+
+        if(error.response.status == 400){
+          console.log("please check gdrive")
+    
+        } else if(error.response.status == 500){
+          console.log("its server error check backend")
+        }
+      }
+    }
+   
+
+  }catch(err){
+    console.log(err.response.status)
+    console.log(err.message)
+  }
+
+}
+
+
+
+export const uploadPhotoFile = async(photo , formId)=>{
+
+  
+  try {
+    const newFormData = new FormData();
+
+    if (photo) {
+      newFormData.append('photo', photo);
+    }
+
+      swal({
+        title: "Submitting...",
+        text: "Please wait...",
+        closeModal: false,
+        // closeOnConfirm: false, // Prevent automatic closing
+        closeOnEsc: false ,  // Prevent user from closing with Esc
+        allowOutsideClick: false // Prevent user from clicking outside the dialog
+      });
+
+
+      try {
+        const response = await axios.post(
+          `${APIURL}${ServerVariables.uploadPhoto}/${formId}`,newFormData,
+          {
+            headers: { 'Content-Type': 'multipart/form-data' },
+          }
+        );
+
+        swal.close(); // Close loading indicator after response
+
+        if (response.data.message) {
+          swal("Photo Uploaded!", response.data.message, "success");
+        } else {
+          swal("Error!", "An error occurred while Uploading the certificates.", "error");
+        }
+
+        console.log(response.data.message);
+        console.table(response.data.userObj);
+
+        return response;
+      } catch (error) {
+        swal.close(); // Close loading indicator on error
+        console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
+        swal("Error!", "An error occurred while submitting the form.", "error");
+      }
+
+  } catch(error){
+    console.log(error.message)
+  }
+
+}
+
+
+

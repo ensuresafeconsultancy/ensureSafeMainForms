@@ -12,6 +12,8 @@ import './assets/css/sidebar.css'
 // import Wshcm_form from './courseForms'
 import AdminPanel from './AdminPanel/index.jsx'
 import HomePage from './Home/homePage'
+
+import './assets/css/formLayout.css'
 function App() {
 
   return (

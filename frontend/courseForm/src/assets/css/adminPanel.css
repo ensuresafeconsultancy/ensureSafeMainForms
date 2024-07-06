@@ -1,7 +1,14 @@
+.mainBgColor{
+    background-color: rgb(50, 115, 255) !important;
+    color: #fff !important;
+}
+
+
 .wshcmFormContainer{
     height: 75vh;
    overflow: auto;
 }
+
 .cursor_pointer{
     cursor: pointer;
 }
@@ -57,6 +64,14 @@
     font-size: 25px;
 }
 
+.refreshBox{
+    height: 35px;
+    width: 35px;
+}
+
+.refreshBox:hover{
+    background: rgb(226, 226, 226);
+}
 
 /* ---------------------------------------- */
 

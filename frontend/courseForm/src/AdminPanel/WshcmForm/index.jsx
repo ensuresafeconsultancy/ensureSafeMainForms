@@ -18,7 +18,7 @@ import { MdDelete } from "react-icons/md";
 
 import EditFormData from "./editFormData";
 import AddcertificateFiles from "./addCertificate";
-import AddPhoto from "./addPhoto";
+import AddPhotos from "./addPhoto";
 
 import swal from "sweetalert";
 
@@ -41,7 +41,7 @@ function WshcmForm() {
           "photoId",
           "certificateFilesId",
           "certificateFiles",
-          "photo",
+          "photos",
           "__v",
         ];
         const filteredEntries = Object.entries(formDataOne).filter(
@@ -57,26 +57,33 @@ function WshcmForm() {
 
 
   console.table(formData);
-  useEffect(() => {
-    const timeoutId = setTimeout(async () => {
-      try {
-        const response = await fetchWshcmData();
-        console.log("useeffect")
-        if (response && response.status === 200) {
-          setFormData(response.data.WshcmFormData);
-        } else {
-          console.error("Error fetching data:", response);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err);
-      } finally {
-        setIsLoading(false);
-      }
-    }, 0); // Delay for 2 seconds
 
-    // Cleanup function to clear the timeout when the component unmounts
-    return () => clearTimeout(timeoutId);
-  }, []);
+  const fetchData = async () => {
+    try {
+      setIsLoading(true); // Set loading state to true before fetch
+      const response = await fetchWshcmData();
+      console.log("useEffect");
+      if (response && response.status === 200) {
+        setFormData(response.data.WshcmFormData);
+      } else {
+        console.error("Error fetching data:", response);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err);
+    } finally {
+      setIsLoading(false); // Set loading state to false after fetch
+    }
+  };
+
+  // Execute `fetchData` on initial render and on click of `refreshBox`
+  useEffect(() => {
+    fetchData();
+  }, []); // Empty dependency array for initial fetch
+
+  const handleRefreshClick = () => {
+    fetchData();
+  };
+  
 
   const deleteSingleRecord = async (recordId) => {
     const response = await deleteRecord(recordId);
@@ -95,11 +102,10 @@ function WshcmForm() {
       updateFormData(response.data.updatedForm , itemId)
     }
   }
-
-  const deletePhoto = async(formId , photoId)=>{
-    const response = await deleteSinglePhoto(formId , photoId)
+  const deletePhoto = async(itemId , index)=>{
+    const response = await deleteSinglePhoto(itemId , index)
     if(response.status ==200){
-      updateFormData(response.data.updatedForm , formId)
+      updateFormData(response.data.updatedForm , itemId)
     }
   }
 
@@ -115,7 +121,6 @@ function WshcmForm() {
     }
   }
 
-  // var editFormDataObj = null;
 
   const handleEditClick = (item , formId) => {
     setSelectedFormData(item);
@@ -128,13 +133,10 @@ function WshcmForm() {
     setEditFormId(formId);
     setIsCertificateUploadModalOpen(true);
   }
-
-  const handlePhotoUpload = (formId)=>{
-    // setSelectedFormData(item);
+  const handlePhotoUpload = (item , formId)=>{
     setEditFormId(formId);
     setIsPhotoUploadModalOpen(true);
   }
-
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedFormData, setSelectedFormData] = useState(null);
@@ -145,7 +147,7 @@ function WshcmForm() {
 
   return (
     <div className="">
-      <Header />
+      <Header handleRefreshClick={handleRefreshClick} />
 
       <div
         className="modal fade"
@@ -203,8 +205,8 @@ function WshcmForm() {
       </div>
 
      
-        {/* modal for Editing data */}
-
+        
+    {/* modal for Editing data */}
     {isEditModalOpen && 
 
       <EditFormData updateFormData={updateFormData} selectedFormData={selectedFormData}  setSelectedFormData={setSelectedFormData} isEditModalOpen={isEditModalOpen} setIsEditModalOpen={setIsEditModalOpen}  editFormId={editFormId} />
@@ -217,7 +219,7 @@ function WshcmForm() {
 
     {isPhotoUploadModalOpen && 
 
-      <AddPhoto updateFormData={updateFormData} setIsPhotoUploadModalOpen={setIsPhotoUploadModalOpen}  editFormId={editFormId} />
+      <AddPhotos updateFormData={updateFormData} setIsPhotoUploadModalOpen={setIsPhotoUploadModalOpen}  editFormId={editFormId} />
     }
 
 
@@ -316,56 +318,66 @@ function WshcmForm() {
                             {/* <td><div className="d-flex justify-content-center"><IoAddCircleSharp /></div></td> */}
                         </td>
                         <td>
-                          {item.photo ? (
-                            <div className="d-flex justify-content-between align-items-center ">
-                              <span
-                                onClick={() =>
-                                  openFile(item.photo, item.photoId)
-                                }
-                                className="text-truncate cursor_pointer fileName "
-                                style={{ maxWidth: "150px" }}
-                              >
-                                {item.photo.substr(0, 23).concat("...") +
-                                  item.photo.split(".")[1]}
-                              </span>
-
-                              <div className="d-flex justify-content-center align-items-center">
-
-                              <span
-                                onClick={() =>
-                                  downloadFile(item.photo, item.photoId)
-                                }
-                                className="text-success cursor_pointer  rounded-circle download_bg"
-                              >
-                                <MdDownloadForOffline className="downloadIcon rounded-circle" />
-                              </span>
-
-                              <span>
-
-                              <MdDelete
-                                className="actionIcon p-2 rounded-circle cursor_pointer deleteIcon"
-                                onClick={() => deletePhoto(item._id , item.photoId)}
-                              />
-                              </span>
+                          {item.photos &&
+                            item.photos.map((itemFile, index) => {
+                              return (
+                                <div
+                                  className="d-flex justify-content-between align-items-center"
+                                  key={index}
+                                >
+                                  <span
+                                    onClick={() =>
+                                      openFile(
+                                        itemFile,
+                                        item.photoId[index]
+                                      )
+                                    }
+                                    className="text-truncate cursor_pointer fileName "
+                                    style={{ maxWidth: "150px" }}
+                                  >
+                                    {itemFile.substr(0, 23).concat("...") +
+                                      itemFile.split(".")[1]}
+                                  </span>
 
 
+                            <div className="d-flex justify-content-center align-items-center">
 
-                              </div>
-                             
-                             
+                                  <span
+                                    onClick={() =>
+                                      downloadFile(
+                                        itemFile,
+                                        item.photoId[index]
+                                      )
+                                    }
+                                    className="text-success cursor_pointer  rounded-circle download_bg"
+                                  >
+                                    <MdDownloadForOffline className="downloadIcon rounded-circle" />
+
+                                    
+                                  </span>
+                                  <span className="text-success cursor_pointer  rounded-circle download_bg">
+                                      <MdDelete
+                                  className="actionIcon p-2 rounded-circle cursor_pointer deleteIcon"
+                                  onClick={() => deletePhoto(item._id , index)}
+                                />
+
+                                  </span>
 
 
-                            </div>
-                          ) : (
-                            <div className="d-flex justify-content-center align-items-center flex-column">
-                              Add Photo
+                                  </div>
+                                 
+                                </div>
+                              );
+                            })}
+                            <div className="d-flex justify-content-center align-items-center">
                               <span className="addCertificateIconBox d-flex justify-content-center align-items-center rounded-circle">
 
-                              <IoAddCircleSharp className="addCertificateIcon cursor_pointer" onClick={()=> handlePhotoUpload(item._id)} />
+                              <IoAddCircleSharp className="addCertificateIcon cursor_pointer" onClick={()=> handlePhotoUpload(item , item._id)} />
                               </span>
                               </div>
-                          )}
+                            {/* <td><div className="d-flex justify-content-center"><IoAddCircleSharp /></div></td> */}
                         </td>
+                        
                         <td>
                           <div className="d-flex gap-1">
                             <FaEye

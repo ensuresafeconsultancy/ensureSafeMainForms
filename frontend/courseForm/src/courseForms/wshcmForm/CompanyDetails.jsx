@@ -85,25 +85,25 @@ const CompanyDetails = ({handleInputChange , setContactNoFunc, companyPersonCont
 
         <div className="form-group">
           <div className="py-3">
-            <label htmlFor="">Company Name *</label>
+            <label htmlFor="" className="fw-bold">Company Name *</label>
             <input type="text" className='form-control' id='companyName' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyName} name="companyName" required />
             {companyNameError && <span className='text-danger'>Company name required *</span>}
           </div>
             
           <div className="pb-3">
-            <label htmlFor="">Company UEN/Reg No *</label>
+            <label htmlFor="" className="fw-bold">Company UEN/Reg No *</label>
             <input type="text" className='form-control' id='companyUEN' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyUEN} name="companyUEN" required />
             {companyRegError && <span className='text-danger'>Company Reg no required *</span>}
           </div>
             
           <div className="pb-3">
-            <label htmlFor="">Contact Person Name *</label>
+            <label htmlFor="" className="fw-bold">Contact Person Name *</label>
             <input type="text" className='form-control' id='companyPersonName' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyPersonName} name="companyPersonName" required />
             {companyPersonNameError && <span className='text-danger'>Company Person name required *</span>}
           </div>
             
           <div className="pb-3">
-            <label htmlFor="">Contact Person Email *</label>
+            <label htmlFor="" className="fw-bold">Contact Person Email *</label>
             <input type="email" className='form-control' id="companyPersonEmail" onChange={handleInputChange} onKeyUp={checkKeyup} value={companyPersonEmail} name="companyPersonEmail" required />
             {companyPersonEmailError && <span className='text-danger'>Company Email ID required *</span>}
 
@@ -111,7 +111,7 @@ const CompanyDetails = ({handleInputChange , setContactNoFunc, companyPersonCont
            
 
           <div className="pb-3">
-          <label htmlFor="">Contact Person Contact No *</label>
+          <label htmlFor="" className="fw-bold">Contact Person Contact No *</label>
        
             <PhoneInput country={'sg'} id="companyPersonContactNo"  onChange={handleContactNo} inputProps={{ required: true }} />
             {companyPersonContactError && (

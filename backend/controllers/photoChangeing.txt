@@ -1,0 +1,98 @@
+
+router.delete("/deleteSinglePhoto/:formId/:photoId", async (req, res) => {
+  try {
+    const formId = req.params.formId;
+    const photoId = req.params.photoId;
+
+    console.log("formId = ", formId);
+    console.log("photoId = ", photoId);
+
+    // 1. Find the form document
+    const wshcmForm = await WshcmForm.findById(formId);
+
+    if (!wshcmForm) {
+      return res.status(404).send({ message: "Form not found" });
+    }
+
+    // 2. Check if photoId matches existing photoId (optional)
+    if (wshcmForm.photoId !== photoId) {
+      return res.status(400).send({ message: "Photo ID does not match existing photo" });
+    }
+
+    // 3. Delete photo from Google Drive (if applicable)
+    try {
+      const authClient = await authorize();
+      await deleteFile(authClient, photoId); // Replace with your implementation
+    } catch (err) {
+      console.error("Error deleting file from Google Drive:", err);
+      // Handle file deletion error gracefully (e.g., log and continue deletion)
+    }
+
+    // 4. Update the form document
+    wshcmForm.photoId = undefined;
+    wshcmForm.photo = undefined; // Set both fields to undefined to delete
+    const updatedForm = await wshcmForm.save();
+
+    res.send({ message: "Photo and photoId deleted successfully" , updatedForm : updatedForm });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Error deleting photo" });
+  }
+});
+
+
+
+router.post("/uploadPhoto/:formId" ,upload.fields([{ name: 'photo', maxCount: 1 }]) , async(req , res)=>{
+
+  try{
+
+
+    const validationErrors = [];
+
+    // Validate photo file size
+    if (req.files['photo'] && !validateFileSize(req.files['photo'][0])) {
+      validationErrors.push(`Photo file exceeds the maximum size of 30MB.`);
+    }
+
+    if (validationErrors.length > 0) {
+      // If there are validation errors, return a bad request with the errors
+      return res.status(400).send({ status: 0, message: 'Validation errors:', errors: validationErrors });
+    }
+
+
+    const photo = req.files['photo'][0];
+    console.log("check photo")
+
+    console.log("photo = " ,req.files['photo'][0].path)
+
+    //uploading files to gdrive
+    const authClient = await authorize();
+
+    const photoId = await uploadFile(authClient, photo.path, photo.mimetype , photo.originalname);
+
+    console.log("photoId = " , photoId.data.id)
+
+
+    const formId = req.params.formId;
+
+    const updatedForm = await WshcmForm.findByIdAndUpdate(formId, {
+      photo: photo.originalname,
+      photoId : photoId.data.id,
+    }, { new: true }); // Return the updated document
+
+    if (!updatedForm) {
+      return res.status(404).send({ message: 'Form not found' });
+    }
+
+    deleteAllFiles('files'); 
+    res.status(200).send({ message: 'Photo uploaded successfully!', updatedForm: updatedForm });
+
+
+  }catch(error){
+
+    return res.status(404).send({ message: "Something went wrong sorrrry" });
+
+  }
+
+} )
+

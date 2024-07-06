@@ -5,7 +5,7 @@ import { ServerVariables } from '../../SERVER_VARIABLES/serverVariables';
 import swal from 'sweetalert';
 
 
-export const wshcmApiCall = async (formData, certificateFiles, photo) => {
+export const wshcmApiCall = async (formData, certificateFiles, photos) => {
   try {
     const newFormData = new FormData();
 
@@ -18,13 +18,17 @@ export const wshcmApiCall = async (formData, certificateFiles, photo) => {
     for (let i = 0; i < certificateFiles.length; i++) {
         newFormData.append('certificateFiles', certificateFiles[i]);
       }
+
+    for (let i = 0; i < photos.length; i++) {
+        newFormData.append('photos', photos[i]);
+      }
     // if (certificateFiles && certificateFiles.length > 0) {
     //     certificateFiles.forEach(file => newFormData.append('educationalCertificates', file));
     //   }
     // Append photo file (assuming it's a single file)
-    if (photo) {
-      newFormData.append('photo', photo);
-    }
+    // if (photo) {
+    //   newFormData.append('photo', photo);
+    // }
 
     const confirmResult = await swal({
       title: "Want to submit?",
