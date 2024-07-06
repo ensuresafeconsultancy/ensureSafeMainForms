@@ -8,7 +8,7 @@ import {
   deleteSingleCertificate,
   deleteSinglePhoto,
 } from "../apiCall";
-import LoadingForm from "../../assets/table-loader.gif";
+import LoadingForm from "../../assets/Loading/table-loader.gif";
 import Header from "./Header";
 
 import { MdDownloadForOffline } from "react-icons/md";
@@ -150,7 +150,7 @@ function WshcmForm() {
       <Header handleRefreshClick={handleRefreshClick} />
 
       <div
-        className="modal fade"
+        className="modal fade viewFormDataModel"
         id="exampleModal"
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
@@ -172,7 +172,7 @@ function WshcmForm() {
                 aria-label="Close"
               ></button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body" style={{overflowX : 'auto'}}>
               {Object.keys(showFormData).length > 0 ? (
                 <table className="data-table">
                   <thead></thead>
@@ -230,7 +230,7 @@ function WshcmForm() {
         {isLoading ? ( // Conditionally render loading component
           <img src={LoadingForm} className="img-fluid" />
         ) : (
-          <table className="table table-hover table-bordered ">
+          <table className="table table-hover table-bordered formTableCustom ">
             <thead>
               <tr>
                 <th scope="col">S.No</th>

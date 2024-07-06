@@ -164,6 +164,17 @@ async function deleteAllFiles(folderPath) {
 // Example usage (call this after uploading or whenever you need to delete files)
 // deleteAllFiles('files'); 
 
+router.get("/getWshcmCount", async(req,res)=>{
+  try {
+    const count = await WshcmForm.countDocuments();
+    console.log(`There are ${count} wshcmForm documents in the collection.`);
+    res.send({WshcmCount : count})
+  } catch (error) {
+    console.error("Error counting wshcmForm documents:", error);
+    res.send({message : "something went wrong sorrrry"})
+  }
+})
+
 
 
 
@@ -208,6 +219,7 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
   
 
       if(req.body.organization == "Company"){
+        
          // Company name (required, string)
         if (!req.body.companyName || typeof req.body.companyName !== 'string') {
           validationErrors.push('"companyName" is required and must be a string.');

@@ -3,9 +3,8 @@
     color: #fff !important;
 }
 
-
 .wshcmFormContainer{
-    height: 75vh;
+    height: 80vh;
    overflow: auto;
 }
 
@@ -13,7 +12,8 @@
     cursor: pointer;
 }
 .fileName:hover{
-    color: red;
+    color: #04335E;
+    font-weight: 800;
 }
 .downloadIcon{
     height: 25px;
@@ -39,7 +39,9 @@
 }
 
 .exportPdf:hover{
-    background-color: rgb(175, 255, 175);
+    background-color: #8ff4ff5b !important;
+    font-weight: 800;
+    
 }
 
 .loadingImg{
@@ -64,9 +66,9 @@
     font-size: 25px;
 }
 
-.refreshBox{
-    height: 35px;
-    width: 35px;
+.refreshIcon{
+    height: 25px;
+    width: 25px;
 }
 
 .refreshBox:hover{
@@ -90,4 +92,77 @@
     display: flex;
     justify-content: space-between;
   }
+
+  .editModal .modal-body{
+      overflow-x: auto;
+  }
   
+
+  /* ---------------Sidebar---------------------- */
+
+  
+
+  
+  /* .list-group-item:hover , .accordion-item:hover , .accordion-button:hover{
+      background-color: #8ff4ff5b !important;
+      color: #fff !important;
+  } */
+
+  
+  .esLogoAdminpanel{
+      height: 37px;
+  }
+
+  /* #sidebar-wrapper{
+      background-color: #04335E !important;
+      color: #12CBE0 !important;
+      border: none !important;
+      outline: 0 !important;
+  } */
+  /* .list-group-item {
+      background-color: #04335E ;
+      color: #12CBE0 !important;
+      font-weight: 700;
+      border: none !important;
+      outline: 0 !important;
+  } */
+  /* .list-group, .accordion-button , .accordion-collapse{
+      background-color: #04335E ;
+      color: #12CBE0 !important;
+      font-weight: 700;
+      border: none !important;
+      outline: 0 !important;
+  } */
+  
+  /* .accordion-item , .list-group-item:last-child {
+     border: none !important;
+     outline: 0 !important;
+     border-radius: none !important;
+  } */
+
+  /* .accordion-body , .accordion-collapse{
+      border: none !important;
+      outline: 0 !important;
+  }
+
+  .accordion-button:focus {
+ 
+    border-color: none !important;
+    outline: 0;
+    box-shadow: none !important;
+} */
+
+
+.formTableCustom thead{
+    background-color: #084e8f;
+    color: #fff;
+    text-align: center;
+}
+.formTableCustom tbody tr:hover{
+    background-color: #8ff4ff5b !important;
+    color: #fff !important;
+}
+/* .formTableCustom thead tr th{
+    vertical-align: center;
+    
+} */

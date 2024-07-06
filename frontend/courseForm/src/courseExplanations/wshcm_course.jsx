@@ -2,7 +2,7 @@
 import Wshcm_form from '../courseForms/wshcmForm'
 // import CheckForm from '../courseForms/wshcmForm/checkForm'
 
-import EnsureSafeLogo from '../assets/logos/Ensure-Safe-Logo.png'
+import EnsureSafeLogo from '../assets/logos/Ensure-Safe-Logo-min.png'
 const Wshcm_course = () => {
   return (
     <section className=" pb-lg-5 pt-lg-5 " id='formMainBox'>

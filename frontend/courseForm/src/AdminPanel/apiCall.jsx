@@ -5,6 +5,20 @@ import { saveAs } from 'file-saver';
 import swal from 'sweetalert';
 
 
+export const getWshcmCount = async()=>{
+  try{
+
+    const response = await axios.get(`${APIURL}${ServerVariables.getWshcmFormCount}`);
+
+    if(response){
+      return response.data.WshcmCount;
+    }
+
+  }catch(err){
+    console.log(err)
+  }
+}
+
 export const fetchWshcmData = async()=>{
     try{
         const response = await axios.get(`${APIURL}${ServerVariables.fetchWshcmFormData}`);

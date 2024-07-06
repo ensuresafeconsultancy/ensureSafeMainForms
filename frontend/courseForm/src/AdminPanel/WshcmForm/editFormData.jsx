@@ -209,6 +209,8 @@ const validateForm = async(event)=>{
   return (
 
 <> 
+
+
     <div
         className="modal fade show editModal"
         id="exampleModal2"
@@ -226,7 +228,7 @@ const validateForm = async(event)=>{
          
             <div className="modal-header">
               <h1 className="modal-title fs-5" id="exampleModalLabel2">
-                Edit Modal title
+                Edit Form
               </h1>
               <button
                 type="button"
@@ -437,10 +439,10 @@ const validateForm = async(event)=>{
                   </tr>
                   <tr>
                     <td className="fw-bold py-1">GENDER</td>
-                    <select id="" className="form-control my-3" name="gender" defaultValue={editFormObj? editFormObj.gender : ''}  onChange={handleInputChange} >
-                      <option value="" className="form-control py-1" name="gender">Select Gender</option>
-                      <option value="male" className="form-control py-1" name="gender">Male</option>
-                      <option value="female" className="form-control py-1" name="gender">Female</option>
+                    <select id="" className="form-control my-3" name="gender" value={editFormObj? editFormObj.gender : ''}  onChange={handleInputChange} >
+                      <option value="" className="form-control py-1" >Select Gender</option>
+                      <option value="Male" className="form-control py-1">Male</option>
+                      <option value="Female" className="form-control py-1" >Female</option>
                     </select>
                   </tr>
                   <tr>

@@ -53,9 +53,9 @@ export function Header() {
                 <div className="container-fluid">
                     <span style={{cursor:'pointer' , fontSize:'27px'}} id="sidebarToggle" onClick={sideBarHideShow}>{iconChange?  <i onClick={iconChangeForSlider} className="fa-solid fa-circle-arrow-right"></i> : <i onClick={iconChangeForSlider} className="fa-solid fa-circle-arrow-left"></i>   }</span>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span className="navbar-toggler-icon"></span></button>
-                    <div className="collapse navbar-collapse" style={{height:'76px'}} id="navbarSupportedContent">
+                    <div className="collapse navbar-collapse" style={{height:'55px'}} id="navbarSupportedContent">
                         <ul className="navbar-nav ms-auto mt-2 mt-lg-0 me-5 d-flex align-items-center">
-                            <li className="nav-item mx-2 active"><a className="nav-link font-large" href="#!">Home </a></li>
+                            {/* <li className="nav-item mx-2 active"><a className="nav-link font-large" href="#!">Home </a></li>
                             <li className="nav-item mx-2"><a className="nav-link font-large" href="#!">Profile</a></li>
                             <li className="nav-item mx-2"><a className="nav-link font-large" href="#!">Reports</a></li>
                             <li className="nav-item mx-2 dropdown">
@@ -66,7 +66,7 @@ export function Header() {
                                     <div className="dropdown-divider"></div>
                                     <a className="dropdown-item" href="#!">Something else here</a>
                                 </div>
-                            </li>
+                            </li> */}
                             <li className="nav-item mx-2"><a className="nav-link font-large" href="#!">Balaji K <i className="fa-regular fa-user"></i></a></li>
                             <li className="nav-item mx-2"><a className="nav-link font-large" onClick={logoutSwal} href="#!">Logout <i className="fa-solid fa-arrow-right-from-bracket"></i></a></li>
                         </ul>

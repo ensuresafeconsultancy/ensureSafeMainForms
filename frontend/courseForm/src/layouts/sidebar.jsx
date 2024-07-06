@@ -1,39 +1,107 @@
 import { Link } from 'react-router-dom'
 // import EnsureSafeLogo from '../assets/logos'
+import ESLogo from '../assets/logos/es_logo.png'
+
+import { MdSpaceDashboard } from "react-icons/md";
+import { SiGoogleforms } from "react-icons/si";
+
+// import downArrow from '../assets/logos/down_arrow.svg';
+import { IoIosArrowDown } from "react-icons/io";
+
 export function Sidebar(){
+
+    function openForms() {
+
+        const productTypeSidebar = document.getElementById('sidebarForms');
+        const changeDownArrow = productTypeSidebar.children[1]; // Assuming the second child is the down arrow
+      
+        changeDownArrow.classList.toggle('transform_rotate_180deg');
+      
+        const productTypeItems = document.getElementById('product_type_items');
+        productTypeItems.classList.toggle('d-none');
+        // activeBtn(event)
+
+      
+      }
+
+    //   function activeBtn(event){
+
+    //     const activeBtnTag = event.target;
+
+    //     const otherTags = document.getElementsByClassName('sidebarBtn');
+
+    //     for(let i=0;i<otherTags.length;i++){
+    //         otherTags.classList.remove('activeAdminBtnBg')
+    //     }
+
+    //     activeBtnTag.classList.add('activeAdminBtnBg')
+
+
+    //     console.log("worlddddd" , activeBtnTag.classList)
+
+
+    //   }
+
+    // function activeBtn(event) {
+    //     event.stopPropagation(); // Prevent bubbling
+    
+    //     const otherTags = document.getElementsByClassName('sidebarBtn');
+    //     for (let i = 0; i < otherTags.length; i++) {
+    //         otherTags[i].classList.remove('activeAdminBtnBg');
+    //     }
+    
+    //     const activeBtnTag = event.target;
+    //     activeBtnTag.classList.add('activeAdminBtnBg');
+    //     console.log("worlddddd", activeBtnTag.classList);
+    // }
+    
+    // onClick={(e)=>activeBtn(e)}
     return (
         <>
-            <div className="border-end bg-white" id="sidebar-wrapper">
-                <div className="sidebar-heading border-bottom bg-light d-flex align-items-center justify-content-center" >  <strong className="d-inline-block h4 fw-bold">Admin Panel</strong> </div>
-                {/* <img className='Bk_Logo rounded-circle shadow'  src={EnsureSafeLogo}/> */}
-                <div className="list-group list-group-flush overflow-hidden">
-                    
-                    <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/admin/dashboard" > Dashboard</Link>
-                    <div className="accordion " id="accordionExample">
-                   
+            <div className="border-end " id="sidebar-wrapper">
+                <Link className="sidebar-heading text-decoration-none border-bottom d-flex align-items-center justify-content-center"  to="/admin/dashboard" >
+                      <img src={ESLogo} alt="" className='esLogoAdminpanel' />
+                      <strong className="d-inline-block h6  fw-bolder m-0 text-nowrap">Admin Panel</strong> 
+                </Link>
 
-                    <div className="accordion-item">
-                        <h2 className="accordion-header" id="headingTwo">
-                        <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                            Forms
-                        </button>
-                        </h2>
-                        <div id="collapseTwo" className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                        <div className="accordion-body p-0">
-                            <Link className="list-group-item list-group-item-action list-group-item-light border-none p-3 " to="/admin/WshcmForm" >WSHCM Forms</Link>
-
-                        </div>
-                        </div>
+                <div className="" >
+                    <div className="w-100 d-flex justify-content-start align-items-center  sidebarBtn" >
+                       
+                        <Link className=" w-100 text-decoration-none d-flex justify-content-start p-3 gap-2 align-items-center" to="/admin/dashboard" >
+                        <MdSpaceDashboard className='btnIcon' />
+                             Dashboard
+                             </Link>
                     </div>
-                    </div>
-
-                    {/* <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/products" >Products</Link>
-                    <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/users"  >Users</Link>
-                    <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/vendors"  >Vendors</Link>
-                    <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/orders" >Orders</Link>
-                    <Link className="list-group-item list-group-item-action list-group-item-light p-3" to="/faqs" >FAQs</Link> */}
-         
                 </div>
+
+                <div className="" id=''>
+
+                    <div  id='sidebarForms' onClick={()=> openForms()} className="d-flex sidebarBtn justify-content-between align-items-center cursor_pointer p-3">
+                        <div className="d-flex justify-content-center align-items-center ">
+                            <SiGoogleforms   className='btnIcon' />
+                            <h6 className="m-0 ps-2">Forms</h6>
+                        </div>
+                            {/* <img src={downArrow} className="down_arrow change_down_arrow" id="" alt="" /> */}
+                            <IoIosArrowDown className="down_arrow change_down_arrow"  />
+                    </div>
+
+                    <div className='' id="product_type_items">
+
+                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" >
+                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >WSHCM Forms</Link>
+                            
+                        </div>
+                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" >
+                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >Fire Forms</Link>
+                            
+                        </div>
+
+                    </div>
+
+
+                </div>
+               
+                
             </div>
             
 

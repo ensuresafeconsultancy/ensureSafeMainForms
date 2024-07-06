@@ -12,9 +12,30 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
   <script src="https://kit.fontawesome.com/d48236184a.js" crossorigin="anonymous"></script>
 
+
+  <style>
+    .centerLoading{
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50% , -50%);
+    }
+
+    @media (max-width: 500px) {
+      .centerLoading img{
+          height: 171px;
+        }
+    }
+  </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+
+      <div class="centerLoading">
+        <img src="MainLoding.gif" alt="">
+      </div>
+
+    </div>
     <script type="module" src="/src/main.jsx"></script>
     <script type="module" src="./src/assets/js/sidebar.js"></script>
   </body>

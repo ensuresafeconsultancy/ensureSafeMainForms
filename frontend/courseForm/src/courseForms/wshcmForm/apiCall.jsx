@@ -54,7 +54,8 @@ export const wshcmApiCall = async (formData, certificateFiles, photos) => {
         closeModal: false,
         // closeOnConfirm: false, // Prevent automatic closing
         closeOnEsc: false ,  // Prevent user from closing with Esc
-        allowOutsideClick: false // Prevent user from clicking outside the dialog
+        allowOutsideClick: false, // Prevent user from clicking outside the dialog
+        buttons: false
       });
 
       try {
@@ -76,13 +77,20 @@ export const wshcmApiCall = async (formData, certificateFiles, photos) => {
 
         console.log(response.data.message);
         console.table(response.data.userObj);
+
+
+        if(response.status == 200){
+          return true;
+        }
       } catch (error) {
         swal.close(); // Close loading indicator on error
         console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
         swal("Error!", "An error occurred while submitting the form.", "error");
+        return true;
       }
     } else {
       swal("Your imaginary file is safe!");
+      return true;
     }
 
     

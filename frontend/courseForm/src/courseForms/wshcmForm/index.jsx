@@ -52,8 +52,10 @@ const Wshcm_form = () => {
     const [certificateFiles , setCertificateFiles] = useState([]);
     const [photos , setPhotos] = useState([]);
 
+    const [submitBtnDisabled , setSubmitBtnDisable] = useState(false);
 
-    const validateForm=(event)=>{
+
+    const validateForm= async(event)=>{
         event.preventDefault();
         console.log("companyPersonContactError = ",companyPersonContactError);
         if(formData.companyPersonContactNo.length<1 || companyPersonContactError){
@@ -65,7 +67,12 @@ const Wshcm_form = () => {
         } else if(formData.class_type == ''){
             return alert("Select class type")
         }
-        wshcmApiCall(formData , certificateFiles , photos);
+
+        setSubmitBtnDisable(true);
+        const response = await wshcmApiCall(formData , certificateFiles , photos);
+        if(response){
+            setSubmitBtnDisable(false);
+        }
     }
 
 
@@ -444,7 +451,7 @@ const Wshcm_form = () => {
       
 
 <div className="text-center pt-3">
-      <button className='btn px-5 fw-bold mainBgColor'>Submit</button>
+      <button className={`btn px-5 fw-bold mainBgColor ${submitBtnDisabled? "disabled" : ''}`}>Submit</button>
 </div>
 
         

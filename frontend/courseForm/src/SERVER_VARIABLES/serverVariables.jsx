@@ -7,6 +7,7 @@ export const ServerVariables = {
     adminLoginPath : "/adminLogin",
     adminRegisterPath : "/adminRegister",
     fetchWshcmFormData : "/wshcmForm/fetchWshcmForms",
+    getWshcmFormCount : "/wshcmForm/getWshcmCount",
     // exportWshcmFormPdf : "/wshcmForm/generate-pdf",
     exportWshcmFormPdf : "/wshcmForm/exportFormPdf",
     exportSingleRecord : "/wshcmForm/exportSingleRecordPdf",
