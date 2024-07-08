@@ -12,7 +12,7 @@ export const ServerVariables = {
     exportWshcmFormPdf : "/wshcmForm/exportFormPdf",
     exportSingleRecord : "/wshcmForm/exportSingleRecordPdf",
     exportWshcmFormCsv : "/wshcmForm/exportFormCsv",
-    deleteAllWshcmData : "/wshcmForm/delete-all",
+    deleteAllFormData : "/wshcmForm/delete-all",
     openFile : "/wshcmForm/openFile",
     deleteWshcmRecord : "/wshcmForm/deleteWshcmRecord",
 

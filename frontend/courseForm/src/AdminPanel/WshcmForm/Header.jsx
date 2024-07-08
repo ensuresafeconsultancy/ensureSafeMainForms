@@ -1,6 +1,6 @@
 import LoadingImg from "../../assets/Loading/loading.gif";
 import { useState } from "react";
-import { downloadDocPdf , downloadDocCsv , deleteAllWshcmData} from "../apiCall";
+import { downloadDocPdf , downloadDocCsv , deleteAllFormData} from "../apiCall";
 import PropTypes from 'prop-types';
 
 import { LuRefreshCcw } from "react-icons/lu";
@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { ImCross } from "react-icons/im";
 
 
-const Header = ({handleRefreshClick}) => {
+const Header = ({handleRefreshClick , formName , addFormUrl}) => {
   const [pdfLoading, setPdfLoading] = useState(false);
   const [excelLoading, setExcelLoading] = useState(false);
 
@@ -32,9 +32,10 @@ const Header = ({handleRefreshClick}) => {
       console.error(error);
     }
   };
-  const deleteAll = async () => {
+  const deleteAll = async (formName) => {
     try {
-      await deleteAllWshcmData();
+      await deleteAllFormData(formName);
+      handleRefreshClick(formName)
     } catch (error) {
       console.error(error);
     }
@@ -46,7 +47,7 @@ const Header = ({handleRefreshClick}) => {
 
       {/* <div className="d-flex justify-content-center align-items-center gap-2" > */}
 
-        <span className="refreshBox p-2 d-flex justify-content-center align-items-center rounded-circle cursor_pointer" onClick={()=>handleRefreshClick()}>
+        <span className="refreshBox p-2 d-flex justify-content-center align-items-center rounded-circle cursor_pointer" onClick={()=>handleRefreshClick(formName)}>
           <LuRefreshCcw className="refreshIcon" />
         </span>
      
@@ -80,7 +81,7 @@ const Header = ({handleRefreshClick}) => {
     <li className="cursor_pointer">
 
     <Link
-        className="cursor_pointer px-2 py-2  exportPdf text-decoration-none text-dark d-flex justify-content-center align-items-center gap-1" to="/WshcmForm"  >
+        className="cursor_pointer px-2 py-2  exportPdf text-decoration-none text-dark d-flex justify-content-center align-items-center gap-1" to={addFormUrl}  >
         <FaPlus />
      Add new data
       </Link>
@@ -90,7 +91,7 @@ const Header = ({handleRefreshClick}) => {
 
     <span
         className="cursor_pointer text-nowrap exportPdf px-3 py-2  d-flex justify-content-start align-items-center gap-2"
-        onClick={() => deleteAll()}
+        onClick={() => deleteAll(formName)}
       >
         <ImCross />
         Delete all {" "}
@@ -106,6 +107,8 @@ const Header = ({handleRefreshClick}) => {
 };
 
 Header.propTypes = {
+  formName : PropTypes.string.isRequired,
+  addFormUrl : PropTypes.string.isRequired,
   handleRefreshClick : PropTypes.func.isRequired
 }
 

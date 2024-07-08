@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import PropTypes from 'prop-types';
+
 import {
   fetchWshcmData,
   downloadFile,
@@ -24,7 +26,7 @@ import swal from "sweetalert";
 
 import { IoAddCircleSharp } from "react-icons/io5";
 
-function WshcmForm() {
+function AdminFormLists({formName , addFormUrl}) {
   const [formData, setFormData] = useState([]);
   const [isLoading, setIsLoading] = useState(true); // Initial loading state (true)
 
@@ -58,18 +60,22 @@ function WshcmForm() {
 
   console.table(formData);
 
-  const fetchData = async () => {
+  const fetchData = async (formName) => {
     try {
       setIsLoading(true); // Set loading state to true before fetch
-      const response = await fetchWshcmData();
-      console.log("useEffect");
+      const response = await fetchWshcmData(formName);
+      console.log("Form list useEffect");
       if (response && response.status === 200) {
-        setFormData(response.data.WshcmFormData);
+
+          setFormData(response.data.WshcmFormData);
+  
       } else {
-        console.error("Error fetching data:", response);
+        console.log("Error fetching data:", response);
+        setFormData([]);
       }
     } catch (err) {
       console.error("Error fetching data:", err);
+      setFormData([]);
     } finally {
       setIsLoading(false); // Set loading state to false after fetch
     }
@@ -77,11 +83,11 @@ function WshcmForm() {
 
   // Execute `fetchData` on initial render and on click of `refreshBox`
   useEffect(() => {
-    fetchData();
-  }, []); // Empty dependency array for initial fetch
+    fetchData(formName);
+  }, [formName]); // Empty dependency array for initial fetch
 
-  const handleRefreshClick = () => {
-    fetchData();
+  const handleRefreshClick = (formName) => {
+    fetchData(formName);
   };
   
 
@@ -147,7 +153,7 @@ function WshcmForm() {
 
   return (
     <div className="">
-      <Header handleRefreshClick={handleRefreshClick} />
+      <Header handleRefreshClick={handleRefreshClick} formName={formName} addFormUrl={addFormUrl}/>
 
       <div
         className="modal fade viewFormDataModel"
@@ -246,8 +252,7 @@ function WshcmForm() {
               </tr>
             </thead>
             <tbody className="">
-              {formData
-                ? formData.map((item, index) => {
+              {formData && formData.map((item, index) => {
                     return (
                       <tr key={item._id}>
                         <td>{index + 1}</td>
@@ -404,7 +409,7 @@ function WshcmForm() {
                       </tr>
                     );
                   })
-                : ""}
+                }
             </tbody>
           </table>
         )}
@@ -414,4 +419,9 @@ function WshcmForm() {
   );
 }
 
-export default WshcmForm;
+AdminFormLists.propTypes = {
+  formName : PropTypes.string.isRequired,
+  addFormUrl : PropTypes.string.isRequired,
+}
+
+export default AdminFormLists;

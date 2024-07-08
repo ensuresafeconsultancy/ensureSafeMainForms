@@ -6,7 +6,8 @@ const HomePage = () => {
     <>
 
         <div>Homepage</div>
-        <Link to="/WshcmForm">GO to WshcmForm </Link> <br />
+        <Link to="/wshcmForm">GO to WshcmForm </Link> <br />
+        <Link to="/awshpForm">GO to awshpForm </Link> <br />
         <Link to="/admin">GO to Admin </Link>
     
     </>

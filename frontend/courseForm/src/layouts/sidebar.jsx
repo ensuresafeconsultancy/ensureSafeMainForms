@@ -88,11 +88,11 @@ export function Sidebar(){
                     <div className='' id="product_type_items">
 
                         <div className="d-flex justify-content-start align-items-center  sidebarBtn" >
-                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >WSHCM Forms</Link>
+                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/awshpForm" >AWSHP Forms</Link>
                             
                         </div>
                         <div className="d-flex justify-content-start align-items-center  sidebarBtn" >
-                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >Fire Forms</Link>
+                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >WSHCM Forms</Link>
                             
                         </div>
 

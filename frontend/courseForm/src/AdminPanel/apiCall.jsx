@@ -11,7 +11,7 @@ export const getWshcmCount = async()=>{
     const response = await axios.get(`${APIURL}${ServerVariables.getWshcmFormCount}`);
 
     if(response){
-      return response.data.WshcmCount;
+      return response.data.formNameCounts;
     }
 
   }catch(err){
@@ -19,13 +19,15 @@ export const getWshcmCount = async()=>{
   }
 }
 
-export const fetchWshcmData = async()=>{
+export const fetchWshcmData = async(formName)=>{
     try{
-        const response = await axios.get(`${APIURL}${ServerVariables.fetchWshcmFormData}`);
+        const response = await axios.get(`${APIURL}${ServerVariables.fetchWshcmFormData}/${formName}`);
         console.log(response.data)
         if(response && response.data){
             if(response.data.status == 1){
                 return response;
+            } else {
+              return response;
             }
         }
        
@@ -193,7 +195,7 @@ export const downloadRecord = async (recordId)=>{
   }
 }
 
-export const deleteAllWshcmData = async ()=>{
+export const deleteAllFormData = async (formName)=>{
   try{
 
 
@@ -226,15 +228,25 @@ export const deleteAllWshcmData = async ()=>{
       });
 
       try {
-        const response = await axios.delete(`${APIURL}${ServerVariables.deleteAllWshcmData}`);
+        const response = await axios.delete(`${APIURL}${ServerVariables.deleteAllFormData}/${formName}`);
 
-
-        if(response){
+        console.log(response.data.status)
+        if(response.data.status === 1){
           console.log(response.data)
+          console.log(response.data.status)
+          swal.close(); // Close loading indicator after response
+          swal("Success!", "All the data deleted successfully", "success").then(() => {
+            // window.location.href="/admin"
+              });
+        } else {
+          swal("warning!", response.data.message, "warning").then(() => {
+            // window.location.href="/admin"
+              });
+
         }
         swal.close(); // Close loading indicator after response
         swal("Success!", "All the data deleted successfully", "success").then(() => {
-          window.location.href="/admin"
+          // window.location.href="/admin"
             });
         
 

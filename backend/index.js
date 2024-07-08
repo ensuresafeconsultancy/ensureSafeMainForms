@@ -52,8 +52,18 @@ const mongoose = require('mongoose')
 //   .then(() => console.log('Connected!'))
 
 
+try{
   mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected!'))
+  .catch((err)=>{
+    console.log("Database not connected")
+  })
+
+}catch(err){
+  console.log("Db not connected")
+}
+
+
 
 
 const PORT = process.env.PORT || 3000;

@@ -112,20 +112,61 @@ router.get('/uploadFile' , async(req, res)=>{
 })
 
 
-router.get("/fetchWshcmForms" , async(req,res)=>{
+// router.get("/fetchWshcmForms/:formName" , async(req,res)=>{
  
-    try{
-      let WshcmFormData = await WshcmForm.find();
-      const wshcmFormSchemaFields = Object.keys(WshcmForm.schema.obj);
-      const schemaFieldsWithTypes = WshcmForm.schema.obj;
-      res.send({status : 1 , message:"Welcome to Product Page" , WshcmFormData : WshcmFormData , wshcmFormSchemaFields : wshcmFormSchemaFields , schemaFieldsWithTypes: schemaFieldsWithTypes});  
+//     try{
 
-    }catch(err){
-      res.send({status : 0 , message : "Error occured in wschm from fetch"})
+//       const formName = req.params.formName;
+//       let WshcmFormData = await WshcmForm.find({formName : formName});
+//       const wshcmFormSchemaFields = Object.keys(WshcmForm.schema.obj);
+//       const schemaFieldsWithTypes = WshcmForm.schema.obj;
+//       res.send({status : 1 , message:"Welcome to Product Page" , WshcmFormData : WshcmFormData , wshcmFormSchemaFields : wshcmFormSchemaFields , schemaFieldsWithTypes: schemaFieldsWithTypes});  
+
+//     }catch(err){
+//       res.send({status : 0 , message : "Error occured in wschm from fetch"})
+//     }
+
+
+// })
+
+
+router.get("/fetchWshcmForms/:formName", async (req, res) => {
+  try {
+    const { formName } = req.params; // Destructure formName from request parameters
+
+    console.log(" formName = "  , formName)
+
+    // Validate formName (optional, but recommended for security and UX)
+    if (!formName) {
+      return res.status(400).send({ status: 0, message: "Missing required parameter: formName" });
+    }
+    
+
+    // const WshcmFormData = await WshcmForm.find(); // Find forms matching formName
+    const WshcmFormData = await WshcmForm.find({ formName : formName }); // Find forms matching formName
+    const wshcmFormSchemaFields = Object.keys(WshcmForm.schema.obj);
+    const schemaFieldsWithTypes = WshcmForm.schema.obj;
+
+
+    console.log("WshcmFormData = " , WshcmFormData)
+    if(WshcmFormData.length>0){
+      return res.send({
+        status: 1,
+        message: "Fetched Forms",
+       WshcmFormData : WshcmFormData , wshcmFormSchemaFields : wshcmFormSchemaFields , schemaFieldsWithTypes: schemaFieldsWithTypes
+      });
     }
 
+    res.send({
+      status: 0,
+      message: "No Forms",
+    });
+  } catch (err) {
+    console.log("Error message = " , err); // Log error for debugging
+    res.status(500).send({ status: 0, message: "Error occurred while fetching forms" }); // Send appropriate error response
+  }
+});
 
-})
 
 
 function validateFileSize(file) {
@@ -167,8 +208,38 @@ async function deleteAllFiles(folderPath) {
 router.get("/getWshcmCount", async(req,res)=>{
   try {
     const count = await WshcmForm.countDocuments();
+
+    // const formNameCounts = await WshcmForm.aggregate([
+    //   { $group: { _id: "$formName", count: { $sum: 1 } } },
+    // ]);
+
+    const formNameCounts = await WshcmForm.aggregate([
+      {
+        $group: {
+          _id: "$formName",
+          companyCount: {
+            $sum: {
+              $cond: { if: { $eq: ["$organization", "Company"] }, then: 1, else: 0 },
+            },
+          },
+          individualCount: {
+            $sum: {
+              $cond: { if: { $eq: ["$organization", "Individual"] }, then: 1, else: 0 },
+            },
+          },
+          count: { $sum: 1 },
+        },
+      },
+    ]);
+
+
+    console.log("formNameCounts = " , formNameCounts)
+
+
+
     console.log(`There are ${count} wshcmForm documents in the collection.`);
-    res.send({WshcmCount : count})
+    // res.send({WshcmCount : count})
+    res.send({formNameCounts : formNameCounts})
   } catch (error) {
     console.error("Error counting wshcmForm documents:", error);
     res.send({message : "something went wrong sorrrry"})
@@ -367,6 +438,7 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
       
       // Create a new form instance
     const newForm = new WshcmForm({
+      formName : req.body.formName,
       class_type: req.body.class_type,
       participantName: req.body.participantName,
       NRIC_No: req.body.NRIC_No,
@@ -398,6 +470,8 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
       photoId : photoFileIds,
     
     });
+
+    console.log(newForm)
 
     // photo: photo.originalname,
     //   photoId : photoId.data.id,
@@ -559,19 +633,48 @@ router.get('/exportFormCsv', async(req,res)=>{
 
 
 
-router.delete('/delete-all', async (req, res) => {
+router.delete('/delete-all/:formName', async (req, res) => {
   try {
-    // Delete documents from database
-    const deletedCount = await WshcmForm.deleteMany({});
-    console.log(`Deleted ${deletedCount} forms from database.`);
+    const { formName } = req.params; // Destructure formName for clarity
+
+    console.log("delete formName = ", formName)
+
+    const deletedRecords = await WshcmForm.find({ formName : formName}, { certificateFilesId: 1, photoId: 1 });
+
+    console.log("deletedRecords = , ",deletedRecords)
+
+ 
+    if(deletedRecords.length>0){
+       // Delete documents from database
+     const deletedCount = await WshcmForm.deleteMany({formName : formName});
+    console.log(`Deleted ${deletedCount.length} forms from database.`);
+
+
+    const authClient = await authorize();
+    for(let deleteRecord of deletedRecords){
+      for(let certificateFileId of deleteRecord.certificateFilesId){
+        await deleteFile(authClient, certificateFileId)
+      }
+      for(let photoId of deleteRecord.photoId){
+        await deleteFile(authClient, photoId)
+      }
+    }
 
     // Delete files from Google Drive folder (if successful deletion in database)
-    const authClient = await authorize();
-    await deleteAllFilesInFolder(authClient, folderId); // Adjust folderId as needed
+  
+    // await deleteAllFilesInFolder(authClient, folderId); // Adjust folderId as needed
     console.log('Deletion of files from Google Drive completed.');
 
     // Respond with success message
+    // res.send({ status: 1, message: `Deleted hehe forms` });
     res.send({ status: 1, message: `Deleted ${deletedCount} forms` });
+
+    } else {
+      return res.send({status : 0 , message : "No forms to delete"})
+    }
+   
+
+  
   } catch (err) {
     console.error(err);
     res.status(500).send('Error deleting forms');

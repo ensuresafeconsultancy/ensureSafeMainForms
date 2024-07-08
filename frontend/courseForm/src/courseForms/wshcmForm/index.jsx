@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from 'prop-types';
 
 import Timings from './Timings'
 import CompanyDetails from './CompanyDetails'
@@ -13,9 +14,14 @@ import { GrOrganization } from "react-icons/gr";
 import { FaMale } from "react-icons/fa";
 import { FaFemale } from "react-icons/fa";
 
-const Wshcm_form = () => {
+import ReactCountryFlag from 'react-country-flag';
+
+import { NATIONALITY , RACE , QUALIFICATION , SALARY_RANGE} from './classTimings'
+
+const Wshcm_form = ({formName}) => {
 
     const [formData , setFormData] = useState({
+        formName : formName,
         class_type : '',
         participantName : '',
         NRIC_No : '',
@@ -118,7 +124,7 @@ const Wshcm_form = () => {
     }
    
 
-    const [classType, setClassType] = useState(null); // Track currently active logo (index)
+    // const [classType, setClassType] = useState(null); // Track currently active logo (index)
     const [activeLogo, setActiveLogo] = useState(null); // Track currently active logo (index)
     const [genderIndex, setGenderIndex] = useState(null); // Track currently active logo (index)
 
@@ -127,16 +133,16 @@ const Wshcm_form = () => {
 //   };
    
 
-  const handleClassType = (index) => {
-    setClassType(index); // Update the active logo state
-    // Directly update the organization field in formData based on the index
-    setFormData((formData) => ({
-      ...formData,
-      class_type: index === 0 ? 'Sunday class' : 'Tuesday, Thursday, Saturday',
-    }));
+//   const handleClassType = (index) => {
+//     setClassType(index); // Update the active logo state
+//     // Directly update the organization field in formData based on the index
+//     setFormData((formData) => ({
+//       ...formData,
+//       class_type: index === 0 ? 'Sunday class' : 'Tuesday, Thursday, Saturday',
+//     }));
 
-    console.table(formData)
-  };
+//     console.table(formData)
+//   };
   const handleLogoClick = (index) => {
     setActiveLogo(index); // Update the active logo state
     // Directly update the organization field in formData based on the index
@@ -159,6 +165,172 @@ const Wshcm_form = () => {
     console.table(formData)
   };
 
+
+  function handleClassChange(event) {
+    // Get the parent container of the clicked div
+    // const parentContainer = event.currentTarget.parentNode;
+  
+    // Get all divs within the container with the 'classTypeChange' class
+    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
+  
+    // Remove 'registrationLogoBoxActive' from all divs within the container
+    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add 'registrationLogoBoxActive' to the clicked div
+    const clickedDiv = event.currentTarget;
+    // clickedDiv.classList.add('registrationLogoBoxActive');
+
+    const allDivs = document.querySelectorAll('.registrationLogoBox.classTypeChange');
+      
+    // Remove the 'registrationLogoBoxActive' class from all divs first
+    allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add the 'registrationLogoBoxActive' class only to the clicked div
+    // const clickedDiv = event.currentTarget;
+    clickedDiv.classList.add('registrationLogoBoxActive');
+
+
+
+    // console.log(event)
+
+    const elementName = event.target.attributes.name.nodeValue;
+    const elementValue = event.target.attributes.value.nodeValue;
+
+    setFormData((formData)=> ({...formData , [elementName] : elementValue}))
+  }
+  
+  function handleNationalityChange(event) {
+    // Get the parent container of the clicked div
+    // const parentContainer = event.currentTarget.parentNode;
+  
+    // Get all divs within the container with the 'classTypeChange' class
+    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
+  
+    // Remove 'registrationLogoBoxActive' from all divs within the container
+    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add 'registrationLogoBoxActive' to the clicked div
+    const clickedDiv = event.currentTarget;
+    // clickedDiv.classList.add('registrationLogoBoxActive');
+
+    const allDivs = document.querySelectorAll('.registrationLogoBox.nationalityChange');
+      
+    // Remove the 'registrationLogoBoxActive' class from all divs first
+    allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add the 'registrationLogoBoxActive' class only to the clicked div
+    // const clickedDiv = event.currentTarget;
+    clickedDiv.classList.add('registrationLogoBoxActive');
+
+
+
+    console.log(event)
+
+    const elementName = event.target.attributes.name.nodeValue;
+    const elementValue = event.target.attributes.value.nodeValue;
+
+    setFormData((formData)=> ({...formData , [elementName] : elementValue}))
+  }
+
+
+  function handleRaceChange(event) {
+    // Get the parent container of the clicked div
+    // const parentContainer = event.currentTarget.parentNode;
+  
+    // Get all divs within the container with the 'classTypeChange' class
+    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
+  
+    // Remove 'registrationLogoBoxActive' from all divs within the container
+    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add 'registrationLogoBoxActive' to the clicked div
+    const clickedDiv = event.currentTarget;
+    // clickedDiv.classList.add('registrationLogoBoxActive');
+
+    const allDivs = document.querySelectorAll('.registrationLogoBox.raceChange');
+      
+    // Remove the 'registrationLogoBoxActive' class from all divs first
+    allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add the 'registrationLogoBoxActive' class only to the clicked div
+    // const clickedDiv = event.currentTarget;
+    clickedDiv.classList.add('registrationLogoBoxActive');
+
+
+    console.log(event)
+
+    const elementName = event.target.attributes.name.nodeValue;
+    const elementValue = event.target.attributes.value.nodeValue;
+
+    setFormData((formData)=> ({...formData , [elementName] : elementValue}))
+  }
+
+  function handleQualificationChange(event) {
+    // Get the parent container of the clicked div
+    // const parentContainer = event.currentTarget.parentNode;
+  
+    // Get all divs within the container with the 'classTypeChange' class
+    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
+  
+    // Remove 'registrationLogoBoxActive' from all divs within the container
+    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add 'registrationLogoBoxActive' to the clicked div
+    const clickedDiv = event.currentTarget;
+    // clickedDiv.classList.add('registrationLogoBoxActive');
+
+    const allDivs = document.querySelectorAll('.registrationLogoBox.qualificationChange');
+      
+    // Remove the 'registrationLogoBoxActive' class from all divs first
+    allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add the 'registrationLogoBoxActive' class only to the clicked div
+    // const clickedDiv = event.currentTarget;
+    clickedDiv.classList.add('registrationLogoBoxActive');
+
+
+    console.log(event)
+
+    const elementName = event.target.attributes.name.nodeValue;
+    const elementValue = event.target.attributes.value.nodeValue;
+
+    setFormData((formData)=> ({...formData , [elementName] : elementValue}))
+  }
+  
+  function handleSalaryChange(event) {
+    event.stopPropagation(); 
+    // Get the parent container of the clicked div
+    // const parentContainer = event.currentTarget.parentNode;
+  
+    // Get all divs within the container with the 'classTypeChange' class
+    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
+  
+    // Remove 'registrationLogoBoxActive' from all divs within the container
+    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add 'registrationLogoBoxActive' to the clicked div
+    const clickedDiv = event.currentTarget;
+    // clickedDiv.classList.add('registrationLogoBoxActive');
+
+    const allDivs = document.querySelectorAll('.registrationLogoBox.salaryChange');
+      
+    // Remove the 'registrationLogoBoxActive' class from all divs first
+    allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+  
+    // Add the 'registrationLogoBoxActive' class only to the clicked div
+    // const clickedDiv = event.currentTarget;
+    clickedDiv.classList.add('registrationLogoBoxActive');
+
+
+    console.log(event)
+
+    const elementName = event.target.attributes.name.nodeValue;
+    const elementValue = event.target.attributes.value.nodeValue;
+
+    setFormData((formData)=> ({...formData , [elementName] : elementValue}))
+  }
+  
+
   return (
     <div className="container px-lg-5 px-2">
        
@@ -168,7 +340,7 @@ const Wshcm_form = () => {
                 <h5 className="fw-bold pb-3">Class Type</h5>
                 
 
-                <div className="d-flex justify-content-start align-items-center gap-3">
+                {/* <div className="d-flex justify-content-start align-items-center gap-3">
                     <div
                         className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
                             classType === 0 ? 'registrationLogoBoxActive' : ''
@@ -187,8 +359,22 @@ const Wshcm_form = () => {
 
                         <span>Tuesday, Thursday, Saturday</span>
                         
-                        {/* Tuesday, Thursday, Saturday */}
+               
                     </div>
+                </div> */}
+
+                <div className="d-flex justify-content-start align-items-center gap-3">
+                    <div name = "class_type" value="Sunday class" className="registrationLogoBox p-4 classTypeChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer" onClick={(event) => handleClassChange(event)}> 
+                        Sunday class
+                    </div>
+                    <div name = "class_type" value="Tuesday, Thursday, Saturday" className="registrationLogoBox p-4 classTypeChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer" onClick={(event) => handleClassChange(event)}> 
+                        Tuesday, Thursday, Saturday
+                    </div>
+
+                    {/* <div className="registrationLogoBox p-4 classTypeChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer">
+                        <ReactCountryFlag countryCode={'cn'} svg />  
+                        <span>Sunday class</span>
+                        </div> */}
                 </div>
 
                 {/* <div className="row">
@@ -202,7 +388,7 @@ const Wshcm_form = () => {
             </div>
         
 
-        <Timings class_type = {formData.class_type} handleInputChange={handleInputChange} /> 
+        <Timings class_type = {formData.class_type} handleInputChange={handleInputChange} setFormData = {setFormData} /> 
 
         <div className="form-group pb-4">
         <h5 className='fw-bold pb-3'>Type Of Registration</h5>
@@ -288,43 +474,27 @@ const Wshcm_form = () => {
             
             
             <div className="pb-3">
-            <label htmlFor="" className="fw-bold">Nationality *</label>
-            <div className="form-check" onClick={handleInputChange}>
-                <input className="form-check-input" type="radio" value="Singaporean" name="nationality" required />
-                <label className="form-check-label">
-                Singaporean
-                </label>
-            </div>
-            <div className="form-check" onClick={handleInputChange}>
-                <input className="form-check-input" type="radio" value="Singapore Pr" name="nationality" />
-                <label className="form-check-label">
-                Singapore Pr
-                </label>
-            </div>
-            <div className="form-check" onClick={handleInputChange}>
-                <input className="form-check-input" type="radio" value="Malasiyan" name="nationality" />
-                <label className="form-check-label">
-                Malasiyan
-                </label>
-            </div>
-            <div className="form-check" onClick={handleInputChange}>
-                <input className="form-check-input" type="radio" value="Indian" name="nationality" />
-                <label className="form-check-label">
-                Indian
-                </label>
-            </div>
-            <div className="form-check" onClick={handleInputChange}>
-                <input className="form-check-input" type="radio" value="Chinese" name="nationality" />
-                <label className="form-check-label">
-                Chinese
-                </label>
-            </div>
+            <label htmlFor="" className="fw-bold pb-3">Nationality *</label>
+                <div className="d-flex justify-content-start align-items-center flex-wrap gap-2">
+
+                    {NATIONALITY && NATIONALITY.map((item , index)=>{
+
+                        return <div key={index} name = "nationality" value={item.countryName}  className="registrationLogoBox px-3 py-3 nationalityChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer" onClick={(event) => handleNationalityChange(event)}>
+                            <ReactCountryFlag style={{ width: '40px', height: '20px' }}  name = "nationality" value={item.countryName}  countryCode={item.countryCode} svg />  {/* Use svg for scalability */}
+                                {item.countryName}
+                            </div>
+
+                    })}
+                    
+                </div>
+
+
             </div>
             
             <div className="pb-3">
             <label htmlFor="" className="fw-bold">Race *</label>
 
-                <div className="form-check" onClick={handleInputChange}>
+                {/* <div className="form-check" onClick={handleInputChange}>
                     <input className="form-check-input" type="radio" value="Chinese" name="race" required />
                     <label className="form-check-label">
                     Chinese
@@ -353,7 +523,33 @@ const Wshcm_form = () => {
                     <label className="form-check-label">
                     Filipino
                     </label>
+                </div> */}
+
+                <div className="d-flex justify-content-start align-items-center flex-wrap gap-2">
+
+                    {RACE && RACE.map((item , index)=>{
+
+                        return <div key={index} name = "race" value={item}  className="registrationLogoBox px-3 py-3 raceChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer" onClick={(event) => handleRaceChange(event)}>
+                                {item}
+                            </div>
+
+                    })}
+                    
                 </div>
+
+                {/* <div className="d-flex justify-content-center align-items-start flex-column gap-2">
+                        {RACE && RACE.map((item , index)=> (
+                                <div key={index} name="race" value={item} className="registrationLogoBox raceChange py-2 px-3 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-row cursor_pointer" onClick={(e)=> handleRaceChange(e)}>
+                                        
+                                <div className="p-2 rounded-circle border bg-white radioBtnShadow"></div>
+
+                                {item}
+
+                                </div>
+                            
+                                ))}
+                        </div> */}
+
             </div>
             
 
@@ -372,8 +568,8 @@ const Wshcm_form = () => {
             </div>
             
             <div className="pb-3">
-            <label htmlFor="" className="fw-bold">Salary Range *</label>
-                    <div className="form-check" onClick={handleInputChange}>
+            <label htmlFor="" className="fw-bold pb-3">Salary Range *</label>
+                    {/* <div className="form-check" onClick={handleInputChange}>
                         <input className="form-check-input" type="radio" value="Less Then $1000" name="salary" required />
                         <label className="form-check-label">
                         Less Then $1000
@@ -396,15 +592,29 @@ const Wshcm_form = () => {
                         <label className="form-check-label">
                         $3000 And Above
                         </label>
-                    </div>
+                    </div> */}
+
+
+                    <div className="d-flex justify-content-center align-items-start flex-column gap-2">
+                        {SALARY_RANGE && SALARY_RANGE.map((item , index)=> (
+                                <div key={index} name="salary" value={item} className="registrationLogoBox salaryChange py-2 px-3 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-row cursor_pointer" onClick={(e)=> handleSalaryChange(e)}>
+                                        
+                                <div name="salary" value={item} className="p-2 rounded-circle border bg-white radioBtnShadow"></div>
+
+                                {item}
+
+                                </div>
+                            
+                                ))}
+                        </div>
             </div>
            
 
 
             <div className="pb-3">
-            <label htmlFor="" className="fw-bold">Highest Qualification *</label>
+            <label htmlFor="" className="fw-bold pb-3">Highest Qualification *</label>
 
-                        <div className="form-check" onClick={handleInputChange}>
+                        {/* <div className="form-check" onClick={handleInputChange}>
                             <input className="form-check-input" type="radio" value="Degree" name="qualifications" required />
                             <label className="form-check-label">
                             Degree
@@ -427,7 +637,21 @@ const Wshcm_form = () => {
                             <label className="form-check-label">
                             others
                             </label>
+                        </div> */}
+
+                        <div className="d-flex justify-content-center align-items-start flex-column gap-2">
+                        {QUALIFICATION && QUALIFICATION.map((item , index)=> (
+                                <div key={index} name="qualifications" value={item} className="registrationLogoBox qualificationChange py-2 px-3 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-row cursor_pointer" onClick={(e)=> handleQualificationChange(e)}>
+                                        
+                                <div name="qualifications" value={item} className="p-2 rounded-circle border bg-white radioBtnShadow"></div>
+
+                                {item}
+
+                                </div>
+                            
+                                ))}
                         </div>
+
             </div>
             
 
@@ -450,9 +674,9 @@ const Wshcm_form = () => {
         </div>
       
 
-<div className="text-center pt-3">
-      <button className={`btn px-5 fw-bold mainBgColor ${submitBtnDisabled? "disabled" : ''}`}>Submit</button>
-</div>
+        <div className="text-center pt-3">
+            <button className={`btn px-5 fw-bold mainBgColor ${submitBtnDisabled? "disabled" : ''}`}>Submit</button>
+        </div>
 
         
         
@@ -463,6 +687,10 @@ const Wshcm_form = () => {
 
     </div>
   )
+}
+
+Wshcm_form.propTypes = {
+    formName : PropTypes.string.isRequired,
 }
 
 export default Wshcm_form

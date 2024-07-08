@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')
 
 const wshcmForm = new mongoose.Schema({
+    formName : String,
     class_type : String,
     participantName : String,
     NRIC_No : String,

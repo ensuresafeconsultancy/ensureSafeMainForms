@@ -77,9 +77,7 @@ const Wshcm_course = () => {
             <hr />
 
 
-        <Wshcm_form />
-
-        {/* <CheckForm /> */}
+        <Wshcm_form formName={'WSHCM'} />
 
         </div>
 
