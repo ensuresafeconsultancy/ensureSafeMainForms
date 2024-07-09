@@ -31,4 +31,4 @@ const wshcmForm = new mongoose.Schema({
     photos : [String],
 })
 
-module.exports = mongoose.model('wshcmForm' , wshcmForm)
+module.exports = mongoose.model('CourseForm' , wshcmForm)
