@@ -51,7 +51,7 @@ const ThankYou = () => {
                         <img src={SUCCESS_ICON} style={successIcon} className='mt-3' alt="" />
 
                         <h2 className='fw-bold pt-4'  style={{letterSpacing : "2px"}}>Thank you</h2>
-                        <h6>We contact you soon.</h6>
+                        <h6>We will contact you soon.</h6>
                         <div className="d-flex justify-content-center gap-2 pt-5 flex-wrap">
                             <a href="https://www.ensuresafe.sg/courses/" className="px-3 py-2 text-decoration-none border cursor_pointer rounded-4  d-flex  justify-content-center align-items-center gap-2 redirectWebsiteBtn" target="_blank"> <FaListAlt /> Courses</a>
                             <a href="https://www.ensuresafe.sg/wp-content/uploads/2024/06/ALL-COURSES-BROCHURE.pdf" className="px-3 py-2 text-decoration-none border cursor_pointer rounded-4 d-flex  justify-content-center align-items-center gap-2 redirectWebsiteBtn" target="_blank"><FaBookOpen /> Brochure</a>
@@ -64,7 +64,7 @@ const ThankYou = () => {
                     <div className="col-lg-6">
                             <h5 className='pt-lg-0 pt-4 text-center fw-bold'>Follow us:</h5>
 
-                            <div className="d-flex justify-content-center gap-2 align-items-center flex-row  pt-3">
+                            <div className="d-flex justify-content-center gap-3 align-items-center flex-row  pt-3">
                                     <a href="https://www.facebook.com/Ensuresafeconsultancy" target="_blank" data-tooltip-id="facebook_TT" data-tooltip-content="Facebook" className="d-flex text-decoration-none justify-content-start gap-2 align-items-center p-3  rounded-circle facebookIconTY iconTY" style={{width : 'fit-content'}}>
                                         <FaFacebook style={socialMediaIconSize} />
                                         <Tooltip id="facebook_TT" />

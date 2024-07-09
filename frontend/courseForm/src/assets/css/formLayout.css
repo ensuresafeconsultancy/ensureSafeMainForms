@@ -62,15 +62,16 @@ label{
 .iconTY{
     color: #fff;
     transition: 0.5s;
+    box-shadow: 0px 0px 6px 0px rgba(8, 8, 8, 0.445);
 }
 .iconTY:hover{
     color: #fff;
-    box-shadow: 0px 0px 6px 0px rgba(8, 8, 8, 0.445);
+    box-shadow: 0px 0px 6px 0px rgb(255, 255, 255);
     transform: translateY(-5px);
 }
 
 .facebookIconTY{
-    background-color: #1876f26c;
+    background-color: #006eff;
    
 }
 .youtubeIconTY{
