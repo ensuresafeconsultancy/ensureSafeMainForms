@@ -10,7 +10,7 @@ import { IoIosArrowDown } from "react-icons/io";
 
 export function Sidebar(){
 
-    function openForms() {
+    function openForms(event) {
 
         const productTypeSidebar = document.getElementById('sidebarForms');
         const changeDownArrow = productTypeSidebar.children[1]; // Assuming the second child is the down arrow
@@ -21,7 +21,37 @@ export function Sidebar(){
         productTypeItems.classList.toggle('d-none');
         // activeBtn(event)
 
+        handleActiveBtnChange(event)
+
       
+      }
+
+      function handleActiveBtnChange(event) {
+        // Get the parent container of the clicked div
+        // const parentContainer = event.currentTarget.parentNode;
+      
+        // Get all divs within the container with the 'classTypeChange' class
+        // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
+      
+        // Remove 'registrationLogoBoxActive' from all divs within the container
+        // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
+      
+        // Add 'registrationLogoBoxActive' to the clicked div
+        const clickedDiv = event.currentTarget;
+        // clickedDiv.classList.add('registrationLogoBoxActive');
+    
+        const allDivs = document.querySelectorAll('.sidebarBtn');
+          
+        // Remove the 'registrationLogoBoxActive' class from all divs first
+        allDivs.forEach(div => div.classList.remove('activeAdminBtnBg'));
+      
+        // Add the 'registrationLogoBoxActive' class only to the clicked div
+        // const clickedDiv = event.currentTarget;
+        clickedDiv.classList.add('activeAdminBtnBg');
+    
+    
+    
+    
       }
 
     //   function activeBtn(event){
@@ -65,7 +95,7 @@ export function Sidebar(){
                 </Link>
 
                 <div className="" >
-                    <div className="w-100 d-flex justify-content-start align-items-center  sidebarBtn" >
+                    <div className="w-100 d-flex justify-content-start align-items-center  sidebarBtn" onClick={(event)=>handleActiveBtnChange(event)} >
                        
                         <Link className=" w-100 text-decoration-none d-flex justify-content-start p-3 gap-2 align-items-center" to="/admin/dashboard" >
                         <MdSpaceDashboard className='btnIcon' />
@@ -76,7 +106,7 @@ export function Sidebar(){
 
                 <div className="" id=''>
 
-                    <div  id='sidebarForms' onClick={()=> openForms()} className="d-flex sidebarBtn justify-content-between align-items-center cursor_pointer p-3">
+                    <div  id='sidebarForms' onClick={(event)=> openForms(event)} className="d-flex sidebarBtn justify-content-between align-items-center cursor_pointer p-3">
                         <div className="d-flex justify-content-center align-items-center ">
                             <SiGoogleforms   className='btnIcon' />
                             <h6 className="m-0 ps-2">Forms</h6>
@@ -87,11 +117,11 @@ export function Sidebar(){
 
                     <div className='' id="product_type_items">
 
-                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" >
+                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" onClick={(event)=>handleActiveBtnChange(event)} >
                             <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/awshpForm" >AWSHP Forms</Link>
                             
                         </div>
-                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" >
+                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" onClick={(event)=>handleActiveBtnChange(event)} >
                             <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >WSHCM Forms</Link>
                             
                         </div>

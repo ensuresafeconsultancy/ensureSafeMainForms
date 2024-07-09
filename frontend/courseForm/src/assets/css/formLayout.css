@@ -20,7 +20,7 @@
     /* background-color: rgb(236, 236, 236); */
     background-color: rgb(50, 115, 255);
     color: #fff;
-    box-shadow: 0px 0px 6px 0px rgb(50, 115, 255);
+    /* box-shadow: 0px 0px 6px 0px rgb(50, 115, 255); */
 }
 
 .registrationLogoBoxActive{
@@ -47,6 +47,69 @@
 label{
     font-weight: 600;
 } */
+
+.redirectWebsiteBtn{
+    color: #fff;
+    transition: 0.4s;
+}
+.redirectWebsiteBtn:hover{
+    background-color: #fff;
+    color: #000;
+    font-weight: 800;
+    box-shadow: 0px 0px 6px 0px rgb(255, 255, 255);
+}
+
+.iconTY{
+    color: #fff;
+    transition: 0.5s;
+}
+.iconTY:hover{
+    color: #fff;
+    box-shadow: 0px 0px 6px 0px rgba(8, 8, 8, 0.445);
+    transform: translateY(-5px);
+}
+
+.facebookIconTY{
+    background-color: #1876f26c;
+   
+}
+.youtubeIconTY{
+    background-color: rgba(255, 0, 0, 0.438);
+    
+}
+.linkedinIconTY{
+    background-color: #0076b57e ;
+    
+}
+.instagramIconTY{
+    background-color: #e1306b7a ;
+    
+}
+.whatsappIconTY{
+    background-color: 	#075e5493 ;
+    
+}
+.whatsappIconTY:hover{
+    background-color: 	#075E54 ;
+    color: rgb(162, 255, 162);
+    
+}
+.instagramIconTY:hover{
+    background-color: #E1306C ;
+    
+}
+.linkedinIconTY:hover{
+    background-color: #0077B5 ;
+    
+}
+.youtubeIconTY:hover{
+    background-color: rgba(255, 0, 0, 0.781);
+    
+}
+.facebookIconTY:hover{
+    background-color: #1272f0;
+    
+}
 
 @media (min-width: 1400px) {
     #formMainBox .container{

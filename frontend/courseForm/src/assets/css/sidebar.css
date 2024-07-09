@@ -67,6 +67,7 @@
   .activeAdminBtnBg{
     background-color: #8ff4ff5b !important;
     color: #fff !important;
+    font-weight: 900;
   }
 
   @media (min-width: 768px) {

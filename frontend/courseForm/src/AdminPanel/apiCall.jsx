@@ -103,10 +103,10 @@ export const openFile = async(file , fileId) => {
   // window.open(`${APIURL}/${file}`, "_blank", "noopener");
   };
 
- export const downloadDocPdf = async () => {
+ export const downloadDocPdf = async (formName) => {
     try {
     
-        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}`);
+        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}/${formName}`);
         const url = `${APIURL}/${response.data.filePath}`; // Use the file path from the backend
         window.open(url, '_blank'); // Open the PDF in a new tab
     } catch (error) {
@@ -152,11 +152,11 @@ export const openFile = async(file , fileId) => {
 
 
 
- export const downloadDocCsv = async () => {
+ export const downloadDocCsv = async (formName) => {
   
     try {
     
-        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormCsv}`);
+        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormCsv}/${formName}`);
         const csvData = response.data; // Assuming the response contains the CSV data
 
         // Create a Blob object with the CSV data

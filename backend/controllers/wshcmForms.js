@@ -496,11 +496,13 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
 
 
 
-router.get('/exportFormPdf', async(req,res)=>{
+router.get('/exportFormPdf/:formName', async(req,res)=>{
   try{
 
+    const {formName} = req.params;
+
       console.log("Hello")
-      const formDoc = await WshcmForm.find();
+      const formDoc = await WshcmForm.find({formName:formName});
       const data = {
           formDoc : formDoc,
       };
@@ -576,11 +578,13 @@ router.get("/exportSingleRecordPdf/:id",async(req , res)=>{
 })
 
 
-router.get('/exportFormCsv', async(req,res)=>{
+router.get('/exportFormCsv/:formName', async(req,res)=>{
   try{
 
+    const {formName} = req.params;
+
     console.log("hello")
-    const data = await WshcmForm.find();
+    const data = await WshcmForm.find({formName:formName});
 
     // Configure CSV parser with desired fields (adjust as needed)
     const fields = [

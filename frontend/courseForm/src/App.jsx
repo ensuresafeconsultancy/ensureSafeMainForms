@@ -15,7 +15,7 @@ import AdminPanel from './AdminPanel/index.jsx'
 import HomePage from './Home/homePage'
 
 import { REG_FORM_URL_CLIENT_PATH } from './courseExplanations/RegistrationFormUrl/formUrls'
-
+import ThankYou from './layouts/thankYou'
 import './assets/css/formLayout.css'
 function App() {
 
@@ -30,6 +30,9 @@ function App() {
         {/* If u change this url(/fdr) then update the name in Adminpanel>index.js>addFormUrl */}
         <Route path={REG_FORM_URL_CLIENT_PATH.wshcmForm} element={<Wshcm_course />} />
         <Route path={REG_FORM_URL_CLIENT_PATH.awshpForm} element={<Awshp_course />} />
+
+        <Route path="/thankyou" element={<ThankYou />} />
+
         
         <Route path="/admin" element={<AdminPanel />} />
         <Route path="/admin/*" element={<AdminPanel />} />

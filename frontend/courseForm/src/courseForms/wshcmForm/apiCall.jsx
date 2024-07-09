@@ -70,7 +70,8 @@ export const wshcmApiCall = async (formData, certificateFiles, photos) => {
         swal.close(); // Close loading indicator after response
 
         if (response.data.message) {
-          swal("Submitted!", response.data.message, "success");
+          window.location.href="/thankyou";
+          // swal("Submitted!", response.data.message, "success");
         } else {
           swal("Error!", "An error occurred while submitting the form.", "error");
         }
