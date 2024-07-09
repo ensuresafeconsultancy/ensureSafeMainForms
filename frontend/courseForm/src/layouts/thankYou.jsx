@@ -17,7 +17,7 @@ import { AiFillInstagram } from "react-icons/ai";
 
 import PLAY_STORE from '../assets/logos/google-play.png'
 import APPLE_STORE from '../assets/logos/apple-logo.png'
-
+import { FaLocationDot } from "react-icons/fa6";
 
 import 'react-tooltip/dist/react-tooltip.css'
 import { Tooltip } from 'react-tooltip'
@@ -62,7 +62,7 @@ const ThankYou = () => {
                     
                     <div className="row px-lg-5 px-4 pt-4 ">
                     <div className="col-lg-6">
-                            <h5 className='pt-lg-0 pt-4 text-center fw-bold'>Follow us:</h5>
+                            <h5 className='pt-lg-0 pt-4 text-center fw-bold'>Follow us</h5>
 
                             <div className="d-flex justify-content-center gap-3 align-items-center flex-row  pt-3">
                                     <a href="https://www.facebook.com/Ensuresafeconsultancy" target="_blank" data-tooltip-id="facebook_TT" data-tooltip-content="Facebook" className="d-flex text-decoration-none justify-content-start gap-2 align-items-center p-3  rounded-circle facebookIconTY iconTY" style={{width : 'fit-content'}}>
@@ -88,7 +88,7 @@ const ThankYou = () => {
                         </div>
 
                         <div className="col-lg-6">
-                            <h5 className='text-center pt-lg-0 pt-5 fw-bold'>Contact us:</h5>
+                            <h5 className='text-center pt-lg-0 pt-5 fw-bold'>Contact us</h5>
                             <div className=" d-flex  justify-content-center pt-3 align-items-center flex-column gap-3">
                                     <a href="https://api.whatsapp.com/send/?phone=6596805878&text&type=phone_number&app_absent=0" target="_blank" data-tooltip-id="whatsapp_TT" data-tooltip-content="Whatsapp"  className="d-flex justify-content-center gap-2 align-items-center p-3 whatsappIconTY rounded-circle iconTY" style={{width : 'fit-content'}} >
                                         <IoLogoWhatsapp style={socialMediaIconSize} />
@@ -99,6 +99,9 @@ const ThankYou = () => {
                                     </div>
                                     <div className="">
                                         <span> <MdEmail style={socialMediaIconSize}/> training@ensuresafe.sg</span>
+                                    </div>
+                                    <div className="text-center">
+                                        <span className='text-center'><FaLocationDot /> 3, Soon Lee Street, # 02-05,<br />  Singapore 627606</span>
                                     </div>
 
                             </div>
