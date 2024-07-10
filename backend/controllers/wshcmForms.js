@@ -544,7 +544,7 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
         // Handle custom error object or message returned by newForm.save()
         return res.status(400).send({ status: 0, message: response.error });
       }
-      // deleteAllFiles('files'); 
+      deleteAllFiles('files'); 
       res.send({ status: 1, message: "Successfully received" });
       console.log("check 1")
        // Include saved data in response (optional)
