@@ -1,8 +1,9 @@
 
 import './App.css'
 
-import Wshcm_course from './courseExplanations/wshcm_course.jsx'
 import Awshp_course from './courseExplanations/awshp_course'
+import Vmbsc_course from './courseExplanations/vmbsc_course'
+import Wshcm_course from './courseExplanations/wshcm_course.jsx'
 import {BrowserRouter as Router , Routes , Route } from 'react-router-dom'
 
 // import { Sidebar } from './layouts/sidebar'
@@ -28,8 +29,9 @@ function App() {
         <Route path="/" element={<HomePage />} />
 
         {/* If u change this url(/fdr) then update the name in Adminpanel>index.js>addFormUrl */}
-        <Route path={REG_FORM_URL_CLIENT_PATH.wshcmForm} element={<Wshcm_course />} />
         <Route path={REG_FORM_URL_CLIENT_PATH.awshpForm} element={<Awshp_course />} />
+        <Route path={REG_FORM_URL_CLIENT_PATH.vmbscForm} element={<Vmbsc_course />} />
+        <Route path={REG_FORM_URL_CLIENT_PATH.wshcmForm} element={<Wshcm_course />} />
 
         <Route path="/thankyou" element={<ThankYou />} />
 

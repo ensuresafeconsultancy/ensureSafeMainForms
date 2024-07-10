@@ -166,3 +166,22 @@
     vertical-align: center;
     
 } */
+
+
+/* ---------------------------------- */
+
+::-webkit-scrollbar-thumb {
+    /* background: linear-gradient(#f39e2f, #5b37eb, #f1307e); */
+    /* background-color: rgb(71, 71, 71); */
+ 
+    background: #575c66;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-track {
+    /* background: #222a35; */
+}
+::-webkit-scrollbar {
+    height: 4px;
+    width: 4px;
+}

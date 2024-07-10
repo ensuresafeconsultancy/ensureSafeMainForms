@@ -34,6 +34,7 @@ const AdminPanel = () => {
               <Route path="/" element={<Dashboard />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/awshpForm" element={<AdminFormLists formName={'AWSHP'} addFormUrl={REG_FORM_URL_CLIENT_PATH.awshpForm} />} />
+              <Route path="/vmbscForm" element={<AdminFormLists formName={'VMBSC'} addFormUrl={REG_FORM_URL_CLIENT_PATH.vmbscForm} />} />
               <Route path="/wshcmForm" element={<AdminFormLists formName={'WSHCM'} addFormUrl={REG_FORM_URL_CLIENT_PATH.wshcmForm} />} />
 
               <Route path="*" element={<Navigate to="/admin" replace />} />

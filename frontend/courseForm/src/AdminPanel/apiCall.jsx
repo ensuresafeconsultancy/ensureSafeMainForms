@@ -5,13 +5,31 @@ import { saveAs } from 'file-saver';
 import swal from 'sweetalert';
 
 
+function getAuthToken(){
+  const token = localStorage.getItem('isAuth');
+
+  return {
+    'authorization': token
+  };
+
+}
+
 export const getWshcmCount = async()=>{
   try{
+    
 
-    const response = await axios.get(`${APIURL}${ServerVariables.getWshcmFormCount}`);
+    const token = getAuthToken();
 
-    if(response){
+    const response = await axios.get(`${APIURL}${ServerVariables.getWshcmFormCount}`,{
+      headers: token
+  });
+
+    if(response.data.status == 1){
       return response.data.formNameCounts;
+    } else if(response.data.status == 0){
+      localStorage.setItem('isAuth', '')
+      window.location.href = "/admin"
+      return 
     }
 
   }catch(err){
@@ -21,13 +39,16 @@ export const getWshcmCount = async()=>{
 
 export const fetchWshcmData = async(formName)=>{
     try{
-        const response = await axios.get(`${APIURL}${ServerVariables.fetchWshcmFormData}/${formName}`);
+      const token = getAuthToken();
+        const response = await axios.get(`${APIURL}${ServerVariables.fetchWshcmFormData}/${formName}`, {headers : token});
         console.log(response.data)
         if(response && response.data){
             if(response.data.status == 1){
                 return response;
-            } else {
-              return response;
+            } else if(response.data.status == 0) {
+              localStorage.setItem('isAuth', '')
+              window.location.href = "/admin"
+              return 
             }
         }
        
@@ -106,9 +127,16 @@ export const openFile = async(file , fileId) => {
  export const downloadDocPdf = async (formName) => {
     try {
     
-        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}/${formName}`);
-        const url = `${APIURL}/${response.data.filePath}`; // Use the file path from the backend
-        window.open(url, '_blank'); // Open the PDF in a new tab
+        const response = await axios.get(`${APIURL}${ServerVariables.exportWshcmFormPdf}/${formName}`, {headers : getAuthToken()});
+        if(response.data.status == 1){
+          const url = `${APIURL}/${response.data.filePath}`; // Use the file path from the backend
+          window.open(url, '_blank'); // Open the PDF in a new tab
+        } else if(response.data.status == 0){
+          localStorage.setItem('isAuth', '')
+          window.location.href = "/admin"
+          return 
+        }
+       
     } catch (error) {
         console.error(error);
     }
@@ -679,9 +707,6 @@ export const uploadPhotoFile = async(photos , formId)=>{
         console.error('Error:', error.response ? error.response.data.errors : error); // Handle error data if available
         swal("Error!", "An error occurred while submitting the form.", "error");
       }
-
-
-
 
   } catch(error){
     console.log(error.message)

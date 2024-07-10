@@ -41,7 +41,7 @@ const Header = ({handleRefreshClick , formName , addFormUrl}) => {
     }
   };
   return (
-    <div className="d-flex justify-content-between align-items-center gap-2 py-3 pb-4 px-lg-5 px-2 flex-wrap">
+    <div className="d-flex justify-content-between align-items-center gap-2 py-3 pb-4 px-lg-5 px-2 ">
 
 <div className="d-flex justify-content-center align-items-center gap-2">
       <h4 className="fw-bolder">{formName} Forms</h4>
@@ -55,8 +55,7 @@ const Header = ({handleRefreshClick , formName , addFormUrl}) => {
 <div className="d-flex justify-content-end align-items-center gap-2">
  
 
-     
-
+    
       <div className="btn-group">
       <button className="btn dropdown-toggle exportPdf border rounded-pill px-3 py-2" type="button" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
         Exports

@@ -3,7 +3,7 @@ const express = new require('express')
 const router = express.Router()
 const multer  = require('multer')
 const WshcmForm  = require('../schema/wshcmFormSchema')
-
+const jwt = require('jsonwebtoken');
 const Json2csvParser = require('json2csv').Parser;
 
 // const nodemailer = require('nodemailer');
@@ -33,6 +33,16 @@ async function authorize(){
     );
     await jwtClient.authorize();
     return jwtClient;    
+}
+
+function verifyJWT(token){
+  try{
+    var decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    console.log("decoded = " , decoded)
+    return true;
+  }catch(err){
+    return false;
+  }
 }
 
 async function deleteFile(authClient, fileId) {
@@ -140,8 +150,9 @@ router.get("/fetchWshcmForms/:formName", async (req, res) => {
     if (!formName) {
       return res.status(400).send({ status: 0, message: "Missing required parameter: formName" });
     }
-    
 
+    if(verifyJWT(req.headers.authorization)){
+      
     // const WshcmFormData = await WshcmForm.find(); // Find forms matching formName
     const WshcmFormData = await WshcmForm.find({ formName : formName }); // Find forms matching formName
     const wshcmFormSchemaFields = Object.keys(WshcmForm.schema.obj);
@@ -157,10 +168,17 @@ router.get("/fetchWshcmForms/:formName", async (req, res) => {
       });
     }
 
-    res.send({
+    return res.send({
       status: 0,
       message: "No Forms",
     });
+
+    } else {
+      console.log("You are not authorized person")
+      res.send({status : 0 , message : "You are not authorized person"})
+    }
+    
+
   } catch (err) {
     console.log("Error message = " , err); // Log error for debugging
     res.status(500).send({ status: 0, message: "Error occurred while fetching forms" }); // Send appropriate error response
@@ -207,39 +225,51 @@ async function deleteAllFiles(folderPath) {
 
 router.get("/getWshcmCount", async(req,res)=>{
   try {
-    const count = await WshcmForm.countDocuments();
 
-    // const formNameCounts = await WshcmForm.aggregate([
-    //   { $group: { _id: "$formName", count: { $sum: 1 } } },
-    // ]);
 
-    const formNameCounts = await WshcmForm.aggregate([
-      {
-        $group: {
-          _id: "$formName",
-          companyCount: {
-            $sum: {
-              $cond: { if: { $eq: ["$organization", "Company"] }, then: 1, else: 0 },
+
+    if(verifyJWT(req.headers.authorization)){
+      const count = await WshcmForm.countDocuments();
+
+      // const formNameCounts = await WshcmForm.aggregate([
+      //   { $group: { _id: "$formName", count: { $sum: 1 } } },
+      // ]);
+  
+      const formNameCounts = await WshcmForm.aggregate([
+        {
+          $group: {
+            _id: "$formName",
+            companyCount: {
+              $sum: {
+                $cond: { if: { $eq: ["$organization", "Company"] }, then: 1, else: 0 },
+              },
             },
-          },
-          individualCount: {
-            $sum: {
-              $cond: { if: { $eq: ["$organization", "Individual"] }, then: 1, else: 0 },
+            individualCount: {
+              $sum: {
+                $cond: { if: { $eq: ["$organization", "Individual"] }, then: 1, else: 0 },
+              },
             },
+            count: { $sum: 1 },
           },
-          count: { $sum: 1 },
         },
-      },
-    ]);
+      ]);
+  
+  
+      console.log("formNameCounts = " , formNameCounts)
+  
+  
+  
+      console.log(`There are ${count} wshcmForm documents in the collection.`);
+      // res.send({WshcmCount : count})
+      res.send({status : 1 , formNameCounts : formNameCounts})
+
+    } else {
+      res.send({status : 0})
+
+    }
 
 
-    console.log("formNameCounts = " , formNameCounts)
 
-
-
-    console.log(`There are ${count} wshcmForm documents in the collection.`);
-    // res.send({WshcmCount : count})
-    res.send({formNameCounts : formNameCounts})
   } catch (error) {
     console.error("Error counting wshcmForm documents:", error);
     res.send({message : "something went wrong sorrrry"})
@@ -501,37 +531,46 @@ router.get('/exportFormPdf/:formName', async(req,res)=>{
 
     const {formName} = req.params;
 
-      console.log("Hello")
-      const formDoc = await WshcmForm.find({formName:formName});
-      const data = {
-          formDoc : formDoc,
-      };
+      console.log("Export pdf = " , formName)
 
-      const filePathName = path.resolve(__dirname , '../ejs_file/htmltopdf.ejs');
-      const htmlString = fs.readFileSync(filePathName).toString();
-      const options = {
-        format: 'A2',
-        orientation: 'landscape',
-        margin: '10mm', // Set all margins to 0
-        childProcessOptions: {
-          env: { OPENSSL_CONF: '/dev/null' },
-        },
-      }  
-      const ejsData = ejs.render(htmlString , data);
+      if(verifyJWT(req.headers.authorization)){
 
-      console.log("EJS Data:", ejsData);
-    console.log("Options used for PDF generation:", options);
+        const formDoc = await WshcmForm.find({formName:formName});
+        const data = {
+            formDoc : formDoc,
+        };
+
+        const filePathName = path.resolve(__dirname , '../ejs_file/htmltopdf.ejs');
+        const htmlString = fs.readFileSync(filePathName).toString();
+        const options = {
+          format: 'A2',
+          orientation: 'landscape',
+          margin: '10mm', // Set all margins to 0
+          childProcessOptions: {
+            env: { OPENSSL_CONF: '/dev/null' },
+          },
+        }  
+        const ejsData = ejs.render(htmlString , data);
+
+        // console.log("EJS Data:", ejsData);
+      // console.log("Options used for PDF generation:", options);
+      console.log("generating .. ")
 
 
-      pdf.create(ejsData, options).toFile('./exportedPdfs/userForms.pdf', (err, response) => {
-          if (err) {
-              console.log("Error->>>>>>>>>", err);
-              res.status(500).send(err);
-          } else {
-              console.log('File generated');
-              res.send({ filePath: 'userForms.pdf' }); // Send the file path
-          }
-      });
+        pdf.create(ejsData, options).toFile('./exportedPdfs/userForms.pdf', (err, response) => {
+            if (err) {
+                console.log("Error->>>>>>>>>", err);
+                res.status(500).send(err);
+            } else {
+                console.log('File generated');
+                res.send({ status : 1,  filePath: 'userForms.pdf' }); // Send the file path
+            }
+        });
+
+      } else {
+        res.send({ status : 0 }); 
+      }
+      
      
   }catch(err){
       console.log(err.message)

@@ -1,6 +1,7 @@
 import {useEffect , useState} from 'react'
 
 import LoadingImg from "../../assets/Loading/loading.gif";
+import { LuRefreshCcw } from "react-icons/lu";
 
 import { getWshcmCount } from '../apiCall';
 const Dashboard = () => {
@@ -9,25 +10,14 @@ const Dashboard = () => {
 
   const [formNameCounts , setFormNameCounts] = useState('null');
 
+
+  const fetchFormsCount = async()=>{
+    const formNameCounts = await getWshcmCount();
+    console.log("Dashboard useEffect");
+    setFormNameCounts(formNameCounts);
+  }
   useEffect(()=>{
-
-    (async()=>{
-      const formNameCounts = await getWshcmCount();
-      console.log("Dashboard useEffect");
-
-
-      setFormNameCounts(formNameCounts);
-
-      // console.log("count = " , count)
-
-      // if(count>=0){
-      //   setWshcmcount(count);
-      //   // setWshcmcount(6);
-      // }
-    })();
-
-
-    console.log("hello")
+    fetchFormsCount();
   },[])
 
   return (
@@ -67,6 +57,13 @@ const Dashboard = () => {
               }
               </tbody>
             </table>
+
+          <div className="d-flex justify-content-center align-items-center">
+              <div className="refreshBox p-2 d-flex justify-content-center align-items-center rounded-circle cursor_pointer" onClick={()=>fetchFormsCount()}>
+                <LuRefreshCcw className="refreshIcon" />
+              </div>
+          </div>
+           
           </div>
 
 

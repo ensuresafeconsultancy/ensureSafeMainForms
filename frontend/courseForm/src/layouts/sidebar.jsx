@@ -122,7 +122,11 @@ export function Sidebar(){
                             
                         </div>
                         <div className="d-flex justify-content-start align-items-center  sidebarBtn" onClick={(event)=>handleActiveBtnChange(event)} >
-                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/WshcmForm" >WSHCM Forms</Link>
+                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/vmbscForm" >vmbsc Forms</Link>
+                            
+                        </div>
+                        <div className="d-flex justify-content-start align-items-center  sidebarBtn" onClick={(event)=>handleActiveBtnChange(event)} >
+                            <Link className="ps-5 w-100 text-decoration-none d-inline-block p-3" to="/admin/wshcmForm" >WSHCM Forms</Link>
                             
                         </div>
 
