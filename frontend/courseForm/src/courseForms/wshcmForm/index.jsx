@@ -658,7 +658,7 @@ const Wshcm_form = ({formName}) => {
             <SignatureCanvas
                 ref={sigCanvas}
                 penColor="black"
-                canvasProps={{ width: 500, height: 200, className: 'signature-pad' }}
+                canvasProps={{ className: 'signature-pad' }}
                 onEnd={() => setSigned(true)}
             />
             <div className="signature-actions">

@@ -114,6 +114,8 @@ label{
 
 .signature-pad{
     border: 1px solid #000;
+    width: 400px !important;
+    height: 200px !important;
     /* width: 300px; */
 }
 
@@ -125,7 +127,7 @@ label{
 
 @media (max-width:420px) and (min-width: 300px) {
     .signature-pad{
-        width: 287px;
-        height: 140px;
+        width: 287px !important;
+        height: 140px !important;
     }
   }
