@@ -41,7 +41,7 @@ const Timings = ({class_type , setFormData}) => {
         {class_type!==''? class_type === "Sunday class"? 
 
 
-        <div className='form-group pb-5'> 
+        <div id='class_timing_id' className='form-group pb-5'> 
 
                 <h5 className="fw-bold pb-2">Sunday Class Schedule *</h5>
 
@@ -71,7 +71,7 @@ const Timings = ({class_type , setFormData}) => {
         
         : 
         
-        <div className='form-group pb-5'>
+        <div id='class_timing_id' className='form-group pb-5'>
                 <h5 className="fw-bold" >Tuesday, Thursday, Saturday Class Schedule *</h5>
 
                 {/* {TUE_THUR_FRI && TUE_THUR_FRI.map((item , index)=> (

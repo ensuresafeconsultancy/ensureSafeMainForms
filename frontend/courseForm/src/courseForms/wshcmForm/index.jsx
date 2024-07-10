@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types';
 
-import { useRef } from 'react';
+import { useRef , useEffect } from 'react';
 import SignatureCanvas from 'react-signature-canvas';
 
 
@@ -55,6 +55,8 @@ const Wshcm_form = ({formName}) => {
         // studentPhoto: null, // Initialize with null
     })
 
+  
+
     const [emailIDError  ,setEmailIDError] = useState(false);
     const [experienceError  ,setExperienceError] = useState(false);
     const [companyPersonContactError , setCompanyPersonContactError] = useState(false);
@@ -68,24 +70,88 @@ const Wshcm_form = ({formName}) => {
     const validateForm= async(event)=>{
         event.preventDefault();
         console.log("companyPersonContactError = ",companyPersonContactError);
-        if(formData.companyPersonContactNo.length<1 || companyPersonContactError){
-            if(formData.organization == "Company"){
-                return alert("Company Contact No invalid")
-            }
-        } else if(formData.contact_no.length<1 || contactNoError){
-            return alert("Enter Contact No  properly")
-        } else if(formData.class_type == ''){
-            return alert("Select class type")
-        }
+        console.log("formData.organization = ",formData.organization);
+        console.log("formData.companyPersonContactNo.length = ",formData.companyPersonContactNo.length<1);
+    //     if(!formData.class_type){
+    //         const element = document.getElementById('class_type_id');
+    //             if (element) {
+    //                 element.scrollIntoView({ behavior: 'smooth' });
+    //                 return alert("Select class type")
+    //             } else {
+    //                 console.error("Element with ID", "not found!");
+    //             }
+    //     } else if(formData.class_type){
+    //         if(!formData.sunday_class_timing && !formData.working_day_timing){
+    //             const element = document.getElementById('class_timing_id');
+    //             if (element) {
+    //                 element.scrollIntoView({ behavior: 'smooth' });
+                   
+    //             } else {
+    //                 console.error("Element with ID", "not found!");
+    //             }
+    //             return alert("Select class timing")
+    //         } else if(formData.companyPersonContactNo.length<1 || companyPersonContactError){
+    //         console.log("show")
+    //         if(formData.organization === "Company"){
+    //             const element = document.getElementById('company_id');
+    //             if (element) {
+    //                 element.scrollIntoView({ behavior: 'smooth' });
+                   
+    //             } else {
+    //                 console.error("Element with ID", "not found!");
+    //             }
+    //             return alert("Company Contact No invalid")
+    //         } else if(formData.contact_no.length<1 || contactNoError){
+    //         // console.log("show")
+    //         const element = document.getElementById('contact_no_id');
+    //         if (element) {
+    //             element.scrollIntoView({ behavior: 'smooth' });
+               
+    //         } else {
+    //             console.error("Element with ID", "not found!");
+    //         }
 
-        setSubmitBtnDisable(true);
-        const response = await wshcmApiCall(formData , certificateFiles , photos);
-        if(response){
-            setSubmitBtnDisable(false);
-        }
+    //         return alert("Enter Contact No  properly")
+    //     } else if(!formData.gender){
+    //         const element = document.getElementById('gender_id');
+    //         if (element) {
+    //             element.scrollIntoView({ behavior: 'smooth' });
+               
+    //         } else {
+    //             console.error("Element with ID", "not found!");
+    //         }
+    //         return alert("Select gender")
+    //     } else if(!signed){
+    //         const element = document.getElementById('signature_id');
+    //         if (element) {
+    //             element.scrollIntoView({ behavior: 'smooth' });
+               
+    //         } else {
+    //             console.error("Element with ID", "not found!");
+    //         }
+    //         return alert("Please do digital signature")
+    //     } else {
+    //         console.log("show")
+
+         
+    //     }
+
+       
+    // }
+    // }
+
+console.log("hello")
+console.log("hello")
+    setSubmitBtnDisable(true);
+    const response = await wshcmApiCall(formData , certificateFiles , photos , signature);
+    if(response){
+        setSubmitBtnDisable(false);
     }
 
 
+
+
+    }
     const handleInputChange = (event)=>{
         const classTypeValue = event.target.value || event.target.innerHTML;
         const elementName = event.target.name || event.target.parentElement.children[0].name;
@@ -145,6 +211,15 @@ const Wshcm_form = ({formName}) => {
 
       if (!signed) return;
       const img = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+    //   const img = sigCanvas.current.getTrimmedCanvas();
+
+    //   const reader = new FileReader();
+    //   reader.readAsDataURL(img);
+    //   reader.onload = () => setSignature(reader.result);
+    //   reader.onerror = (error) => console.error('Error:', error);
+
+
+      console.log("signature = " , signature)
       setSignature(img);
     };
 
@@ -288,15 +363,6 @@ const Wshcm_form = ({formName}) => {
   function handleSalaryChange(event) {
     event.stopPropagation(); 
 
-    // const parentContainer = event.currentTarget.parentNode;
-  
-    // Get all divs within the container with the 'classTypeChange' class
-    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
-  
-    // Remove 'registrationLogoBoxActive' from all divs within the container
-    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
-  
-    // Add 'registrationLogoBoxActive' to the clicked div
     const clickedDiv = event.currentTarget;
     // clickedDiv.classList.add('registrationLogoBoxActive');
 
@@ -324,32 +390,11 @@ const Wshcm_form = ({formName}) => {
        
 
         <form action="" onSubmit={validateForm}>
-            <div className="form-group py-4">
-                <h5 className="fw-bold pb-3">Class Type</h5>
+            <div className="form-group py-4" id='class_type_id'>
+                <h5 className="fw-bold pb-3" >Class Type</h5>
                 
 
-                {/* <div className="d-flex justify-content-start align-items-center gap-3">
-                    <div
-                        className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
-                            classType === 0 ? 'registrationLogoBoxActive' : ''
-                        }`}
-                        onClick={() => handleClassType(0)}
-                    >
-                        
-                        Sunday class
-                    </div>
-                    <div
-                        className={`registrationLogoBox p-4 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer ${
-                            classType === 1 ? 'registrationLogoBoxActive' : ''
-                        }`}
-                        onClick={() => handleClassType(1)}
-                    >
-
-                        <span>Tuesday, Thursday, Saturday</span>
-                        
-               
-                    </div>
-                </div> */}
+              
 
                 <div className="d-flex justify-content-start align-items-center gap-3">
                     <div name = "class_type" value="Sunday class" className="registrationLogoBox p-4 classTypeChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer" onClick={(event) => handleClassChange(event)}> 
@@ -359,18 +404,7 @@ const Wshcm_form = ({formName}) => {
                         Tuesday, Thursday, Saturday
                     </div>
 
-                    {/* <div className="registrationLogoBox p-4 classTypeChange rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-column cursor_pointer">
-                        <ReactCountryFlag countryCode={'cn'} svg />  
-                        <span>Sunday class</span>
-                        </div> */}
-                </div>
-
-                {/* <div className="row">
-                    <div className="col">
-
-                    </div>
-                    <div className="col"></div>
-                </div> */}
+               </div>
 
             
             </div>
@@ -426,7 +460,7 @@ const Wshcm_form = ({formName}) => {
 
             </div>
 
-            <div className="pb-3">
+            <div className="pb-3" id='gender_id'>
                 <label htmlFor="" className='pb-2 fw-bold'>Gender *</label>
 
                 <div className="d-flex justify-content-start align-items-center gap-3">
@@ -451,13 +485,8 @@ const Wshcm_form = ({formName}) => {
             </div>
           
 
-
-
             </div>
 
-            
-
-           
 
             
             
@@ -482,37 +511,6 @@ const Wshcm_form = ({formName}) => {
             <div className="pb-3">
             <label htmlFor="" className="fw-bold">Race *</label>
 
-                {/* <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Chinese" name="race" required />
-                    <label className="form-check-label">
-                    Chinese
-                    </label>
-                </div>
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Malay" name="race" />
-                    <label className="form-check-label">
-                    Malay
-                    </label>
-                </div>
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Indian" name="race" />
-                    <label className="form-check-label">
-                    Indian
-                    </label>
-                </div>
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Bangladeshi" name="race" />
-                    <label className="form-check-label">
-                    Bangladeshi
-                    </label>
-                </div>
-                <div className="form-check" onClick={handleInputChange}>
-                    <input className="form-check-input" type="radio" value="Filipino" name="race" />
-                    <label className="form-check-label">
-                    Filipino
-                    </label>
-                </div> */}
-
                 <div className="d-flex justify-content-start align-items-center flex-wrap gap-2">
 
                     {RACE && RACE.map((item , index)=>{
@@ -525,18 +523,6 @@ const Wshcm_form = ({formName}) => {
                     
                 </div>
 
-                {/* <div className="d-flex justify-content-center align-items-start flex-column gap-2">
-                        {RACE && RACE.map((item , index)=> (
-                                <div key={index} name="race" value={item} className="registrationLogoBox raceChange py-2 px-3 rounded-4 border d-flex justify-content-center align-items-center gap-2 flex-row cursor_pointer" onClick={(e)=> handleRaceChange(e)}>
-                                        
-                                <div className="p-2 rounded-circle border bg-white radioBtnShadow"></div>
-
-                                {item}
-
-                                </div>
-                            
-                                ))}
-                        </div> */}
 
             </div>
             
@@ -557,31 +543,7 @@ const Wshcm_form = ({formName}) => {
             
             <div className="pb-3">
             <label htmlFor="" className="fw-bold pb-3">Salary Range *</label>
-                    {/* <div className="form-check" onClick={handleInputChange}>
-                        <input className="form-check-input" type="radio" value="Less Then $1000" name="salary" required />
-                        <label className="form-check-label">
-                        Less Then $1000
-                        </label>
-                    </div>
-                    <div className="form-check" onClick={handleInputChange}>
-                        <input className="form-check-input" type="radio" value="$1000 To $1999" name="salary" />
-                        <label className="form-check-label">
-                        $1000 To $1999
-                        </label>
-                    </div>
-                    <div className="form-check" onClick={handleInputChange}>
-                        <input className="form-check-input" type="radio" value="$2000 To $2999" name="salary" />
-                        <label className="form-check-label">
-                        $2000 To $2999
-                        </label>
-                    </div>
-                    <div className="form-check" onClick={handleInputChange}>
-                        <input className="form-check-input" type="radio" value="$3000 And Above" name="salary" />
-                        <label className="form-check-label">
-                        $3000 And Above
-                        </label>
-                    </div> */}
-
+                   
 
                     <div className="d-flex justify-content-center align-items-start flex-column gap-2">
                         {SALARY_RANGE && SALARY_RANGE.map((item , index)=> (
@@ -602,30 +564,7 @@ const Wshcm_form = ({formName}) => {
             <div className="pb-3">
             <label htmlFor="" className="fw-bold pb-3">Highest Qualification *</label>
 
-                        {/* <div className="form-check" onClick={handleInputChange}>
-                            <input className="form-check-input" type="radio" value="Degree" name="qualifications" required />
-                            <label className="form-check-label">
-                            Degree
-                            </label>
-                        </div>
-                        <div className="form-check" onClick={handleInputChange}>
-                            <input className="form-check-input" type="radio" value="Diploma" name="qualifications" />
-                            <label className="form-check-label">
-                            Diploma
-                            </label>
-                        </div>
-                        <div className="form-check" onClick={handleInputChange}>
-                            <input className="form-check-input" type="radio" value="Gce O Level/Sslc/Hsc" name="qualifications" />
-                            <label className="form-check-label">
-                            Gce O Level/Sslc/Hsc
-                            </label>
-                        </div>
-                        <div className="form-check" onClick={handleInputChange}>
-                            <input className="form-check-input" type="radio" value="others" name="qualifications" />
-                            <label className="form-check-label">
-                            others
-                            </label>
-                        </div> */}
+                      
 
                         <div className="d-flex justify-content-center align-items-start flex-column gap-2">
                         {QUALIFICATION && QUALIFICATION.map((item , index)=> (
@@ -653,19 +592,20 @@ const Wshcm_form = ({formName}) => {
             {/* <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhoto(e.target.files[0])} required /> */}
 
 
-            <div className="signature-box">
+            <div className="signature-box" id='signature_id'>
             <h2>Sign Here</h2>
             <SignatureCanvas
                 ref={sigCanvas}
                 penColor="black"
                 canvasProps={{ className: 'signature-pad' }}
+                style ={{background : '#fff'}}
                 onEnd={() => setSigned(true)}
             />
-            <div className="signature-actions">
-                <button type='button' onClick={()=>clearSignature()} disabled={!signed}>Clear</button>
-                <button type='button' onClick={()=>saveSignature()} disabled={!signed}>Save</button>
+            <div className="signature-actions d-flex gap-2 pb-3">
+                <button type='button'  className='btn px-3 btn-danger fw-bold' onClick={()=>clearSignature()} disabled={!signed}>Clear</button>
+                <button type='button' className='btn px-3 fw-bold mainBgColor' onClick={()=>saveSignature()} disabled={!signed}>Save</button>
             </div>
-            {signature && <img src={signature} alt="Signature" />}
+            {signature && <img src={signature} className="img-fluid border border-success" alt="Signature" />}
             </div>
 
             <div className="pb-3 d-flex justify-content-start align-items-center">

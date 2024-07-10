@@ -83,7 +83,7 @@ const CompanyDetails = ({handleInputChange , setContactNoFunc, companyPersonCont
 
     <h4 className="fw-bold">Enter the Company Details</h4>
 
-        <div className="form-group">
+        <div className="form-group" id="company_id">
           <div className="py-3">
             <label htmlFor="" className="fw-bold">Company Name *</label>
             <input type="text" className='form-control' id='companyName' onChange={handleInputChange} onKeyUp={checkKeyup} value={companyName} name="companyName" required />

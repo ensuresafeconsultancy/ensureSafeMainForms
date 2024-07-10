@@ -147,9 +147,9 @@ router.get("/fetchWshcmForms/:formName", async (req, res) => {
     console.log(" formName = "  , formName)
 
     // Validate formName (optional, but recommended for security and UX)
-    if (!formName) {
-      return res.status(400).send({ status: 0, message: "Missing required parameter: formName" });
-    }
+    // if (!formName) {
+    //   return res.status(400).send({ status: 0, message: "Missing required parameter: formName" });
+    // }
 
     if(verifyJWT(req.headers.authorization)){
       
@@ -175,7 +175,7 @@ router.get("/fetchWshcmForms/:formName", async (req, res) => {
 
     } else {
       console.log("You are not authorized person")
-      res.send({status : 0 , message : "You are not authorized person"})
+      res.send({status : 404 , message : "You are not authorized person"})
     }
     
 
@@ -282,7 +282,8 @@ router.get("/getWshcmCount", async(req,res)=>{
 // const submitForm = async(req,res) =>{
 
   // upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photo', maxCount: 1 }]) ,
-router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photos', maxCount: 12 }]) , async (req, res) => {
+  //, {name: 'signature', maxCount: 1}
+router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 12 }, { name: 'photos', maxCount: 12 } ]) , async (req, res) => {
     try {
       // Comprehensive validation
       const validationErrors = [];
@@ -425,6 +426,29 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
     console.log(req.files['certificateFiles'])
     // console.log("photos = " ,req.files['photos'][0].path)
 
+    const base64Parts = req.body.signature.split(',');
+    const contentType = base64Parts[0].split(':')[1].split(';')[0].trim();
+    const imageData = base64Parts[1];
+    
+    const fs = require('fs').promises;
+    const { PNG } = require('pngjs');
+    
+    const buffer = Buffer.from(imageData, 'base64');
+    
+    // Parse the buffer as a PNG
+    const pngImage = PNG.sync.read(buffer);
+    
+    // Generate a unique filename and path for the PNG image
+    const signFilename = `${Date.now()}-${Math.random().toString(36).substring(2, 15)}.png`;
+    const signFilePath = `files/${signFilename}`;
+    
+    // Write the PNG image buffer to a file
+    await fs.writeFile(signFilePath, PNG.sync.write(pngImage));
+    // const signatureFile = req.files['signature'][0];
+
+    // console.log("signatureFile  = , " , req.files['signature'])
+    // console.log("signatureFile path  = , " , req.files['signature'][0].path)
+
     for(let certificate of certificateFiles){
       console.log(typeof certificate.path)
     }
@@ -459,6 +483,10 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
     console.log("photoFileIds = " , photoFileIds)
     console.log("photoFileNames = " , photoFileNames)
 
+   
+    const signatureFileId = await uploadFile(authClient, signFilePath, 'image/png', signFilename);
+
+    // const signatureFileId = await uploadFile(authClient, signatureFile.path, signatureFile.mimetype , signatureFile.originalname);
       
     // const photoIds = await uploadFile(authClient, photos.path, photos.mimetype , photos.originalname);
 
@@ -498,9 +526,12 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
       
       photos: photoFileNames,
       photoId : photoFileIds,
+      signatureFile : signFilename,
+      signatureFileId : signatureFileId.data.id,
+     
     
     });
-
+    
     console.log(newForm)
 
     // photo: photo.originalname,
@@ -513,7 +544,7 @@ router.post("/submitForm", upload.fields([{ name: 'certificateFiles', maxCount: 
         // Handle custom error object or message returned by newForm.save()
         return res.status(400).send({ status: 0, message: response.error });
       }
-      deleteAllFiles('files'); 
+      // deleteAllFiles('files'); 
       res.send({ status: 1, message: "Successfully received" });
       console.log("check 1")
        // Include saved data in response (optional)

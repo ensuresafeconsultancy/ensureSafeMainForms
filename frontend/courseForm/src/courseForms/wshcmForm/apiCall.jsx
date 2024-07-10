@@ -5,7 +5,7 @@ import { ServerVariables } from '../../SERVER_VARIABLES/serverVariables';
 import swal from 'sweetalert';
 
 
-export const wshcmApiCall = async (formData, certificateFiles, photos) => {
+export const wshcmApiCall = async (formData, certificateFiles, photos , signature) => {
   try {
     const newFormData = new FormData();
 
@@ -20,8 +20,35 @@ export const wshcmApiCall = async (formData, certificateFiles, photos) => {
       }
 
     for (let i = 0; i < photos.length; i++) {
+      console.log("photos[i] " , photos[i])
         newFormData.append('photos', photos[i]);
       }
+
+
+      const base64Parts = signature.split(',');
+    // const contentType = base64Parts[0].split(':')[1].trim();
+    const imageData = base64Parts[1];
+
+    console.log("imageData = " , imageData)
+
+
+      const blob = new Blob([imageData], { type: 'image/png' }); // Assuming signature is base64 encoded image data
+      const fileName = 'signature.png'; // Set a filename for the signature
+
+      const file = new File([blob], fileName, { type: blob.type });
+
+
+      console.log("signature = " , signature)
+      console.log("file sign = " , file)
+
+      newFormData.append('signature', signature);
+      // console.log(file);
+
+      // console.log("signature = " , signature)
+      // return true;
+    
+
+
     // if (certificateFiles && certificateFiles.length > 0) {
     //     certificateFiles.forEach(file => newFormData.append('educationalCertificates', file));
     //   }
@@ -70,7 +97,7 @@ export const wshcmApiCall = async (formData, certificateFiles, photos) => {
         swal.close(); // Close loading indicator after response
 
         if (response.data.message) {
-          window.location.href="/thankyou";
+          // window.location.href="/thankyou";
           // swal("Submitted!", response.data.message, "success");
         } else {
           swal("Error!", "An error occurred while submitting the form.", "error");

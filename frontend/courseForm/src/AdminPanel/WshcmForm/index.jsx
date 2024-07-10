@@ -247,6 +247,7 @@ function AdminFormLists({formName , addFormUrl}) {
                 <th scope="col">Email Id</th>
                 <th scope="col">Nationality</th>
                 <th scope="col">Certificate Files</th>
+                <th scope="col">Signature Files</th>
                 <th scope="col">Photo</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -321,6 +322,54 @@ function AdminFormLists({formName , addFormUrl}) {
                               </span>
                               </div>
                             {/* <td><div className="d-flex justify-content-center"><IoAddCircleSharp /></div></td> */}
+                        </td>
+                        <td>
+                          {item.signatureFile && <div
+                                  className="d-flex justify-content-between align-items-center"
+                                  key={index}
+                                >
+                                  <span
+                                    onClick={() =>
+                                      openFile(
+                                        item.signatureFile,
+                                        item.signatureFileId
+                                      )
+                                    }
+                                    className="text-truncate cursor_pointer fileName "
+                                    style={{ maxWidth: "150px" }}
+                                  >
+                                    {item.signatureFile.substr(0, 23).concat("...") +
+                                      item.signatureFile.split(".")[1]}
+                                  </span>
+
+
+                            <div className="d-flex justify-content-center align-items-center">
+
+                                  <span
+                                    onClick={() =>
+                                      downloadFile(
+                                        item.signatureFile,
+                                        item.signatureFileId
+                                      )
+                                    }
+                                    className="text-success cursor_pointer  rounded-circle download_bg"
+                                  >
+                                    <MdDownloadForOffline className="downloadIcon rounded-circle" />
+
+                                    
+                                  </span>
+                                  {/* <span className="text-success cursor_pointer  rounded-circle download_bg">
+                                      <MdDelete
+                                  className="actionIcon p-2 rounded-circle cursor_pointer deleteIcon"
+                                  onClick={() => deletePhoto(item._id , index)}
+                                />
+
+                                  </span> */}
+
+
+                                  </div>
+                                 
+                                </div>}
                         </td>
                         <td>
                           {item.photos &&

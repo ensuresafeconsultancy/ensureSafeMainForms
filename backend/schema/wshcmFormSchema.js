@@ -29,6 +29,8 @@ const wshcmForm = new mongoose.Schema({
     certificateFiles : [String],
     photoId : [String],
     photos : [String],
+    signatureFile : String,
+    signatureFileId: String,
 })
 
 module.exports = mongoose.model('CourseForm' , wshcmForm)

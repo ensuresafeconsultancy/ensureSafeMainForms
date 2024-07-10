@@ -26,11 +26,13 @@ export const getWshcmCount = async()=>{
 
     if(response.data.status == 1){
       return response.data.formNameCounts;
-    } else if(response.data.status == 0){
-      localStorage.setItem('isAuth', '')
-      window.location.href = "/admin"
-      return 
-    }
+    } 
+    // else if(response.data.status == 404){
+    //   localStorage.setItem('isAuth', '')
+    //   window.location.href = "/admin"
+    //   return 
+    // }
+    return response.data.formNameCounts;
 
   }catch(err){
     console.log(err)
@@ -45,11 +47,12 @@ export const fetchWshcmData = async(formName)=>{
         if(response && response.data){
             if(response.data.status == 1){
                 return response;
-            } else if(response.data.status == 0) {
+            } else if(response.data.status == 404) {
               localStorage.setItem('isAuth', '')
               window.location.href = "/admin"
               return 
             }
+            return response;
         }
        
     } catch(err){
