@@ -112,8 +112,20 @@ label{
     
 }
 
+.signature-pad{
+    border: 1px solid #000;
+    /* width: 300px; */
+}
+
 @media (min-width: 1400px) {
     #formMainBox .container{
         max-width: 1108px;
     }
 }
+
+@media (max-width:420px) and (min-width: 300px) {
+    .signature-pad{
+        width: 287px;
+        height: 140px;
+    }
+  }

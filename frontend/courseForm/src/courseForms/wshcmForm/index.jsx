@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types';
 
+import { useRef } from 'react';
+import SignatureCanvas from 'react-signature-canvas';
+
+
 import Timings from './Timings'
 import CompanyDetails from './CompanyDetails'
 import Identification from './Identification'
@@ -122,7 +126,27 @@ const Wshcm_form = ({formName}) => {
         }
 
     }
-   
+
+    const sigCanvas = useRef(null);
+    const [signed, setSigned] = useState(false);
+    const [signature, setSignature] = useState(null);
+  
+    const clearSignature = () => {
+        if (sigCanvas.current) { // Check if reference exists
+          sigCanvas.current.clear();
+          setSigned(false);
+          console.log("Signature Cleared"); // Add console log for debugging
+        } else {
+          console.error("Signature Canvas reference not found!");
+        }
+      };
+    const saveSignature = () => {
+        // event.preventDefault();
+
+      if (!signed) return;
+      const img = sigCanvas.current.getTrimmedCanvas().toDataURL('image/png');
+      setSignature(img);
+    };
 
     // const [classType, setClassType] = useState(null); // Track currently active logo (index)
     const [activeLogo, setActiveLogo] = useState(null); // Track currently active logo (index)
@@ -167,16 +191,7 @@ const Wshcm_form = ({formName}) => {
 
 
   function handleClassChange(event) {
-    // Get the parent container of the clicked div
-    // const parentContainer = event.currentTarget.parentNode;
-  
-    // Get all divs within the container with the 'classTypeChange' class
-    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
-  
-    // Remove 'registrationLogoBoxActive' from all divs within the container
-    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
-  
-    // Add 'registrationLogoBoxActive' to the clicked div
+
     const clickedDiv = event.currentTarget;
     // clickedDiv.classList.add('registrationLogoBoxActive');
 
@@ -200,16 +215,7 @@ const Wshcm_form = ({formName}) => {
   }
   
   function handleNationalityChange(event) {
-    // Get the parent container of the clicked div
-    // const parentContainer = event.currentTarget.parentNode;
-  
-    // Get all divs within the container with the 'classTypeChange' class
-    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
-  
-    // Remove 'registrationLogoBoxActive' from all divs within the container
-    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
-  
-    // Add 'registrationLogoBoxActive' to the clicked div
+   
     const clickedDiv = event.currentTarget;
     // clickedDiv.classList.add('registrationLogoBoxActive');
 
@@ -234,16 +240,7 @@ const Wshcm_form = ({formName}) => {
 
 
   function handleRaceChange(event) {
-    // Get the parent container of the clicked div
-    // const parentContainer = event.currentTarget.parentNode;
-  
-    // Get all divs within the container with the 'classTypeChange' class
-    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
-  
-    // Remove 'registrationLogoBoxActive' from all divs within the container
-    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
-  
-    // Add 'registrationLogoBoxActive' to the clicked div
+
     const clickedDiv = event.currentTarget;
     // clickedDiv.classList.add('registrationLogoBoxActive');
 
@@ -266,16 +263,7 @@ const Wshcm_form = ({formName}) => {
   }
 
   function handleQualificationChange(event) {
-    // Get the parent container of the clicked div
-    // const parentContainer = event.currentTarget.parentNode;
-  
-    // Get all divs within the container with the 'classTypeChange' class
-    // const allDivs = parentContainer.querySelectorAll('.classTypeChange');
-  
-    // Remove 'registrationLogoBoxActive' from all divs within the container
-    // allDivs.forEach(div => div.classList.remove('registrationLogoBoxActive'));
-  
-    // Add 'registrationLogoBoxActive' to the clicked div
+
     const clickedDiv = event.currentTarget;
     // clickedDiv.classList.add('registrationLogoBoxActive');
 
@@ -299,7 +287,7 @@ const Wshcm_form = ({formName}) => {
   
   function handleSalaryChange(event) {
     event.stopPropagation(); 
-    // Get the parent container of the clicked div
+
     // const parentContainer = event.currentTarget.parentNode;
   
     // Get all divs within the container with the 'classTypeChange' class
@@ -664,6 +652,21 @@ const Wshcm_form = ({formName}) => {
             <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhotos(e.target.files)} multiple required />
             {/* <input type="file" className='form-control mb-3' name="studentPhoto" onChange={(e)=> setPhoto(e.target.files[0])} required /> */}
 
+
+            <div className="signature-box">
+            <h2>Sign Here</h2>
+            <SignatureCanvas
+                ref={sigCanvas}
+                penColor="black"
+                canvasProps={{ width: 500, height: 200, className: 'signature-pad' }}
+                onEnd={() => setSigned(true)}
+            />
+            <div className="signature-actions">
+                <button type='button' onClick={()=>clearSignature()} disabled={!signed}>Clear</button>
+                <button type='button' onClick={()=>saveSignature()} disabled={!signed}>Save</button>
+            </div>
+            {signature && <img src={signature} alt="Signature" />}
+            </div>
 
             <div className="pb-3 d-flex justify-content-start align-items-center">
                 <input type="checkbox" className='form-checkbox' required />

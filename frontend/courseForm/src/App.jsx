@@ -4,6 +4,7 @@ import './App.css'
 import Awshp_course from './courseExplanations/awshp_course'
 import Vmbsc_course from './courseExplanations/vmbsc_course'
 import Wshcm_course from './courseExplanations/wshcm_course.jsx'
+import SignatureApp from './Home/signatureTry'
 import {BrowserRouter as Router , Routes , Route } from 'react-router-dom'
 
 // import { Sidebar } from './layouts/sidebar'
@@ -34,6 +35,7 @@ function App() {
         <Route path={REG_FORM_URL_CLIENT_PATH.wshcmForm} element={<Wshcm_course />} />
 
         <Route path="/thankyou" element={<ThankYou />} />
+        <Route path="/signatureApp" element={<SignatureApp />} />
 
         
         <Route path="/admin" element={<AdminPanel />} />
