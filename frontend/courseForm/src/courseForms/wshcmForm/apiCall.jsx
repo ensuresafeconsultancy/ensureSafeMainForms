@@ -97,7 +97,7 @@ export const wshcmApiCall = async (formData, certificateFiles, photos , signatur
         swal.close(); // Close loading indicator after response
 
         if (response.data.message) {
-          // window.location.href="/thankyou";
+          window.location.href="/thankyou";
           // swal("Submitted!", response.data.message, "success");
         } else {
           swal("Error!", "An error occurred while submitting the form.", "error");
